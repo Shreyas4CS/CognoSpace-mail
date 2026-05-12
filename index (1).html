@@ -453,6 +453,91 @@
   }
   #toast.show{opacity:1;animation:toastSlideUp .3s ease both}
 
+  /* ── GLOBAL LINK STYLES — blue for children ── */
+  a, a:visited { color: #1a73e8 !important; text-decoration: underline; }
+  a:hover { color: #1558b0 !important; text-decoration: underline; }
+  /* Exception: footer links keep their style */
+  .footer-links a { color: rgba(255,255,255,.55) !important; text-decoration: none; }
+  .footer-links a:hover { color: #fff !important; }
+  /* Auth switch links */
+  .auth-switch a { color: var(--blue) !important; }
+  /* progress info link */
+  #progressInfo a { color: var(--blue) !important; text-decoration: underline; }
+
+  /* ── DECISION TREE MODAL ── */
+  #dtModal{
+    display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+    background:rgba(45,49,66,.6);backdrop-filter:blur(6px);
+    z-index:500;align-items:center;justify-content:center;padding:16px;
+    animation:fadeInScale .3s ease both;
+  }
+  #dtModal.show{display:flex}
+  .dt-container{
+    background:#fff;border-radius:28px;
+    width:min(900px,100%);max-height:90vh;overflow-y:auto;
+    box-shadow:0 20px 60px rgba(45,49,66,.3);
+    animation:popIn .35s ease both;
+  }
+  .dt-header{
+    padding:28px 32px 20px;
+    background:linear-gradient(135deg,#e8f5e9,#e3f2fd);
+    border-radius:28px 28px 0 0;
+    border-bottom:1.5px solid #c8e6c9;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    flex-wrap:wrap;
+  }
+  .dt-title{font-size:22px;font-family:'Nunito',sans-serif;font-weight:800;color:#1b5e20}
+  .dt-subtitle{font-size:13px;color:#388e3c;margin-top:4px;line-height:1.5}
+  .dt-close-btn{
+    border:none;background:#fff;border-radius:12px;padding:10px 18px;cursor:pointer;
+    font-size:13px;font-family:'Nunito',sans-serif;font-weight:700;color:#555;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);transition:all .2s;flex-shrink:0;
+  }
+  .dt-close-btn:hover{background:#f5f5f5;transform:scale(1.05)}
+  .dt-body{padding:28px 32px 36px}
+  .dt-legend{
+    display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px;
+    background:#f8f9ff;border-radius:14px;padding:14px 18px;
+    border:1px solid #e0e8ff;
+  }
+  .dt-legend-item{display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Nunito',sans-serif;font-weight:600}
+  .dt-legend-dot{width:16px;height:16px;border-radius:50%}
+
+  /* Tree SVG wrapper */
+  .dt-tree-wrap{overflow-x:auto;padding:8px 0}
+  .dt-tree-wrap svg{display:block;margin:0 auto}
+
+  /* Node styles */
+  .dt-node-question rect{fill:#e3f2fd;stroke:#1565c0;stroke-width:2;rx:14;ry:14}
+  .dt-node-question text{fill:#0d47a1;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px}
+  .dt-node-spam rect{fill:#ffebee;stroke:#c62828;stroke-width:2}
+  .dt-node-spam text{fill:#b71c1c;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px}
+  .dt-node-inbox rect{fill:#e8f5e9;stroke:#2e7d32;stroke-width:2}
+  .dt-node-inbox text{fill:#1b5e20;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px}
+  .dt-edge{stroke:#90a4ae;stroke-width:2;fill:none;stroke-dasharray:6,3}
+  .dt-edge-label{font-size:11px;fill:#546e7a;font-family:'Nunito',sans-serif;font-weight:700}
+
+  /* Stats bar below tree */
+  .dt-stats{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:10px;margin-top:24px;
+  }
+  .dt-stat-card{
+    border-radius:14px;padding:14px;text-align:center;
+    border:1.5px solid var(--border);transition:transform .2s,box-shadow .2s;
+    animation:cardAppear .4s ease both;
+  }
+  .dt-stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow2)}
+  .dt-stat-icon{font-size:24px;margin-bottom:6px}
+  .dt-stat-name{font-size:11px;color:var(--text2);font-weight:700;font-family:'Nunito',sans-serif;margin-bottom:4px}
+  .dt-stat-count{font-size:22px;font-weight:800;font-family:'Nunito',sans-serif}
+  .dt-info-box{
+    margin-top:20px;background:linear-gradient(135deg,#f3e5f5,#fce4ec);
+    border-radius:14px;padding:16px 20px;font-size:13px;line-height:1.7;
+    border:1.5px solid #ce93d8;
+  }
+  .dt-info-box strong{color:#6a1b9a;font-family:'Nunito',sans-serif}
+
   /* scrollbar */
   ::-webkit-scrollbar{width:6px}
   ::-webkit-scrollbar-track{background:transparent}
@@ -464,33 +549,40 @@
     body{overflow:auto}
     #appWrap{height:auto;min-height:100vh}
     .main{flex-direction:column}
-    .sidebar{width:100%;border-right:none;border-bottom:1.5px solid var(--border);padding:6px 0;display:flex;flex-wrap:wrap;align-items:center;gap:4px}
-    .compose-btn{width:auto;margin:6px 8px;padding:8px 16px;font-size:13px}
-    #sidebarNav{display:flex;flex-wrap:wrap;gap:2px;padding:4px}
-    .nav-item{height:auto;padding:5px 12px;margin-right:0;border-radius:20px;font-size:12px}
+    .sidebar{width:100%;border-right:none;border-bottom:1.5px solid var(--border);padding:6px 0;display:flex;flex-wrap:wrap;align-items:center;gap:4px;overflow-x:auto}
+    .compose-btn{width:auto;margin:6px 8px;padding:8px 16px;font-size:13px;flex-shrink:0}
+    #sidebarNav{display:flex;flex-wrap:nowrap;gap:2px;padding:4px;overflow-x:auto}
+    .nav-item{height:auto;padding:5px 12px;margin-right:0;border-radius:20px;font-size:12px;white-space:nowrap;flex-shrink:0}
     .nav-section{display:none}
     .topbar-logo .logo-text{font-size:16px}
-    .search-bar{max-width:100%;font-size:13px}
+    .search-bar{max-width:100%;font-size:13px;flex:1;min-width:80px}
     .mode-btn{padding:6px 10px;font-size:12px}
     .training-body{flex-direction:column}
     .cats-panel{width:100%;border-top:2px solid var(--border);border-left:none}
-    .mail-pool{border-right:none}
+    .mail-pool{border-right:none;min-height:200px}
     .l2-body{flex-direction:column}
     .l2-right{width:100%;border-top:1.5px solid var(--border);padding-top:12px}
     .analysis-grid{grid-template-columns:1fr}
     .auth-card{padding:32px 24px 24px}
     .mv-body-wrap{padding:20px 20px 28px}
+    .mv-card{margin:12px}
+    .mv-topbar{padding:10px 16px}
     .footer-inner{flex-direction:column;align-items:center;text-align:center;padding:14px 20px;gap:10px}
-    .live-stats{margin-left:0}
-    .live-header{gap:8px}
-    .modal{padding:28px 20px}
+    .live-stats{margin-left:0;flex-wrap:wrap;justify-content:center}
+    .live-header{gap:8px;flex-wrap:wrap}
+    .modal{padding:28px 20px;width:min(660px,calc(100vw - 32px));margin:0 auto}
     .modal-actions{flex-direction:column-reverse}
     .modal-btn{width:100%;text-align:center}
+    .training-header{padding:12px 16px}
+    .dt-container{border-radius:20px;width:min(900px,calc(100vw - 24px))}
+    .dt-header{padding:20px 20px 16px;border-radius:20px 20px 0 0}
+    .dt-body{padding:16px}
+    .dt-stats{grid-template-columns:repeat(2,1fr)}
   }
   @media(max-width:480px){
-    .topbar{padding:0 10px;gap:6px}
+    .topbar{padding:0 10px;gap:4px;height:56px}
     .topbar-logo .logo-text{display:none}
-    .search-bar{padding:0 12px;height:38px}
+    .search-bar{padding:0 10px;height:36px;font-size:12px}
     .avatar{width:32px;height:32px;font-size:13px}
     .mode-btn{padding:5px 8px;font-size:11px}
     .lock-icon{display:none}
@@ -498,6 +590,12 @@
     .live-mail-row{padding:10px 14px}
     .lm-preview{display:none}
     .footer-links{gap:10px}
+    .live-header{padding:10px 14px}
+    .live-title{font-size:16px}
+    .live-stat{padding:6px 12px;font-size:13px}
+    .dt-stats{grid-template-columns:repeat(2,1fr)}
+    .dt-legend{gap:8px}
+    .modal-actions{gap:8px}
   }
 </style>
 </head>
@@ -621,6 +719,7 @@
             </div>
           </div>
           <button class="live-gen-btn" id="liveGenBtn" onclick="generateOneLiveMail()">⚡ Generate Mail</button>
+          <button class="live-gen-btn" style="background:linear-gradient(135deg,#2e7d32,#4caf50);margin-left:4px" onclick="openDTModal()">🌳 Decision Tree</button>
           <span id="liveLimit" style="font-size:13px;color:var(--text3);flex-shrink:0">0 / 50</span>
         </div>
         <div class="live-tabs">
@@ -730,7 +829,38 @@
     </div>
     <div class="modal-actions">
       <button class="modal-btn" onclick="document.getElementById('analysisModal').classList.remove('show')">Close</button>
+      <button class="modal-btn" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#1b5e20;border-color:#a5d6a7" onclick="openDTModal()">🌳 See Decision Tree</button>
       <button class="modal-btn primary" onclick="goToLevel2()">🌲 Level 2 Decision Tree →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DECISION TREE MODAL ── -->
+<div id="dtModal">
+  <div class="dt-container">
+    <div class="dt-header">
+      <div>
+        <div class="dt-title">🌳 Your Decision Tree</div>
+        <div class="dt-subtitle">See how the AI makes decisions — step by step, just like you did!</div>
+      </div>
+      <button class="dt-close-btn" onclick="closeDTModal()">✕ Close</button>
+    </div>
+    <div class="dt-body">
+      <div class="dt-legend">
+        <div class="dt-legend-item"><div class="dt-legend-dot" style="background:#1565c0"></div> Question Node</div>
+        <div class="dt-legend-item"><div class="dt-legend-dot" style="background:#c62828"></div> 🚫 Spam</div>
+        <div class="dt-legend-item"><div class="dt-legend-dot" style="background:#2e7d32"></div> 📥 Inbox</div>
+        <div class="dt-legend-item"><div class="dt-legend-dot" style="background:#f4b942"></div> 🏷️ Promotional</div>
+        <div class="dt-legend-item"><div class="dt-legend-dot" style="background:#4caf50"></div> 👥 Social</div>
+      </div>
+      <div class="dt-tree-wrap" id="dtTreeWrap"></div>
+      <div class="dt-stats" id="dtStats"></div>
+      <div class="dt-info-box">
+        <strong>🧠 How does a Decision Tree work?</strong><br><br>
+        A Decision Tree asks YES/NO questions one at a time — just like a game of 20 Questions! 🎮<br>
+        At each step it checks one feature of the email (like: <em>"Is the sender unknown?"</em>). Based on your answer, it goes left or right down the tree until it reaches a final decision: <strong>SPAM 🚫</strong> or <strong>INBOX 📥</strong>.<br><br>
+        <strong style="color:#6a1b9a">You just built a real AI model by sorting those emails! 🎉</strong>
+      </div>
     </div>
   </div>
 </div>
@@ -1387,7 +1517,7 @@ function openMailView(mailOrJson, isLive){
       line=line.trim();
       if(!line) return '<br>';
       // links styled
-      line=line.replace(/(→\s*\S+|www\.\S+|https?:\/\/\S+)/g,'<span style="color:var(--blue);font-weight:600">$1</span>');
+      line=line.replace(/(→\s*\S+|www\.\S+|https?:\/\/\S+)/g,'<a href="#" style="color:#1a73e8;font-weight:600;text-decoration:underline">$1</a>');
       return `<p style="margin-bottom:6px">${escHtml2(line)}</p>`;
     })
     .join('');
@@ -1439,6 +1569,195 @@ function showToast(msg, dur=3000){
   t.classList.add('show');
   clearTimeout(t._timer);
   t._timer=setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+// ═══════════════════════════════════════
+//  DISABLE RIGHT-CLICK
+// ═══════════════════════════════════════
+document.addEventListener('contextmenu', function(e){
+  e.preventDefault();
+  return false;
+});
+
+// ═══════════════════════════════════════
+//  DECISION TREE MODAL
+// ═══════════════════════════════════════
+function openDTModal(){
+  buildDecisionTree();
+  document.getElementById('dtModal').classList.add('show');
+}
+function closeDTModal(){
+  document.getElementById('dtModal').classList.remove('show');
+}
+
+function buildDecisionTree(){
+  // Build stats cards
+  const total = generatedMails.length || 1;
+  const statsEl = document.getElementById('dtStats');
+  statsEl.innerHTML = CATS.map(c=>{
+    const count = categoryAssignments[c.id]?.length || 0;
+    const pct = Math.round((count/total)*100);
+    return `<div class="dt-stat-card" style="border-top:3px solid ${c.color};background:${c.bg}">
+      <div class="dt-stat-icon">${c.icon}</div>
+      <div class="dt-stat-name">${c.name}</div>
+      <div class="dt-stat-count" style="color:${c.color}">${count}</div>
+      <div style="font-size:11px;color:var(--text3)">${pct}% of mails</div>
+    </div>`;
+  }).join('');
+
+  // Build SVG decision tree
+  const W = Math.max(820, window.innerWidth - 80);
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} 600`);
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', 600);
+  svg.style.fontFamily = "'Nunito', sans-serif";
+
+  // Tree structure: fixed decision logic based on categories
+  const tree = [
+    // [id, label, x, y, type, parent, branch-label]
+    { id:'q1', label:'Is sender\nunknown?', x:W/2, y:60, type:'q', parent:null, bl:'' },
+    { id:'spam1', label:'🚫 SPAM\n(Unknown Sender)', x:W*0.18, y:200, type:'spam', parent:'q1', bl:'YES' },
+    { id:'q2', label:'Urgent\nlanguage?', x:W*0.75, y:200, type:'q', parent:'q1', bl:'NO' },
+    { id:'spam2', label:'🚫 SPAM\n(Urgent!)', x:W*0.55, y:340, type:'spam', parent:'q2', bl:'YES' },
+    { id:'q3', label:'Too many\nlinks?', x:W*0.88, y:340, type:'q', parent:'q2', bl:'NO' },
+    { id:'spam3', label:'🚫 SPAM\n(Too Many Links)', x:W*0.72, y:480, type:'spam', parent:'q3', bl:'YES' },
+    { id:'q4', label:'Prize or\ncash offer?', x:W*0.96, y:480, type:'q', parent:'q3', bl:'NO' },
+    { id:'spam4', label:'🚫 SPAM\n(Prize Scam)', x:W*0.88, y:560, type:'spam', parent:'q4', bl:'YES', small:true },
+    { id:'q5', label:'Known\nplatform?', x:W*0.35, y:340, type:'q', parent:'q2', bl:'NO↘', hidden:true },
+  ];
+
+  // Simpler, cleaner 3-branch layout
+  const nodes = [
+    { id:'root', label:'Is sender\nunknown?',       x:W/2,    y:55,  type:'q'    },
+    { id:'s1',   label:'🚫 SPAM\nUnknown Sender',   x:W*0.15, y:200, type:'spam' },
+    { id:'q2',   label:'Urgent\nlanguage?',          x:W*0.72, y:200, type:'q'   },
+    { id:'s2',   label:'🚫 SPAM\nUrgent!',           x:W*0.48, y:360, type:'spam' },
+    { id:'q3',   label:'Too many\nlinks?',           x:W*0.88, y:360, type:'q'   },
+    { id:'s3',   label:'🚫 SPAM\nToo Many Links',   x:W*0.72, y:500, type:'spam' },
+    { id:'q4',   label:'Prize / cash\noffer?',       x:W*0.97, y:500, type:'q'   },
+    { id:'s4',   label:'🚫 SPAM\nPrize Scam',       x:W*0.87, y:570, type:'spam', small:true },
+    { id:'i4',   label:'📥 INBOX\nPromo/Social',    x:W*1.0,  y:570, type:'inbox', small:true },
+  ];
+
+  // Simple readable layout
+  const ns = [
+    { id:'root', txt:'Is the sender\nunknown?',     x:W/2,    y:55,  t:'q'     },
+    { id:'s1',   txt:'🚫 SPAM\nUnknown Sender',     x:W*0.14, y:200, t:'spam'  },
+    { id:'q2',   txt:'Has urgent\nlanguage?',        x:W*0.70, y:200, t:'q'    },
+    { id:'s2',   txt:'🚫 SPAM\nUrgent / Threat',    x:W*0.46, y:370, t:'spam'  },
+    { id:'q3',   txt:'Too many\nlinks?',             x:W*0.85, y:370, t:'q'    },
+    { id:'s3',   txt:'🚫 SPAM\nPhishing Links',     x:W*0.69, y:510, t:'spam'  },
+    { id:'q4',   txt:'Prize or\ncash offer?',        x:W*0.95, y:510, t:'q'    },
+    { id:'s4',   txt:'🚫 SPAM\nPrize Scam',         x:W*0.87, y:575, t:'spam', sm:true },
+    { id:'i4',   txt:'📥 INBOX\nSafe Email',        x:W*1.03, y:575, t:'inbox', sm:true },
+    { id:'ip',   txt:'📥 INBOX\nPromo / Social',    x:W*0.21, y:370, t:'inbox'  },
+    { id:'ig',   txt:'📥 INBOX\nGeneral Email',     x:W*0.54, y:510, t:'inbox'  },
+  ];
+
+  const edges = [
+    { from:'root', to:'s1',  lbl:'YES', side:'left'  },
+    { from:'root', to:'q2',  lbl:'NO',  side:'right' },
+    { from:'q2',   to:'s2',  lbl:'YES', side:'left'  },
+    { from:'q2',   to:'q3',  lbl:'NO',  side:'right' },
+    { from:'q2',   to:'ip',  lbl:'',    side:'down'  },
+    { from:'q3',   to:'s3',  lbl:'YES', side:'left'  },
+    { from:'q3',   to:'q4',  lbl:'NO',  side:'right' },
+    { from:'q3',   to:'ig',  lbl:'',    side:'down'  },
+    { from:'q4',   to:'s4',  lbl:'YES', side:'left'  },
+    { from:'q4',   to:'i4',  lbl:'NO',  side:'right' },
+  ];
+
+  function nodeW(n){ return n.sm ? 110 : (n.t==='q' ? 140 : 150); }
+  function nodeH(n){ return n.sm ? 44 : 60; }
+  function nodeColor(n){
+    if(n.t==='q')     return {fill:'#e3f2fd', stroke:'#1565c0', text:'#0d47a1'};
+    if(n.t==='spam')  return {fill:'#ffebee', stroke:'#c62828', text:'#b71c1c'};
+    if(n.t==='inbox') return {fill:'#e8f5e9', stroke:'#2e7d32', text:'#1b5e20'};
+    return {fill:'#fff',stroke:'#999',text:'#333'};
+  }
+
+  // Draw edges first
+  edges.forEach(e=>{
+    const fn = ns.find(n=>n.id===e.from);
+    const tn = ns.find(n=>n.id===e.to);
+    if(!fn||!tn) return;
+    const x1 = fn.x, y1 = fn.y + nodeH(fn)/2;
+    const x2 = tn.x, y2 = tn.y - nodeH(tn)/2;
+    const path = document.createElementNS(svgNS,'path');
+    const mx = (x1+x2)/2, my = (y1+y2)/2;
+    path.setAttribute('d',`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`);
+    path.setAttribute('stroke', e.lbl==='YES'?'#c62828':e.lbl==='NO'?'#2e7d32':'#90a4ae');
+    path.setAttribute('stroke-width','2.5');
+    path.setAttribute('fill','none');
+    path.setAttribute('stroke-dasharray', e.lbl?'none':'5,4');
+    svg.appendChild(path);
+
+    if(e.lbl){
+      const lx = x1 + (e.side==='left'?-28:28);
+      const ly = y1 + 22;
+      const lt = document.createElementNS(svgNS,'text');
+      lt.setAttribute('x', lx); lt.setAttribute('y', ly);
+      lt.setAttribute('text-anchor','middle');
+      lt.setAttribute('font-size','12');
+      lt.setAttribute('font-weight','800');
+      lt.setAttribute('font-family',"'Nunito',sans-serif");
+      lt.setAttribute('fill', e.lbl==='YES'?'#c62828':'#2e7d32');
+      lt.textContent = e.lbl;
+      svg.appendChild(lt);
+    }
+  });
+
+  // Draw nodes
+  ns.forEach(n=>{
+    if(n.x > W+20) return; // clip
+    const w = nodeW(n), h = nodeH(n);
+    const c = nodeColor(n);
+    const rect = document.createElementNS(svgNS,'rect');
+    rect.setAttribute('x', n.x - w/2);
+    rect.setAttribute('y', n.y - h/2);
+    rect.setAttribute('width', w);
+    rect.setAttribute('height', h);
+    rect.setAttribute('rx', n.t==='q'?12:20);
+    rect.setAttribute('fill', c.fill);
+    rect.setAttribute('stroke', c.stroke);
+    rect.setAttribute('stroke-width','2');
+    rect.setAttribute('filter','url(#shadow)');
+    svg.appendChild(rect);
+
+    const lines = n.txt.split('\n');
+    lines.forEach((line,i)=>{
+      const t = document.createElementNS(svgNS,'text');
+      const totalH = lines.length * 16;
+      const startY = n.y - totalH/2 + 12 + i*16;
+      t.setAttribute('x', n.x); t.setAttribute('y', startY);
+      t.setAttribute('text-anchor','middle');
+      t.setAttribute('font-size', n.sm?10:12);
+      t.setAttribute('font-weight','800');
+      t.setAttribute('font-family',"'Nunito',sans-serif");
+      t.setAttribute('fill', c.text);
+      t.textContent = line;
+      svg.appendChild(t);
+    });
+  });
+
+  // Drop shadow filter
+  const defs = document.createElementNS(svgNS,'defs');
+  defs.innerHTML = `<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.12)"/>
+  </filter>`;
+  svg.insertBefore(defs, svg.firstChild);
+
+  const wrap = document.getElementById('dtTreeWrap');
+  wrap.innerHTML = '';
+  wrap.appendChild(svg);
+}
+
+// Also expose DT button in live mode view
+function openDTFromLive(){
+  // Use live data if training not done, else training data
+  openDTModal();
 }
 </script>
 </body>
