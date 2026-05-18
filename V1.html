@@ -1,0 +1,1764 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cognospace Mail – Learn Decision Trees</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --blue:#4a90e2;--blue-hover:#2f72c4;--blue-light:#e8f1fc;
+    --green:#52b788;--green-light:#e8f5ef;
+    --red:#e07070;--red-light:#fdf0f0;
+    --yellow:#f4b942;--yellow-light:#fef8e7;
+    --purple:#9b8dd4;--purple-light:#f0edfb;
+    --orange:#f08060;
+    --bg:#f0f4ff;--white:#fff;
+    --border:#dde4f0;--text:#2d3142;--text2:#5a6282;--text3:#9199b5;
+    --hover:#edf1fb;--selected:#dce9fb;
+    --shadow:0 2px 8px rgba(74,144,226,.13),0 1px 3px rgba(74,144,226,.08);
+    --shadow2:0 4px 16px rgba(74,144,226,.18),0 2px 6px rgba(74,144,226,.1);
+    --shadow3:0 8px 28px rgba(74,144,226,.22),0 2px 8px rgba(74,144,226,.12);
+    --radius:14px;
+  }
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeInScale{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+  @keyframes slideIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes popIn{0%{transform:scale(.7);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+  @keyframes wiggle{0%,100%{transform:rotate(0deg)}20%{transform:rotate(-8deg)}40%{transform:rotate(8deg)}60%{transform:rotate(-5deg)}80%{transform:rotate(5deg)}}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(74,144,226,.3)}50%{box-shadow:0 0 0 8px rgba(74,144,226,0)}}
+  @keyframes floatBadge{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  @keyframes toastSlideUp{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+  @keyframes starPop{0%{transform:scale(1)}50%{transform:scale(1.6) rotate(20deg)}100%{transform:scale(1)}}
+  @keyframes cardAppear{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+  @keyframes footerShimmer{0%{background-position:-400px 0}100%{background-position:800px 0}}
+  @keyframes lockPulse{0%,100%{transform:scale(1);opacity:0.6}50%{transform:scale(1.15);opacity:1}}
+
+  body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}
+
+  /* ── AUTH PAGES ── */
+  #authWrap{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    height:100vh;
+    background:linear-gradient(145deg,#eef4ff 0%,#f7f0ff 50%,#edfff5 100%);
+    animation:fadeInScale .5s ease both;
+    padding:16px;
+  }
+  .auth-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px;animation:fadeInUp .5s ease both}
+  .auth-logo .logo-icon{
+    width:52px;height:52px;
+    background:linear-gradient(135deg,#4a90e2,#52b788);
+    border-radius:16px;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:26px;font-weight:800;font-family:'Nunito',sans-serif;
+    box-shadow:0 4px 14px rgba(74,144,226,.35);
+    animation:bounce 2.5s ease infinite;
+  }
+  .auth-logo .logo-text{font-size:28px;font-family:'Nunito',sans-serif;font-weight:800;color:var(--text)}
+  .auth-logo .logo-text span{color:var(--blue)}
+  .auth-card{
+    background:#fff;
+    border:1.5px solid #e2eaf8;
+    border-radius:24px;
+    padding:48px 48px 36px;
+    width:min(440px,100%);
+    box-shadow:0 4px 24px rgba(74,144,226,.12);
+    animation:fadeInUp .55s .1s ease both;
+    transition:box-shadow .3s;
+  }
+  .auth-card:hover{box-shadow:0 8px 32px rgba(74,144,226,.18)}
+  .auth-card h2{font-family:'Nunito',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px}
+  .auth-card p{font-size:14px;color:var(--text2);margin-bottom:32px;line-height:1.6}
+  .auth-input{
+    width:100%;padding:14px 18px;
+    border:1.5px solid var(--border);
+    border-radius:12px;font-size:15px;outline:none;
+    transition:border-color .2s, box-shadow .2s, transform .15s;
+    margin-bottom:16px;color:var(--text);
+    font-family:'Nunito Sans',sans-serif;
+    background:#fafcff;
+  }
+  .auth-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(74,144,226,.15);transform:translateY(-1px);background:#fff}
+  .auth-btn{
+    width:100%;padding:14px;
+    background:linear-gradient(135deg,var(--blue),#6aa8f0);
+    color:#fff;border:none;border-radius:12px;font-size:15px;
+    font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;
+    transition:transform .2s, box-shadow .2s;margin-top:4px;
+    box-shadow:0 4px 14px rgba(74,144,226,.3);
+  }
+  .auth-btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(74,144,226,.4)}
+  .auth-btn:active{transform:translateY(0)}
+  .auth-switch{margin-top:20px;font-size:14px;color:var(--text2);text-align:center}
+  .auth-switch a{color:var(--blue);text-decoration:none;font-weight:700;cursor:pointer;transition:opacity .15s}
+  .auth-switch a:hover{opacity:.75;text-decoration:underline}
+  .auth-err{background:#fff0f0;color:#c0474a;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:16px;display:none;border:1px solid #f5c0c0;animation:fadeInUp .25s ease both}
+
+  /* ── APP SHELL ── */
+  #appWrap{display:none;height:100vh;flex-direction:column;animation:fadeInScale .35s ease both}
+
+  /* Top bar */
+  .topbar{
+    height:64px;display:flex;align-items:center;padding:0 16px;
+    background:#fff;gap:8px;flex-shrink:0;
+    border-bottom:1.5px solid var(--border);
+    box-shadow:0 2px 8px rgba(74,144,226,.07);
+  }
+  .topbar-logo{display:flex;align-items:center;gap:10px;width:220px;flex-shrink:0}
+  .topbar-logo .logo-icon{
+    width:36px;height:36px;background:linear-gradient(135deg,#4a90e2,#52b788);
+    border-radius:10px;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:18px;font-weight:800;font-family:'Nunito',sans-serif;
+    box-shadow:0 2px 8px rgba(74,144,226,.25);transition:transform .2s;
+  }
+  .topbar-logo .logo-icon:hover{transform:rotate(-8deg) scale(1.08)}
+  .topbar-logo .logo-text{font-size:20px;font-family:'Nunito',sans-serif;font-weight:800;color:var(--text)}
+  .topbar-logo .logo-text span{color:var(--blue)}
+  .search-bar{
+    flex:1;max-width:600px;background:#f0f4ff;
+    border-radius:28px;display:flex;align-items:center;padding:0 18px;height:44px;
+    transition:background .2s, box-shadow .2s;gap:10px;border:1.5px solid transparent;
+  }
+  .search-bar:focus-within{background:#fff;box-shadow:var(--shadow2);border-color:var(--blue)}
+  .search-bar input{flex:1;border:none;background:transparent;font-size:15px;outline:none;color:var(--text);font-family:'Nunito Sans',sans-serif}
+  .search-icon{color:var(--text2);font-size:18px}
+  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+  .mode-toggle{
+    display:flex;background:#eef2fc;border-radius:28px;overflow:hidden;
+    font-size:13px;font-family:'Nunito',sans-serif;font-weight:700;
+    border:1.5px solid var(--border);padding:3px;gap:2px;
+  }
+  .mode-btn{
+    padding:7px 16px;cursor:pointer;transition:all .25s;
+    color:var(--text2);border:none;background:transparent;
+    border-radius:22px;font-family:'Nunito',sans-serif;font-weight:600;
+    position:relative;
+  }
+  .mode-btn.active{background:linear-gradient(135deg,var(--blue),#6aa8f0);color:#fff;box-shadow:0 2px 10px rgba(74,144,226,.35);transform:scale(1.04)}
+  .mode-btn:not(.active):hover{background:var(--hover);color:var(--blue)}
+  /* Locked live button in training mode */
+  .mode-btn.locked{cursor:not-allowed;opacity:0.55}
+  .mode-btn.locked:hover{background:transparent;color:var(--text2)}
+  .lock-icon{font-size:11px;margin-left:3px}
+  .avatar{
+    width:38px;height:38px;border-radius:50%;
+    background:linear-gradient(135deg,#4a90e2,#52b788);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:16px;font-weight:700;cursor:pointer;
+    font-family:'Nunito',sans-serif;
+    box-shadow:0 2px 10px rgba(74,144,226,.3);transition:transform .2s, box-shadow .2s;
+  }
+  .avatar:hover{transform:scale(1.12);box-shadow:0 4px 14px rgba(74,144,226,.4)}
+
+  /* ── MAIN LAYOUT ── */
+  .main{display:flex;flex:1;overflow:hidden}
+
+  /* Sidebar */
+  .sidebar{width:240px;flex-shrink:0;padding:10px 0;overflow-y:auto;background:#fff;border-right:1.5px solid var(--border)}
+  .compose-btn{
+    margin:10px 14px 16px;background:#fff;border:1.5px solid var(--border);
+    border-radius:18px;padding:12px 20px;
+    display:flex;align-items:center;gap:12px;cursor:pointer;
+    box-shadow:var(--shadow);font-size:14px;
+    font-family:'Nunito',sans-serif;font-weight:700;color:var(--text);
+    transition:transform .2s, box-shadow .2s, background .2s;width:calc(100% - 28px);
+  }
+  .compose-btn:hover{box-shadow:var(--shadow2);background:var(--blue-light);transform:translateY(-2px)}
+  .compose-btn .pencil{font-size:20px;transition:transform .3s}
+  .compose-btn:hover .pencil{animation:wiggle .5s ease}
+  .nav-item{
+    display:flex;align-items:center;padding:5px 14px 5px 22px;
+    height:38px;border-radius:0 20px 20px 0;cursor:pointer;
+    font-size:14px;font-family:'Nunito Sans',sans-serif;color:var(--text);
+    transition:background .15s, transform .15s;margin-right:14px;gap:12px;font-weight:500;
+  }
+  .nav-item:hover{background:var(--hover);transform:translateX(3px)}
+  .nav-item.active{background:var(--selected);font-weight:700}
+  .nav-item .nav-icon{font-size:18px;width:20px;text-align:center;color:var(--text2)}
+  .nav-item.active .nav-icon{color:var(--blue)}
+  .nav-count{margin-left:auto;font-size:11px;font-weight:700;background:var(--blue);color:#fff;border-radius:10px;padding:1px 8px;font-family:'Nunito',sans-serif}
+  .nav-section{font-size:11px;font-weight:700;color:var(--text3);padding:10px 24px 4px;letter-spacing:.8px;text-transform:uppercase;margin-top:6px}
+  .cat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+  /* ── MAIL LIST ── */
+  .content{flex:1;overflow:hidden;display:flex;flex-direction:column;background:#fff;border-radius:18px;margin:10px 10px 10px 0;box-shadow:var(--shadow)}
+  .inbox-toolbar{display:flex;align-items:center;padding:8px 16px;gap:8px;border-bottom:1.5px solid var(--border);height:52px;flex-shrink:0}
+  .tb-btn{border:none;background:transparent;cursor:pointer;padding:8px;border-radius:50%;color:var(--text2);font-size:18px;transition:background .15s, transform .15s;display:flex;align-items:center}
+  .tb-btn:hover{background:var(--hover);transform:scale(1.1)}
+  .tb-label{font-size:14px;color:var(--text2);margin-left:auto;font-family:'Nunito Sans',sans-serif}
+  .mail-list{overflow-y:auto;flex:1}
+  .mail-row{display:flex;align-items:center;padding:0 16px;height:60px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s,transform .15s;gap:8px;position:relative}
+  .mail-row:hover{background:#f0f5ff;transform:translateX(2px)}
+  .mail-row.unread{background:#fff;font-weight:500}
+  .mail-row.unread .mail-sender,.mail-row.unread .mail-subject{font-weight:700}
+  .mail-row.read{background:#f8faff}
+  .mail-star{font-size:16px;cursor:pointer;color:#dde4f0;flex-shrink:0;padding:4px;border-radius:50%;transition:all .2s}
+  .mail-star.starred,.mail-star:hover{color:var(--yellow);animation:starPop .3s ease}
+  .mail-sender{width:160px;flex-shrink:0;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .mail-preview{flex:1;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)}
+  .mail-preview .mail-subject{color:var(--text)}
+  .mail-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .mail-time{font-size:12px;color:var(--text3);width:56px;text-align:right}
+  .spam-tag{font-size:11px;padding:2px 10px;border-radius:12px;background:var(--red-light);color:#c0474a;font-weight:700}
+  .inbox-tag{font-size:11px;padding:2px 10px;border-radius:12px;background:var(--green-light);color:#2d8a5e;font-weight:700}
+  .cat-badge{font-size:11px;padding:2px 10px;border-radius:12px;font-weight:700}
+
+  /* ── MAIL OPEN VIEW ── */
+  #mailView{
+    display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+    background:#fff;z-index:100;overflow-y:auto;flex-direction:column;
+    animation:fadeInScale .3s ease both;
+  }
+  .mv-topbar{display:flex;align-items:center;padding:14px 24px;gap:12px;border-bottom:1.5px solid var(--border);position:sticky;top:0;background:#fff;z-index:10}
+  .mv-back{font-size:20px;cursor:pointer;border:none;background:var(--hover);padding:9px 14px;border-radius:12px;transition:background .15s,transform .15s;color:var(--text2);font-weight:700}
+  .mv-back:hover{background:var(--selected);transform:translateX(-3px);color:var(--blue)}
+  .mv-subject{font-size:20px;font-weight:800;font-family:'Nunito',sans-serif;flex:1;color:var(--text);line-height:1.3}
+
+  /* Mail view – improved body card */
+  .mv-card{
+    margin:20px 24px;background:#fff;
+    border:1.5px solid var(--border);border-radius:20px;
+    overflow:hidden;box-shadow:var(--shadow);
+  }
+  .mv-card-head{
+    padding:20px 28px 18px;
+    background:linear-gradient(135deg,#f7faff 0%,#eef4ff 100%);
+    border-bottom:1.5px solid var(--border);
+    display:flex;align-items:flex-start;gap:16px;
+  }
+  .mv-avatar{
+    width:48px;height:48px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:20px;font-weight:800;flex-shrink:0;
+    font-family:'Nunito',sans-serif;
+    box-shadow:0 3px 12px rgba(0,0,0,.18);
+  }
+  .mv-sender-info{flex:1}
+  .mv-from{font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;color:var(--text)}
+  .mv-email-addr{font-size:12px;color:var(--text3);margin-top:2px;font-family:'Nunito Sans',sans-serif}
+  .mv-to-line{font-size:13px;color:var(--text2);margin-top:4px}
+  .mv-date{font-size:13px;color:var(--text2);white-space:nowrap;flex-shrink:0;margin-top:4px}
+
+  .mv-body-wrap{padding:28px 32px 36px;font-size:15px;line-height:1.9;color:var(--text);font-family:'Nunito Sans',sans-serif}
+  .mv-body-wrap a{color:var(--blue)}
+
+  .mv-spam-banner{margin:16px 24px 0;padding:14px 20px;background:#fff0f0;border-radius:14px;display:flex;align-items:center;gap:12px;font-size:14px;border:1.5px solid #f5c0c0;animation:fadeInUp .3s ease both}
+  .mv-inbox-banner{margin:16px 24px 0;padding:14px 20px;background:#edfbf3;border-radius:14px;display:flex;align-items:center;gap:12px;font-size:14px;border:1.5px solid #b4e8cc;animation:fadeInUp .3s ease both}
+  .mv-reason{margin:0 24px 24px;padding:18px 22px;background:#fefce8;border:1.5px solid #f0d878;border-radius:14px;font-size:14px;line-height:1.7;animation:fadeInUp .35s ease both}
+  .mv-reason strong{color:#a07010}
+
+  /* ── TRAINING MODE ── */
+  #trainingWrap{display:none;flex:1;flex-direction:column;overflow:hidden}
+  .training-header{padding:16px 24px;background:#fff;border-bottom:1.5px solid var(--border);display:flex;align-items:flex-start;gap:16px;flex-shrink:0;flex-wrap:wrap}
+  .training-title{font-size:19px;font-family:'Nunito',sans-serif;font-weight:800}
+  .training-desc{font-size:13px;color:var(--text2);margin-top:4px;line-height:1.6}
+  .gen-btn{
+    padding:11px 24px;background:linear-gradient(135deg,var(--blue),#6aa8f0);
+    color:#fff;border:none;border-radius:22px;font-size:14px;
+    font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;
+    transition:transform .2s,box-shadow .2s;margin-left:auto;flex-shrink:0;
+    box-shadow:0 4px 14px rgba(74,144,226,.3);
+  }
+  .gen-btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(74,144,226,.4)}
+  .gen-btn:active{transform:translateY(0)}
+  .gen-btn:disabled{background:#c8d0e0;cursor:not-allowed;box-shadow:none;transform:none}
+  .training-body{display:flex;flex:1;overflow:hidden;gap:0}
+
+  /* Mail pool (left) */
+  .mail-pool{flex:1;padding:14px;overflow-y:auto;background:#f5f8ff;border-right:2px solid var(--border)}
+  .pool-title{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:12px;padding:0 4px;text-transform:uppercase;letter-spacing:.6px;font-family:'Nunito',sans-serif}
+
+  /* Improved pool mail card */
+  .pool-mail{
+    background:#fff;border-radius:14px;padding:0;
+    margin-bottom:10px;cursor:grab;
+    border:1.5px solid var(--border);
+    transition:transform .2s, box-shadow .2s, border-color .2s;
+    display:flex;flex-direction:column;user-select:none;
+    animation:cardAppear .3s ease both;overflow:hidden;
+  }
+  .pool-mail:hover{box-shadow:var(--shadow2);border-color:var(--blue);transform:translateY(-3px) scale(1.01)}
+  .pool-mail.dragging{opacity:.55;box-shadow:var(--shadow3);transform:rotate(2deg)}
+  .pm-head{display:flex;align-items:center;gap:10px;padding:10px 14px 8px;background:#fafcff;border-bottom:1px solid #eef1f8}
+  .pm-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800;flex-shrink:0;font-family:'Nunito',sans-serif}
+  .pm-sender{font-size:12px;font-weight:700;color:var(--text);font-family:'Nunito',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+  .pm-time-small{font-size:10px;color:var(--text3);flex-shrink:0}
+  .pm-body{padding:8px 14px 10px}
+  .pm-subject{font-size:12px;color:var(--text);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+  .pm-preview{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* Categories panel (right) */
+  .cats-panel{width:380px;flex-shrink:0;overflow-y:auto;padding:14px;background:#fff}
+  .cat-block{border:2px dashed var(--border);border-radius:16px;margin-bottom:12px;padding:14px;min-height:90px;transition:border-color .2s,background .2s,box-shadow .2s;position:relative}
+  .cat-block.drag-over{border-color:var(--blue);background:var(--blue-light);box-shadow:var(--shadow)}
+  .cat-block-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .cat-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,.07)}
+  .cat-name{font-size:13px;font-weight:800;font-family:'Nunito',sans-serif}
+  .cat-count{margin-left:auto;background:var(--blue);color:#fff;border-radius:12px;padding:2px 10px;font-size:12px;font-weight:700;font-family:'Nunito',sans-serif;transition:transform .2s;animation:floatBadge 2s ease infinite}
+  .cat-desc{font-size:11px;color:var(--text2);margin-bottom:8px;line-height:1.5}
+  .cat-mails-zone{min-height:50px;display:flex;flex-wrap:wrap;gap:6px;padding:4px 0}
+  .dropped-mail{background:var(--blue-light);border:1px solid #c5d9f7;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:600;cursor:default;display:flex;align-items:center;gap:6px;max-width:100%;animation:popIn .25s ease both;font-family:'Nunito Sans',sans-serif}
+  .dropped-mail .dm-remove{cursor:pointer;color:var(--text3);font-size:14px;flex-shrink:0;transition:color .15s,transform .15s}
+  .dropped-mail .dm-remove:hover{color:var(--red);transform:scale(1.2)}
+  .submit-cat-btn{margin-top:10px;padding:8px 20px;background:linear-gradient(135deg,var(--green),#6fcaa0);color:#fff;border:none;border-radius:18px;font-size:12px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;font-family:'Nunito',sans-serif;box-shadow:0 3px 10px rgba(82,183,136,.3)}
+  .submit-cat-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(82,183,136,.4)}
+  .submit-cat-btn:disabled{background:#c8d0e0;cursor:not-allowed;box-shadow:none;transform:none}
+  .submitted-badge{background:var(--green-light);color:#2d8a5e;border-radius:14px;padding:5px 14px;font-size:12px;font-weight:700;display:none;animation:popIn .3s ease both;font-family:'Nunito',sans-serif}
+  .progress-info{font-size:13px;color:var(--text2);padding:10px 0;text-align:center;font-weight:600}
+
+  /* ── ANALYSIS MODAL ── */
+  .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(45,49,66,.55);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:16px}
+  .modal-overlay.show{display:flex}
+  .modal{background:#fff;border-radius:24px;padding:40px;width:min(660px,100%);max-height:88vh;overflow-y:auto;box-shadow:0 16px 48px rgba(45,49,66,.25);animation:popIn .35s ease both}
+  .modal h2{font-size:24px;font-family:'Nunito',sans-serif;font-weight:800;margin-bottom:8px;color:var(--text)}
+  .modal .modal-sub{font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.6}
+  .analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+  .analysis-card{border:1.5px solid var(--border);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px;transition:transform .2s,box-shadow .2s;animation:cardAppear .4s ease both}
+  .analysis-card:hover{transform:translateY(-3px);box-shadow:var(--shadow2)}
+  .analysis-card .ac-label{font-size:13px;color:var(--text2);font-weight:600;font-family:'Nunito',sans-serif}
+  .analysis-card .ac-count{font-size:30px;font-weight:800;font-family:'Nunito',sans-serif}
+  .analysis-card .ac-bar{height:8px;border-radius:4px;background:#edf1fb;margin-top:4px;overflow:hidden}
+  .analysis-card .ac-fill{height:100%;border-radius:4px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+  .modal-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:8px;flex-wrap:wrap}
+  .modal-btn{padding:11px 26px;border-radius:22px;font-size:14px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:transform .2s, box-shadow .2s;border:1.5px solid var(--border);background:#fff;color:var(--text)}
+  .modal-btn:hover{background:var(--hover);transform:translateY(-1px)}
+  .modal-btn.primary{background:linear-gradient(135deg,var(--blue),#6aa8f0);color:#fff;border-color:var(--blue);box-shadow:0 4px 14px rgba(74,144,226,.3)}
+  .modal-btn.primary:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(74,144,226,.4)}
+
+  /* ── LEVEL 2 DECISION TREE ── */
+  #l2Wrap{display:none;flex:1;flex-direction:column;overflow:hidden}
+  .l2-header{padding:16px 24px;background:linear-gradient(135deg,#fff8ee,#fffbf0);border-bottom:2px solid #fde68a;display:flex;align-items:flex-start;gap:12px;flex-shrink:0;flex-wrap:wrap}
+  .l2-title{font-size:19px;font-family:'Nunito',sans-serif;font-weight:800;color:#a05010}
+  .l2-desc{font-size:13px;color:#b06020;margin-top:4px;line-height:1.6}
+  .l2-body{display:flex;flex:1;overflow:hidden;gap:12px;padding:12px}
+  .l2-left{flex:1;overflow-y:auto;background:#fff;border-radius:16px;border:1.5px solid var(--border);padding:16px}
+  .l2-right{width:340px;flex-shrink:0;overflow-y:auto}
+  .l2-main-cat{font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .l2-compare-cat{background:#fff;border-radius:14px;border:2px dashed var(--border);padding:14px;margin-bottom:12px;transition:border-color .2s,background .2s}
+  .l2-compare-cat.drag-over{border-color:var(--orange);background:#fff8f3}
+  .l2-compare-cat-name{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px;font-family:'Nunito',sans-serif}
+  .l2-dropped-zone{min-height:50px;display:flex;flex-wrap:wrap;gap:6px}
+  .submit-l2-btn{padding:11px 26px;background:linear-gradient(135deg,var(--orange),#f4a070);color:#fff;border:none;border-radius:22px;font-size:14px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;margin-top:16px;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(240,128,96,.3)}
+  .submit-l2-btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(240,128,96,.4)}
+
+  /* ── LIVE MODE ── */
+  #liveWrap{display:none;flex:1;flex-direction:column;overflow:hidden}
+  .live-header{padding:14px 24px;background:#fff;border-bottom:1.5px solid var(--border);display:flex;align-items:center;gap:14px;flex-shrink:0;flex-wrap:wrap}
+  .live-title{font-size:19px;font-family:'Nunito',sans-serif;font-weight:800}
+  .live-stats{display:flex;gap:12px;margin-left:auto;align-items:center}
+  .live-stat{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:22px;font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;border:1.5px solid var(--border);transition:all .2s}
+  .live-stat:hover{box-shadow:var(--shadow2);transform:translateY(-2px)}
+  .live-stat.spam-s{color:#c0474a;border-color:#f5c0c0;background:#fff8f8}
+  .live-stat.inbox-s{color:#2d8a5e;border-color:#b4e8cc;background:#f5fdf8}
+  .live-stat .stat-icon{font-size:16px}
+  .live-stat .stat-num{font-size:18px;font-weight:800;min-width:28px;text-align:center;transition:transform .2s}
+  .live-stat:active .stat-num{transform:scale(1.3)}
+  .live-gen-btn{padding:10px 22px;background:linear-gradient(135deg,var(--blue),#6aa8f0);color:#fff;border:none;border-radius:22px;font-size:14px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(74,144,226,.3)}
+  .live-gen-btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(74,144,226,.4)}
+  .live-gen-btn:disabled{background:#c8d0e0;cursor:not-allowed;box-shadow:none;transform:none}
+  .live-tabs{display:flex;border-bottom:1.5px solid var(--border);background:#fff;flex-shrink:0;padding:0 8px}
+  .live-tab{padding:14px 24px;font-size:14px;font-family:'Nunito',sans-serif;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;color:var(--text2);transition:color .2s,border-color .2s}
+  .live-tab:hover{color:var(--blue)}
+  .live-tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:800}
+  .live-body{flex:1;overflow-y:auto;background:#fff}
+
+  /* Improved live mail row */
+  .live-mail-row{
+    display:flex;align-items:center;padding:12px 18px;
+    cursor:pointer;border-bottom:1px solid var(--border);
+    transition:background .15s,transform .15s;gap:12px;min-height:64px;
+  }
+  .live-mail-row:hover{background:#f0f5ff;transform:translateX(3px)}
+  .live-mail-row.new-mail{animation:slideIn .4s ease}
+  .lm-verdict{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+  .lm-verdict.spam{background:#fff0f0}
+  .lm-verdict.inbox{background:#edfbf3}
+  .lm-info{flex:1;min-width:0}
+  .lm-sender{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Nunito',sans-serif;color:var(--text)}
+  .lm-subject{font-size:13px;color:var(--text);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+  .lm-preview{font-size:12px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+  .lm-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+  .lm-badge{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:700;font-family:'Nunito',sans-serif}
+  .lm-badge.spam{background:#fff0f0;color:#c0474a}
+  .lm-badge.inbox{background:#edfbf3;color:#2d8a5e}
+  .lm-time{font-size:11px;color:var(--text3)}
+  .live-empty{text-align:center;padding:64px 24px;color:var(--text3);font-size:15px;font-family:'Nunito',sans-serif}
+  .live-empty .le-icon{font-size:72px;margin-bottom:18px;opacity:.5;animation:bounce 2s ease infinite}
+  .live-limit{text-align:center;padding:18px;font-size:13px;color:var(--text3);border-top:1px solid var(--border);font-style:italic}
+
+  /* ── TRAINING COMPLETE BANNER (shown before live unlocks) ── */
+  .live-locked-banner{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    flex:1;gap:16px;text-align:center;padding:40px 24px;
+  }
+
+  /* ── IMPROVED FOOTER ── */
+  footer{
+    background:linear-gradient(135deg,#1e2340 0%,#2a3160 50%,#1a2a50 100%);
+    padding:0;display:flex;flex-direction:column;
+    flex-shrink:0;position:relative;overflow:hidden;
+  }
+  footer::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,#4a90e2,#52b788,#f4b942,#e07070,#9b8dd4,#4a90e2);
+    background-size:400% 100%;
+    animation:footerShimmer 6s linear infinite;
+  }
+  .footer-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 28px;gap:16px;flex-wrap:wrap;
+  }
+  .footer-brand{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Nunito',sans-serif;font-weight:800;
+    color:#fff;font-size:14px;
+  }
+  .footer-brand .fb-icon{
+    width:28px;height:28px;
+    background:linear-gradient(135deg,#4a90e2,#52b788);
+    border-radius:8px;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:13px;font-weight:800;
+    box-shadow:0 2px 8px rgba(74,144,226,.4);
+  }
+  .footer-brand .fb-tagline{font-size:11px;color:rgba(255,255,255,.5);font-weight:500;font-family:'Nunito Sans',sans-serif;margin-top:1px}
+  .footer-center{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .footer-links{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+  .footer-links a{
+    color:rgba(255,255,255,.55);text-decoration:none;
+    transition:color .2s;font-weight:600;font-size:12px;
+    font-family:'Nunito Sans',sans-serif;
+  }
+  .footer-links a:hover{color:#fff}
+  .footer-copy{font-size:11px;color:rgba(255,255,255,.3);font-family:'Nunito Sans',sans-serif}
+  .footer-right{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.6);font-family:'Nunito',sans-serif;font-weight:600}
+  .footer-right .heart{color:#e07070;animation:bounce 1.5s ease infinite;display:inline-block}
+  .footer-mode-badge{
+    font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;
+    font-family:'Nunito',sans-serif;letter-spacing:.3px;
+  }
+  .footer-mode-badge.training{background:rgba(74,144,226,.25);color:#8ab8f5;border:1px solid rgba(74,144,226,.3)}
+  .footer-mode-badge.live{background:rgba(82,183,136,.25);color:#7dd4a8;border:1px solid rgba(82,183,136,.3)}
+
+  /* ── TOAST ── */
+  #toast{
+    position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+    background:#2d3142;color:#fff;padding:13px 28px;border-radius:14px;font-size:14px;z-index:999;
+    opacity:0;transition:opacity .3s;pointer-events:none;
+    font-family:'Nunito',sans-serif;font-weight:600;
+    box-shadow:0 6px 24px rgba(45,49,66,.25);
+    white-space:nowrap;max-width:90vw;text-overflow:ellipsis;overflow:hidden;
+  }
+  #toast.show{opacity:1;animation:toastSlideUp .3s ease both}
+
+  /* ── GLOBAL LINK STYLES — blue for children ── */
+  a, a:visited { color: #1a73e8 !important; text-decoration: underline; }
+  a:hover { color: #1558b0 !important; text-decoration: underline; }
+  /* Exception: footer links keep their style */
+  .footer-links a { color: rgba(255,255,255,.55) !important; text-decoration: none; }
+  .footer-links a:hover { color: #fff !important; }
+  /* Auth switch links */
+  .auth-switch a { color: var(--blue) !important; }
+  /* progress info link */
+  #progressInfo a { color: var(--blue) !important; text-decoration: underline; }
+
+  /* ── DECISION TREE MODAL ── */
+  #dtModal{
+    display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+    background:rgba(45,49,66,.6);backdrop-filter:blur(6px);
+    z-index:500;align-items:center;justify-content:center;padding:16px;
+    animation:fadeInScale .3s ease both;
+  }
+  #dtModal.show{display:flex}
+  .dt-container{
+    background:#fff;border-radius:28px;
+    width:min(900px,100%);max-height:90vh;overflow-y:auto;
+    box-shadow:0 20px 60px rgba(45,49,66,.3);
+    animation:popIn .35s ease both;
+  }
+  .dt-header{
+    padding:28px 32px 20px;
+    background:linear-gradient(135deg,#e8f5e9,#e3f2fd);
+    border-radius:28px 28px 0 0;
+    border-bottom:1.5px solid #c8e6c9;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    flex-wrap:wrap;
+  }
+  .dt-title{font-size:22px;font-family:'Nunito',sans-serif;font-weight:800;color:#1b5e20}
+  .dt-subtitle{font-size:13px;color:#388e3c;margin-top:4px;line-height:1.5}
+  .dt-close-btn{
+    border:none;background:#fff;border-radius:12px;padding:10px 18px;cursor:pointer;
+    font-size:13px;font-family:'Nunito',sans-serif;font-weight:700;color:#555;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);transition:all .2s;flex-shrink:0;
+  }
+  .dt-close-btn:hover{background:#f5f5f5;transform:scale(1.05)}
+  .dt-body{padding:28px 32px 36px}
+  .dt-legend{
+    display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px;
+    background:#f8f9ff;border-radius:14px;padding:14px 18px;
+    border:1px solid #e0e8ff;
+  }
+  .dt-legend-item{display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Nunito',sans-serif;font-weight:600}
+  .dt-legend-dot{width:16px;height:16px;border-radius:50%}
+
+  /* Tree SVG wrapper */
+  .dt-tree-wrap{overflow-x:auto;padding:8px 0}
+  .dt-tree-wrap svg{display:block;margin:0 auto}
+
+  /* Node styles */
+  .dt-node-question rect{fill:#e3f2fd;stroke:#1565c0;stroke-width:2;rx:14;ry:14}
+  .dt-node-question text{fill:#0d47a1;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px}
+  .dt-node-spam rect{fill:#ffebee;stroke:#c62828;stroke-width:2}
+  .dt-node-spam text{fill:#b71c1c;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px}
+  .dt-node-inbox rect{fill:#e8f5e9;stroke:#2e7d32;stroke-width:2}
+  .dt-node-inbox text{fill:#1b5e20;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px}
+  .dt-edge{stroke:#90a4ae;stroke-width:2;fill:none;stroke-dasharray:6,3}
+  .dt-edge-label{font-size:11px;fill:#546e7a;font-family:'Nunito',sans-serif;font-weight:700}
+
+  /* Stats bar below tree */
+  .dt-stats{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:10px;margin-top:24px;
+  }
+  .dt-stat-card{
+    border-radius:14px;padding:14px;text-align:center;
+    border:1.5px solid var(--border);transition:transform .2s,box-shadow .2s;
+    animation:cardAppear .4s ease both;
+  }
+  .dt-stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow2)}
+  .dt-stat-icon{font-size:24px;margin-bottom:6px}
+  .dt-stat-name{font-size:11px;color:var(--text2);font-weight:700;font-family:'Nunito',sans-serif;margin-bottom:4px}
+  .dt-stat-count{font-size:22px;font-weight:800;font-family:'Nunito',sans-serif}
+  .dt-info-box{
+    margin-top:20px;background:linear-gradient(135deg,#f3e5f5,#fce4ec);
+    border-radius:14px;padding:16px 20px;font-size:13px;line-height:1.7;
+    border:1.5px solid #ce93d8;
+  }
+  .dt-info-box strong{color:#6a1b9a;font-family:'Nunito',sans-serif}
+
+  /* scrollbar */
+  ::-webkit-scrollbar{width:6px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:#c8d4ee;border-radius:6px}
+  ::-webkit-scrollbar-thumb:hover{background:#a8b8dc}
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:768px){
+    body{overflow:auto}
+    #appWrap{height:auto;min-height:100vh}
+    .main{flex-direction:column}
+    .sidebar{width:100%;border-right:none;border-bottom:1.5px solid var(--border);padding:6px 0;display:flex;flex-wrap:wrap;align-items:center;gap:4px;overflow-x:auto}
+    .compose-btn{width:auto;margin:6px 8px;padding:8px 16px;font-size:13px;flex-shrink:0}
+    #sidebarNav{display:flex;flex-wrap:nowrap;gap:2px;padding:4px;overflow-x:auto}
+    .nav-item{height:auto;padding:5px 12px;margin-right:0;border-radius:20px;font-size:12px;white-space:nowrap;flex-shrink:0}
+    .nav-section{display:none}
+    .topbar-logo .logo-text{font-size:16px}
+    .search-bar{max-width:100%;font-size:13px;flex:1;min-width:80px}
+    .mode-btn{padding:6px 10px;font-size:12px}
+    .training-body{flex-direction:column}
+    .cats-panel{width:100%;border-top:2px solid var(--border);border-left:none}
+    .mail-pool{border-right:none;min-height:200px}
+    .l2-body{flex-direction:column}
+    .l2-right{width:100%;border-top:1.5px solid var(--border);padding-top:12px}
+    .analysis-grid{grid-template-columns:1fr}
+    .auth-card{padding:32px 24px 24px}
+    .mv-body-wrap{padding:20px 20px 28px}
+    .mv-card{margin:12px}
+    .mv-topbar{padding:10px 16px}
+    .footer-inner{flex-direction:column;align-items:center;text-align:center;padding:14px 20px;gap:10px}
+    .live-stats{margin-left:0;flex-wrap:wrap;justify-content:center}
+    .live-header{gap:8px;flex-wrap:wrap}
+    .modal{padding:28px 20px;width:min(660px,calc(100vw - 32px));margin:0 auto}
+    .modal-actions{flex-direction:column-reverse}
+    .modal-btn{width:100%;text-align:center}
+    .training-header{padding:12px 16px}
+    .dt-container{border-radius:20px;width:min(900px,calc(100vw - 24px))}
+    .dt-header{padding:20px 20px 16px;border-radius:20px 20px 0 0}
+    .dt-body{padding:16px}
+    .dt-stats{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:480px){
+    .topbar{padding:0 10px;gap:4px;height:56px}
+    .topbar-logo .logo-text{display:none}
+    .search-bar{padding:0 10px;height:36px;font-size:12px}
+    .avatar{width:32px;height:32px;font-size:13px}
+    .mode-btn{padding:5px 8px;font-size:11px}
+    .lock-icon{display:none}
+    .auth-logo .logo-text{font-size:22px}
+    .live-mail-row{padding:10px 14px}
+    .lm-preview{display:none}
+    .footer-links{gap:10px}
+    .live-header{padding:10px 14px}
+    .live-title{font-size:16px}
+    .live-stat{padding:6px 12px;font-size:13px}
+    .dt-stats{grid-template-columns:repeat(2,1fr)}
+    .dt-legend{gap:8px}
+    .modal-actions{gap:8px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ AUTH ═══════════════ -->
+<div id="authWrap">
+  <div class="auth-logo">
+    <div class="logo-icon">C</div>
+    <div class="logo-text"><span>Cogno</span>space Mail</div>
+  </div>
+  <div id="signupCard" class="auth-card">
+    <h2>Create your account ✨</h2>
+    <p>Start learning about Decision Trees with Cognospace Mail — sort emails, train an AI, and see it classify in real time!</p>
+    <div id="signupErr" class="auth-err"></div>
+    <input class="auth-input" id="suName" type="text" placeholder="Full name">
+    <input class="auth-input" id="suEmail" type="email" placeholder="Mail ID (e.g. you@cognospace.mail)">
+    <input class="auth-input" id="suPass" type="password" placeholder="Create password (6+ characters)">
+    <button class="auth-btn" onclick="doSignup()">🚀 Create Account</button>
+    <div class="auth-switch">Already have an account? <a onclick="showLogin()">Sign in</a></div>
+  </div>
+  <div id="loginCard" class="auth-card" style="display:none">
+    <h2>Welcome back! 👋</h2>
+    <p>Continue your AI learning journey with Cognospace Mail</p>
+    <div id="loginErr" class="auth-err"></div>
+    <input class="auth-input" id="liEmail" type="email" placeholder="Mail ID">
+    <input class="auth-input" id="liPass" type="password" placeholder="Password">
+    <button class="auth-btn" onclick="doLogin()">Sign In →</button>
+    <div class="auth-switch">Don't have an account? <a onclick="showSignup()">Create one</a></div>
+  </div>
+</div>
+
+<!-- ═══════════════ APP ═══════════════ -->
+<div id="appWrap">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-logo">
+      <div class="logo-icon">C</div>
+      <div class="logo-text"><span>Cogno</span>space Mail</div>
+    </div>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search mail">
+    </div>
+    <div class="topbar-right">
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="trainModeBtn" onclick="switchMode('training')">🎓 Training</button>
+        <button class="mode-btn locked" id="liveModeBtn" onclick="tryLiveMode()" title="Complete training to unlock Live Mode">⚡ Live <span class="lock-icon">🔒</span></button>
+      </div>
+      <div class="avatar" id="userAvatar" title="Account">A</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+      <button class="compose-btn" onclick="alert('✏️ Compose is available in Live Mode after training!')">
+        <span class="pencil">✏️</span> Compose
+      </button>
+      <div id="sidebarNav"></div>
+    </div>
+
+    <!-- ── TRAINING MODE ── -->
+    <div id="trainingWrap" style="display:flex;flex:1;flex-direction:column;overflow:hidden">
+      <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+        <div class="training-header">
+          <div>
+            <div class="training-title">🎓 Training Mode – Level 1 Decision Tree</div>
+            <div class="training-desc">
+              Step 1: Generate 40 emails → Drag each mail to its category → Submit → See the analysis!<br>
+              <span style="color:#e65100;font-weight:600">🌳 Decision Tree:</span> We teach the computer by sorting examples into groups. This is how AI learns to classify emails!
+            </div>
+          </div>
+          <button class="gen-btn" id="genBtn" onclick="generateMails()">⚡ Generate 40 Mails</button>
+        </div>
+        <div class="training-body" id="trainingBody">
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:15px;flex-direction:column;gap:14px;padding:40px 24px;text-align:center">
+            <div style="font-size:72px;animation:bounce 2s ease infinite">📬</div>
+            <div style="font-size:17px;font-weight:700;color:var(--text2)">Ready to train your AI?</div>
+            <div style="font-size:14px;max-width:440px;line-height:1.7;color:var(--text3)">Click <strong style="color:var(--blue)">"Generate 40 Mails"</strong> to start. You'll drag and drop emails into 7 categories — this teaches the Decision Tree what kind of email belongs where!</div>
+          </div>
+        </div>
+      </div>
+      <footer>
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <div class="fb-icon">C</div>
+            <div>
+              <div>Cognospace Mail</div>
+              <div class="footer-tagline" style="font-size:11px;color:rgba(255,255,255,.45);font-weight:500;font-family:'Nunito Sans',sans-serif">AI Learning Platform</div>
+            </div>
+          </div>
+          <div class="footer-center">
+            <div class="footer-links">
+              <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="#">About Decision Trees</a><a href="#">CognoSpace</a>
+            </div>
+            <div class="footer-copy" style="font-size:11px;color:rgba(255,255,255,.28);font-family:'Nunito Sans',sans-serif;margin-top:4px">© 2026 CognoSpace. All rights reserved.</div>
+          </div>
+          <div class="footer-right">
+            <span class="footer-mode-badge training">🎓 Training Mode</span>
+            Made with <span class="heart">♥</span> for young learners
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ── LIVE MODE ── -->
+    <div id="liveWrap" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+      <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+        <div class="live-header">
+          <div>
+            <div class="live-title">⚡ Live Mode</div>
+            <div style="font-size:13px;color:var(--text2)">The AI uses what it learned in Training to classify new emails automatically!</div>
+          </div>
+          <div class="live-stats">
+            <div class="live-stat spam-s" onclick="liveFilterTab('spam')">
+              <span class="stat-icon">🚫</span> Spam <span class="stat-num" id="spamCount">0</span>
+            </div>
+            <div class="live-stat inbox-s" onclick="liveFilterTab('inbox')">
+              <span class="stat-icon">📥</span> Inbox <span class="stat-num" id="inboxCount">0</span>
+            </div>
+          </div>
+          <button class="live-gen-btn" id="liveGenBtn" onclick="generateOneLiveMail()">⚡ Generate Mail</button>
+          <button class="live-gen-btn" style="background:linear-gradient(135deg,#2e7d32,#4caf50);margin-left:4px" onclick="openDTModal()">🌳 Decision Tree</button>
+          <span id="liveLimit" style="font-size:13px;color:var(--text3);flex-shrink:0">0 / 50</span>
+        </div>
+        <div class="live-tabs">
+          <div class="live-tab active" id="ltAll" onclick="liveFilterTab('all')">📬 All Mail</div>
+          <div class="live-tab" id="ltInbox" onclick="liveFilterTab('inbox')">📥 Inbox</div>
+          <div class="live-tab" id="ltSpam" onclick="liveFilterTab('spam')">🚫 Spam</div>
+        </div>
+        <div class="live-body" id="liveBody">
+          <div class="live-empty"><div class="le-icon">📭</div>Click "Generate Mail" to start receiving emails!</div>
+        </div>
+      </div>
+      <footer>
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <div class="fb-icon">C</div>
+            <div>
+              <div>Cognospace Mail</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.45);font-weight:500;font-family:'Nunito Sans',sans-serif">AI Learning Platform</div>
+            </div>
+          </div>
+          <div class="footer-center">
+            <div class="footer-links">
+              <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="#">About Decision Trees</a><a href="#">CognoSpace</a>
+            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,.28);font-family:'Nunito Sans',sans-serif;margin-top:4px;text-align:center">© 2026 CognoSpace. All rights reserved.</div>
+          </div>
+          <div class="footer-right">
+            <span class="footer-mode-badge live">⚡ Live Mode</span>
+            Made with <span class="heart">♥</span> for young learners
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ── LEVEL 2 WRAP ── -->
+    <div id="l2Wrap" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+      <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+        <div class="l2-header">
+          <div style="flex:1">
+            <div class="l2-title">🌲 Level 2 Decision Tree</div>
+            <div class="l2-desc">Step 2: Compare emails from the biggest category against other categories to find even finer differences!<br>
+            The left shows emails from your biggest category. Drag them to compare with other categories on the right.</div>
+          </div>
+          <button class="gen-btn" style="background:linear-gradient(135deg,#e65100,#f48038);flex-shrink:0" onclick="submitL2()">✅ Complete Training</button>
+        </div>
+        <div class="l2-body" id="l2Body"></div>
+      </div>
+      <footer>
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <div class="fb-icon">C</div>
+            <div>
+              <div>Cognospace Mail</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.45);font-weight:500;font-family:'Nunito Sans',sans-serif">AI Learning Platform</div>
+            </div>
+          </div>
+          <div class="footer-center">
+            <div class="footer-links">
+              <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="#">About Decision Trees</a><a href="#">CognoSpace</a>
+            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,.28);font-family:'Nunito Sans',sans-serif;margin-top:4px;text-align:center">© 2026 CognoSpace. All rights reserved.</div>
+          </div>
+          <div class="footer-right">
+            <span class="footer-mode-badge training" style="background:rgba(240,128,96,.25);color:#f4b080;border-color:rgba(240,128,96,.3)">🌲 Level 2</span>
+            Made with <span class="heart">♥</span> for young learners
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIL VIEW ── -->
+<div id="mailView">
+  <div class="mv-topbar">
+    <button class="mv-back" onclick="closeMailView()">← Back</button>
+    <span class="mv-subject" id="mvSubject"></span>
+    <button style="border:none;background:var(--hover);border-radius:8px;padding:8px 16px;cursor:pointer;font-size:13px;font-family:'Nunito',sans-serif;font-weight:600;color:var(--text2);transition:background .15s" onmouseover="this.style.background='var(--selected)'" onmouseout="this.style.background='var(--hover)'" onclick="closeMailView()">✕ Close</button>
+  </div>
+  <div id="mvBanner"></div>
+  <div class="mv-card">
+    <div class="mv-card-head">
+      <div class="mv-avatar" id="mvAvatar">A</div>
+      <div class="mv-sender-info">
+        <div class="mv-from" id="mvFrom"></div>
+        <div class="mv-email-addr" id="mvEmailAddr"></div>
+        <div class="mv-to-line">To: <span id="mvTo" style="color:var(--text)">me</span></div>
+      </div>
+      <div class="mv-date" id="mvDate"></div>
+    </div>
+    <div class="mv-body-wrap" id="mvBody"></div>
+  </div>
+  <div id="mvReason"></div>
+</div>
+
+<!-- ── ANALYSIS MODAL ── -->
+<div class="modal-overlay" id="analysisModal">
+  <div class="modal">
+    <h2>📊 Training Analysis</h2>
+    <div class="modal-sub">Here's what the Decision Tree model learned from your training data! Notice how each category has a different count — that's realistic data distribution.</div>
+    <div class="analysis-grid" id="analysisGrid"></div>
+    <div style="background:linear-gradient(135deg,#e8f0fe,#eef5ff);border-radius:14px;padding:18px 20px;margin-bottom:20px;font-size:14px;line-height:1.7;border:1.5px solid #c5d8fa">
+      <strong style="color:#1a73e8;font-family:'Nunito',sans-serif;font-size:15px">🌳 What is a Decision Tree?</strong><br><br>
+      Just like how you sorted these emails, a Decision Tree makes decisions step-by-step.<br>
+      First it asks: <em>"Is the sender unknown?"</em> → Then: <em>"Does it have urgent language?"</em> → Then: <em>"Too many links?"</em> → Finally decides: <strong>SPAM</strong> or <strong>INBOX</strong>!<br><br>
+      <span style="color:#1a73e8;font-weight:700">🎉 You just trained a real AI model!</span>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="document.getElementById('analysisModal').classList.remove('show')">Close</button>
+      <button class="modal-btn" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#1b5e20;border-color:#a5d6a7" onclick="openDTModal()">🌳 See Decision Tree</button>
+      <button class="modal-btn primary" onclick="goToLevel2()">🌲 Level 2 Decision Tree →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DECISION TREE MODAL ── -->
+<div id="dtModal">
+  <div class="dt-container">
+    <div class="dt-header">
+      <div>
+        <div class="dt-title">🌳 Your Decision Tree</div>
+        <div class="dt-subtitle">See how the AI makes decisions — step by step, just like you did!</div>
+      </div>
+      <button class="dt-close-btn" onclick="closeDTModal()">✕ Close</button>
+    </div>
+    <div class="dt-body">
+      <div class="dt-legend">
+        <div class="dt-legend-item"><div class="dt-legend-dot" style="background:#1565c0"></div> Question Node</div>
+        <div class="dt-legend-item"><div class="dt-legend-dot" style="background:#c62828"></div> 🚫 Spam</div>
+        <div class="dt-legend-item"><div class="dt-legend-dot" style="background:#2e7d32"></div> 📥 Inbox</div>
+        <div class="dt-legend-item"><div class="dt-legend-dot" style="background:#f4b942"></div> 🏷️ Promotional</div>
+        <div class="dt-legend-item"><div class="dt-legend-dot" style="background:#4caf50"></div> 👥 Social</div>
+      </div>
+      <div class="dt-tree-wrap" id="dtTreeWrap"></div>
+      <div class="dt-stats" id="dtStats"></div>
+      <div class="dt-info-box">
+        <strong>🧠 How does a Decision Tree work?</strong><br><br>
+        A Decision Tree asks YES/NO questions one at a time — just like a game of 20 Questions! 🎮<br>
+        At each step it checks one feature of the email (like: <em>"Is the sender unknown?"</em>). Based on your answer, it goes left or right down the tree until it reaches a final decision: <strong>SPAM 🚫</strong> or <strong>INBOX 📥</strong>.<br><br>
+        <strong style="color:#6a1b9a">You just built a real AI model by sorting those emails! 🎉</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+//  DATA & STATE
+// ═══════════════════════════════════════
+let currentUser = null;
+let accounts = {};
+let currentMode = 'training';
+let trainingComplete = false;   // gates Live Mode
+let generatedMails = [];
+let categoryAssignments = {};
+let submittedCats = {};
+let l2Mails = [];
+let liveMails = [];
+let liveFilter = 'all';
+let liveMailCount = 0;
+let openMailData = null;
+
+const CATS = [
+  {id:'unknown', name:'Unknown Sender',   icon:'👻', color:'#9c27b0', bg:'#f3e5f5', desc:'Emails from addresses you don\'t recognise or that look suspicious.'},
+  {id:'urgent',  name:'Urgent Language',  icon:'🚨', color:'#f44336', bg:'#ffebee', desc:'Emails using scary words like "ACT NOW!", "URGENT!", "Your account will be deleted!"'},
+  {id:'links',   name:'Too Many Links',   icon:'🔗', color:'#ff9800', bg:'#fff3e0', desc:'Emails packed with many clickable links — often a sign of phishing or spam.'},
+  {id:'promo',   name:'Promotional',      icon:'🏷️', color:'#2196f3', bg:'#e3f2fd', desc:'Marketing emails with discount codes, sale announcements, and product offers.'},
+  {id:'prize',   name:'Prize / Cash',     icon:'💰', color:'#ffc107', bg:'#fffde7', desc:'"You\'ve won $1,000,000!" — These are almost always fake scam emails.'},
+  {id:'social',  name:'Social Updates',   icon:'👥', color:'#4caf50', bg:'#e8f5e9', desc:'Notifications from social media platforms like "John liked your post".'},
+  {id:'general', name:'General / Normal', icon:'📧', color:'#607d8b', bg:'#eceff1', desc:'Regular, legitimate emails from known people or services — these go to INBOX.'},
+];
+
+const SPAM_CATS = ['unknown','urgent','links','prize'];
+
+// ── UNEQUAL mail counts: one category gets highest, no two get same ──
+// Total = 40: promo(10) > unknown(8) > general(7) > urgent(5) > social(4) > links(3) > prize(3)
+// Wait – links and prize both = 3; fix: links(4) prize(3)
+// Distribution: promo=10, unknown=8, general=7, urgent=5, social=4, links=4, prize=3 — but links=social=4
+// Final: promo=10, unknown=8, general=7, urgent=5, links=4, social=3, prize=3 — social=prize=3
+// Best unique: promo=10, unknown=8, general=7, urgent=5, links=4, social=3, prize=2 → total 39
+// Or: promo=11, unknown=8, general=7, urgent=5, links=4, social=3, prize=2 → total 40 ✓
+const MAIL_COUNTS = {promo:11, unknown:8, general:7, urgent:5, links:4, social:3, prize:2};
+
+const SENDERS_BY_CAT = {
+  unknown: ['noreply@xz8k2m.net','admin@secure-login-verify.com','support@acct-verify99.biz','info@unknown-domain44.xyz','help@cryptomails.net','team@sys-alert99.biz','verify@accountcheck-io.net'],
+  urgent:  ['alerts@bank-security.net','security@urgent-verify.com','noreply@accountlocked.io','admin@critical-update.info','support@immediate-action.com'],
+  links:   ['deals@linkhub.co','promo@click-more.net','newsletter@linktree-promo.com','info@clickhere99.biz'],
+  promo:   ['offers@shopadeal.com','noreply@flashsale.shop','marketing@bigstore.com','deals@weeklyoffer.net','promo@stylehub.co','newsletter@fashionweek.net','deals@techbazaar.io','hello@brandclub.shop'],
+  prize:   ['winner@lottery-global.com','prizes@cashwinners.net'],
+  social:  ['notifications@sociaflow.com','noreply@friendsapp.net','updates@photoshare.io'],
+  general: ['alice.johnson@gmail.com','bob.smith@company.org','teacher@school.edu','manager@workplace.com','friend@outlook.com','hr@techcorp.com','team@projecthub.io'],
+};
+
+const SUBJECTS_BY_CAT = {
+  unknown: [
+    'Verify your account immediately',
+    'Unusual sign-in activity detected',
+    'Your package is waiting for confirmation',
+    'Important: Action required on your account',
+    'Security alert: We need to verify your identity',
+    'Your account access has been restricted',
+    'Confirm your details to avoid suspension',
+  ],
+  urgent: [
+    '⚠️ URGENT: Your account will be suspended in 2 hours',
+    'ACT NOW — Last chance to save your account!',
+    'IMMEDIATE ACTION REQUIRED — Read this now',
+    'Your account has been compromised — Respond NOW',
+    'WARNING: Suspicious activity detected on your account',
+  ],
+  links: [
+    'Check out these 30 amazing resources you\'ll love!',
+    'Top 50 websites every student needs to visit',
+    'Click here for all the best deals this week',
+    'Your weekly link digest — 40+ handpicked links',
+  ],
+  promo: [
+    '🛍️ 70% OFF — Today Only! Don\'t miss out',
+    'Exclusive deal just for you — Open before midnight',
+    'Flash Sale: Only 3 hours left! Shop now',
+    'Your personal discount code is waiting inside',
+    'New arrivals you\'ll absolutely love this season',
+    '🎁 Weekend Special — Extra 30% on all items',
+    'Big Sale Alert: Up to 80% off — Shop now!',
+    'Your member reward: 500 bonus points this week',
+    'Style picks just for you — New collection inside',
+    'Mega Deal Day — Save big on top brands',
+    'Your wishlist items are on sale today only',
+  ],
+  prize: [
+    '🎉 Congratulations! You\'ve been selected as our winner!',
+    '🏆 You\'ve won $10,000 — Claim your prize now!',
+  ],
+  social: [
+    'Alice commented on your photo',
+    'You have 5 new friend requests this week',
+    'Bob liked your recent post',
+  ],
+  general: [
+    'Team meeting on Friday at 3 PM — Please confirm',
+    'Your order has shipped — Tracking details inside',
+    'Re: Project update — Q2 report ready',
+    'Lunch plans for tomorrow? Let me know!',
+    'Monthly newsletter — May 2026 highlights',
+    'Your invoice #4521 is ready for review',
+    'Welcome to the team — Onboarding schedule attached',
+  ],
+};
+
+const BODIES_BY_CAT = {
+  unknown: [
+    'Dear User,\n\nWe have detected unusual activity on your account. Please verify your identity immediately by clicking the button below.\n\nFailure to respond within 24 hours will result in permanent account termination.\n\n👉 Verify Now →\n\nDo not ignore this message.\n\n— The Security Team',
+    'Hello,\n\nYour account security has been flagged for suspicious access. We need you to confirm your personal details to keep your account active.\n\nThis is a time-sensitive request. Please act now.\n\n👉 Confirm Details →\n\nThank you,\nAccount Safety Team',
+    'ATTENTION ACCOUNT HOLDER,\n\nOur system detected that someone accessed your account from an unknown location. To protect you, we have temporarily restricted your access.\n\nClick below to restore access:\n👉 Restore My Account →\n\nThis link expires in 12 hours.',
+    'Hi,\n\nWe were unable to process your recent request due to unverified account information. Your account will be suspended unless you update your details within 48 hours.\n\n👉 Update Details →\n\nSystem Security Bot',
+    'IMPORTANT NOTICE:\n\nYour account has been placed under review due to irregular activity detected in the past 24 hours. Please provide verification to continue using our services.\n\n👉 Verify Identity →',
+    'Dear Customer,\n\nWe have placed a temporary hold on your account. To lift this hold, you must verify your identity using the link below. This is automated and secure.\n\n👉 Verify & Continue →\n\nAccount Management Team',
+    'Urgent Notice:\n\nWe detected a login from a new device in an unknown location. If this was not you, your account may be at risk.\n\n👉 Secure My Account Now →\n\nAct fast — this alert expires in 6 hours.',
+  ],
+  urgent: [
+    '🚨 URGENT NOTICE!\n\nYour account has been compromised. You MUST act within the next 2 hours or your account will be permanently locked.\n\nACT NOW → Click here to secure your account immediately.\n\nDo NOT delay — every minute counts!',
+    '⚠️ WARNING: Suspicious login from unknown device!\n\nIf this was not you, your account will be suspended in 1 HOUR. Respond immediately to prevent data loss!\n\n🔴 VERIFY IMMEDIATELY →\n\nThis is your FINAL warning.',
+    '🆘 CRITICAL ALERT — Your password was changed without your consent!\n\nIf you did not authorise this, click below RIGHT NOW to recover your account before it is deleted permanently.\n\n👉 RECOVER ACCOUNT → (expires in 30 minutes)',
+    'FINAL WARNING — Your subscription will be terminated in 60 MINUTES!\n\nDue to non-payment, all your data will be deleted. To keep your account, pay immediately using the link below.\n\n💳 PAY NOW → Last chance!',
+    'SECURITY BREACH DETECTED on your account!\n\nUnauthorised transactions were made. You MUST verify your banking details in the next 15 minutes or your funds will be lost.\n\n🔐 SECURE MY MONEY NOW →',
+  ],
+  links: [
+    'Hi there! 👋\n\nHere are this week\'s top 30 resources for learning:\n\n→ www.resource1.com — Free coding lessons\n→ www.freetools2.net — Productivity apps\n→ www.learnmore3.io — Video tutorials\n→ www.clickme4.biz — Study guides\n→ www.greatdeal5.co — Discount codes\n→ www.explore6.net — Science games\n→ www.topsite7.com — Math practice\n...\n\nAnd 23 more amazing links inside! Click each one to explore!',
+    'Weekly Link Digest 📎\n\nBest deals this week:\n🛒 shop1.com | shop2.net | deals3.io | sale4.biz | offer5.co\n\nTop news:\n📰 news1.com | news2.org | blog3.net | headlines4.io | update5.biz\n\nFree tools:\n🔧 tool1.io | tool2.biz | app3.co | free4.net | utility5.com\n\nLearning resources:\n📚 learn1.edu | course2.net | video3.org | quiz4.io | study5.co\n\n...and 35 more links below! Click to explore.',
+    'Hello,\n\nYou\'ve been subscribed to our Ultimate Link Collection newsletter!\n\nThis week\'s edition includes:\n✅ 10 free tool links\n✅ 8 news sites\n✅ 6 shopping deals\n✅ 5 learning resources\n✅ 4 entertainment links\n\nClick each link below to access all 33 resources:\n[link1] [link2] [link3] ... [link33]\n\nUnsubscribe here → unsubscribe.link99.co',
+    'Good morning!\n\nYour personalised link bundle is ready:\n\n🎯 Today\'s featured links:\n• deal-of-day.com\n• freebie-site.net\n• clicknow.io\n• explore-more.biz\n• tools-galore.co\n• save-big.net\n• learn-anything.edu\n• news-hub.org\n• quiz-master.io\n• fun-facts.com\n\n...plus 40 more links waiting for you inside! Don\'t miss them!',
+  ],
+  promo: [
+    'Hey there! 👋\n\n🔥 FLASH SALE — 70% OFF everything!\nToday only: Use code SAVE70 at checkout.\n\nShop our top categories:\n✓ Electronics\n✓ Fashion\n✓ Home & Garden\n✓ Books & Stationery\n\nOffer expires tonight at midnight!\n\n👉 Shop Now →\n\nHappy shopping!\nThe ShopaDeal Team',
+    'Exclusive member deal! 🎁\n\nAs a valued customer, here\'s your personal 40% discount code: LOYAL40\n\nValid on ALL items until Sunday. Our top picks this week:\n• Wireless Earbuds — ₹1,999 (was ₹3,499)\n• Smart Watch — ₹4,999 (was ₹8,999)\n• Running Shoes — ₹2,499 (was ₹4,499)\n\nDon\'t miss out on our newest arrivals! 👉 Shop Now →',
+    'Hello!\n\n🎉 New Collection Just Dropped!\n\nThis season\'s must-have styles are here. Curated just for you based on your past favourites.\n\n🏷️ Special launch offer: 25% OFF with code NEWSTYLE\n\nShop before stocks run out — popular items sell fast!\n\n👉 Explore Collection →',
+    'Good news! ☀️\n\nYour wishlist item — Wireless Headphones — is now 35% OFF!\n\nPrice drop alert:\n🎧 Was: ₹6,499 → Now: ₹4,224\n\nThis deal lasts only 24 hours. Grab yours before it\'s gone!\n\n👉 Buy Now →',
+    '🛒 Weekend Sale Starts Now!\n\nThis weekend only — extra 30% off on all order above ₹999.\n\nUse code: WEEKEND30 at checkout.\n\nNo minimum. No exclusions. Ends Sunday midnight.\n\n👉 Start Shopping →',
+    'Hello from StyleHub! 👗\n\nWe\'ve handpicked our best summer looks just for you:\n\n☀️ Floral Dresses — from ₹799\n👟 Canvas Sneakers — from ₹1,299\n🕶️ UV Sunglasses — from ₹499\n\nFree shipping on orders over ₹999.\n\n👉 Shop the Collection →',
+    'Hi!\n\nBig Sale Day is here 🎊\n\nUp to 80% OFF on 10,000+ products across all categories.\n\nToday\'s Lightning Deals:\n⚡ Smart TV — 60% OFF\n⚡ Laptop Bag — 55% OFF\n⚡ Perfume Set — 70% OFF\n\n👉 View All Deals →\n\nHurry — deals refresh every hour!',
+    'Dear Member,\n\nYou\'ve earned 500 bonus points this week! 🌟\n\nRedeem them for discounts on your next purchase:\n• 100 pts = ₹10 off\n• 500 pts = ₹50 off\n• 1000 pts = ₹110 off\n\n👉 Use My Points →\n\nPoints expire in 30 days.',
+    'New arrivals just for you! 🆕\n\nBased on your recent browsing, here are products we think you\'ll love:\n\n• Smart Desk Lamp — ₹1,499\n• Portable Charger — ₹999\n• Organic Tea Set — ₹699\n• Cosy Hoodie — ₹1,199\n\n👉 See All Recommendations →',
+    'Hello!\n\nMega Deal Day Alert 🔔\n\nSave big on top brands — today only!\n\n💥 Samsung — up to 40% OFF\n💥 Nike — up to 50% OFF\n💥 Apple Accessories — up to 30% OFF\n💥 Books — Buy 2 Get 1 Free\n\n👉 Shop Mega Deals →',
+    'Hi!\n\nYour wishlist items are ON SALE! 🎯\n\nWe noticed you saved these items — now\'s the perfect time to buy:\n\n✅ Running Shoes — NOW ₹2,199 (30% OFF)\n✅ Water Bottle — NOW ₹449 (40% OFF)\n✅ Notebook Set — NOW ₹349 (25% OFF)\n\n👉 Buy My Wishlist →\n\nToday only!',
+  ],
+  prize: [
+    'Dear Winner,\n\nCONGRATULATIONS! 🎉\n\nYou have been selected as our LUCKY WINNER of $10,000 USD in the Global Monthly Lottery Draw!\n\nTo claim your prize:\n1. Reply with your full name and address\n2. Send a processing fee of $50 (refundable)\n3. Provide your bank account details\n\n⏰ You must claim within 48 hours or your prize will be forfeited!\n\nBest regards,\nGlobal Lottery Prize Committee\nRef: WIN-2026-44821',
+    '🏆 YOU\'VE WON — FINAL NOTICE!\n\nYour email address was randomly selected in our international prize draw.\n\nYour prize: $50,000 CASH!\n\nSimply reply with your bank account details to receive your winnings within 24 hours.\n\n⚠️ This offer expires in 6 HOURS. Do not miss this once-in-a-lifetime opportunity!\n\n— The Prize Disbursement Team\n(Ref: PRIZE-2026-GOLD)',
+  ],
+  social: [
+    'Hi! 👋\n\nHere\'s what\'s happening in your network:\n\n💬 Alice Johnson commented on your photo: "Love this! 😍"\n❤️ Bob Smith liked your recent post\n👥 You have 3 new followers this week\n📩 2 new messages waiting in your inbox\n\nSee all your notifications →\n\nKeep sharing — your content is getting popular! 🌟\n\n— The SociaFlow Team',
+    'You have new activity! 🔔\n\nSarah sent you a message: "Hey, are you coming to the event on Saturday? Would be great to catch up!"\n\n❤️ 5 people liked your recent photo\n✅ Mark accepted your friend request\n👁️ Your profile was viewed 23 times this week\n\n👉 Reply to Sarah →\n👉 See All Notifications →\n\n— FriendsApp Notifications',
+    'Weekly Activity Summary 📊\n\nHere\'s how your profile performed this week:\n\n👀 Profile views: 47 (+12 from last week)\n❤️ Total likes: 83\n💬 Comments received: 14\n👥 New followers: 6\n\n🏆 Your top post this week got 34 likes!\n\n👉 View Your Stats →\n\n— PhotoShare Analytics',
+  ],
+  general: [
+    'Hi,\n\nJust a reminder about our team meeting on Friday at 3 PM in Conference Room B. We\'ll be discussing the Q2 project updates and roadmap for next quarter.\n\nPlease bring your progress reports and any blockers you\'d like to discuss.\n\nLooking forward to seeing everyone!\n\nBest,\nAlice',
+    'Hello,\n\nGreat news! Your order #45231 has been shipped and is expected to arrive by Thursday.\n\n📦 Tracking details:\n• Tracking number: TRK89234567\n• Carrier: FastShip Express\n• Estimated delivery: Thursday, 10 AM – 6 PM\n\nThank you for your purchase!\n\nBest,\nThe Store Team',
+    'Hi Team,\n\nThe Q2 report is now ready for review. Key highlights:\n\n✅ Project Alpha — Completed on time\n⏳ Project Beta — 80% complete, on track\n🔄 Project Gamma — Minor delays, new deadline: June 20\n\nPlease review the attached document and share your feedback by EOD Friday.\n\nThanks,\nBob Smith, Project Manager',
+    'Hey!\n\nAre you free for lunch tomorrow? There\'s a new place that opened near the office — I heard the food is amazing.\n\nLet me know by this evening so I can make a reservation!\n\nCheers,\nSam',
+    'Hi,\n\nWelcome to the May 2026 edition of our monthly newsletter!\n\nThis month\'s highlights:\n📌 New AI curriculum launched for Grade 6–9\n📌 STEAM activity kits shipping from June 1\n📌 Webinar: "Intro to Robotics" — May 25, 4 PM\n\nWishing you a great month ahead!\n\nThe CognoSpace Team',
+    'Dear Team,\n\nPlease find attached your invoice #4521 for the month of April 2026.\n\nTotal amount due: ₹24,500\nDue date: May 20, 2026\nPayment method: Bank transfer or UPI\n\nFor any queries, reply to this email.\n\nRegards,\nFinance Department',
+    'Hi!\n\nWelcome aboard! We\'re thrilled to have you on the team. 🎉\n\nYour onboarding schedule:\n📅 Day 1 (Monday): Orientation & team introductions\n📅 Day 2 (Tuesday): Tools setup & system access\n📅 Day 3 (Wednesday): Project briefing with your manager\n\nIf you have any questions before Day 1, feel free to reply to this email.\n\nLooking forward to working with you!\n\nHR Team, CognoSpace',
+  ],
+};
+
+const SPAM_REASONS = {
+  unknown: 'The sender email address is unknown and suspicious (e.g., random numbers/letters in domain). Decision Tree: Is sender known? → NO → SPAM.',
+  urgent:  'The email uses extremely urgent or threatening language ("ACT NOW", "IMMEDIATE ACTION"). Decision Tree: Contains URGENT keywords? → YES → SPAM.',
+  links:   'The email contains an unusually high number of external links — a classic phishing indicator. Decision Tree: Too many links? → YES → SPAM.',
+  prize:   'The email claims the reader has won a prize or cash — a common scam tactic. Decision Tree: Prize/cash offer from unknown sender? → YES → SPAM.',
+};
+const INBOX_REASONS = {
+  promo:   'This is a legitimate promotional email from a known retailer. Decision Tree: Known sender? → YES → Is it dangerous? → NO → INBOX (Promotions).',
+  social:  'This is a routine social media notification from a trusted platform. Decision Tree: Known platform? → YES → INBOX (Social).',
+  general: 'This is a normal, safe email from a known contact or service. Decision Tree: Known sender? → YES → No spam signals? → INBOX (General).',
+};
+
+// avatar colour pool
+const AV_COLORS=['#4285f4','#ea4335','#fbbc04','#34a853','#8430ce','#007b83','#e67c00','#0097a7','#c2185b','#388e3c'];
+
+// ═══════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════
+function showLogin(){ document.getElementById('signupCard').style.display='none'; document.getElementById('loginCard').style.display=''; }
+function showSignup(){ document.getElementById('loginCard').style.display='none'; document.getElementById('signupCard').style.display=''; }
+
+function doSignup(){
+  const name=document.getElementById('suName').value.trim();
+  const email=document.getElementById('suEmail').value.trim();
+  const pass=document.getElementById('suPass').value;
+  const err=document.getElementById('signupErr');
+  if(!name||!email||!pass){ err.style.display='block'; err.textContent='Please fill in all fields.'; return; }
+  if(pass.length<6){ err.style.display='block'; err.textContent='Password must be at least 6 characters.'; return; }
+  if(accounts[email]){ err.style.display='block'; err.textContent='This email is already registered.'; return; }
+  accounts[email]={name,pass};
+  err.style.display='none';
+  showToast('✅ Account created! Please sign in.');
+  document.getElementById('liEmail').value=email;
+  showLogin();
+}
+
+function doLogin(){
+  const email=document.getElementById('liEmail').value.trim();
+  const pass=document.getElementById('liPass').value;
+  const err=document.getElementById('loginErr');
+  if(!email||!pass){ err.style.display='block'; err.textContent='Please enter your email and password.'; return; }
+  if(!accounts[email]||accounts[email].pass!==pass){ err.style.display='block'; err.textContent='Invalid email or password.'; return; }
+  err.style.display='none';
+  currentUser=accounts[email];
+  document.getElementById('userAvatar').textContent=currentUser.name[0].toUpperCase();
+  document.getElementById('authWrap').style.display='none';
+  document.getElementById('appWrap').style.display='flex';
+  initApp();
+}
+
+// ═══════════════════════════════════════
+//  APP INIT
+// ═══════════════════════════════════════
+function initApp(){
+  buildSidebar();
+  switchMode('training');
+}
+
+function buildSidebar(){
+  const nav=document.getElementById('sidebarNav');
+  nav.innerHTML=`
+    <div class="nav-item active" id="navInbox" onclick="openInboxView()">
+      <span class="nav-icon">📥</span> Inbox <span class="nav-count" id="navInboxCount">0</span>
+    </div>
+    <div class="nav-item" onclick="showToast('Sent mail feature coming soon!')"><span class="nav-icon">📤</span> Sent</div>
+    <div class="nav-item" onclick="showToast('Drafts feature coming soon!')"><span class="nav-icon">📝</span> Drafts</div>
+    <div class="nav-item" id="navSpam" onclick="openSpamView()"><span class="nav-icon">🚫</span> Spam <span class="nav-count" id="navSpamCount">0</span></div>
+    <div class="nav-section">Categories</div>
+    ${CATS.map(c=>`<div class="nav-item" onclick="showToast('${c.name}: sort in Training Mode!')"><div class="cat-dot" style="background:${c.color}"></div>${c.name}</div>`).join('')}
+  `;
+}
+
+// ═══════════════════════════════════════
+//  MODE SWITCH — Live mode locked until training complete
+// ═══════════════════════════════════════
+function tryLiveMode(){
+  if(!trainingComplete){
+    showToast('🔒 Complete Training first! Sort all emails and submit all categories.');
+    // flash the lock
+    const btn=document.getElementById('liveModeBtn');
+    btn.style.animation='lockPulse .5s ease 3';
+    setTimeout(()=>{ btn.style.animation=''; },1500);
+    return;
+  }
+  switchMode('live');
+}
+
+function unlockLiveMode(){
+  trainingComplete=true;
+  const btn=document.getElementById('liveModeBtn');
+  btn.classList.remove('locked');
+  btn.innerHTML='⚡ Live';
+  btn.setAttribute('onclick','switchMode(\'live\')');
+  btn.title='Live Mode — now unlocked!';
+  btn.style.background='linear-gradient(135deg,#52b788,#6fcaa0)';
+  btn.style.color='#fff';
+  btn.style.boxShadow='0 2px 10px rgba(82,183,136,.35)';
+}
+
+function switchMode(mode){
+  currentMode=mode;
+  document.getElementById('trainModeBtn').classList.toggle('active',mode==='training');
+  // live btn active state only if training complete
+  const liveBtn=document.getElementById('liveModeBtn');
+  if(mode==='live'&&trainingComplete) liveBtn.classList.add('active');
+  else if(mode!=='live') liveBtn.classList.remove('active');
+  document.getElementById('trainingWrap').style.display=mode==='training'?'flex':'none';
+  document.getElementById('liveWrap').style.display=mode==='live'?'flex':'none';
+  document.getElementById('l2Wrap').style.display='none';
+}
+
+// ═══════════════════════════════════════
+//  MAIL GENERATOR
+// ═══════════════════════════════════════
+let mailIdCounter=0;
+function makeMail(catId){
+  const senders=SENDERS_BY_CAT[catId];
+  const subjects=SUBJECTS_BY_CAT[catId];
+  const bodies=BODIES_BY_CAT[catId];
+  const sender=senders[Math.floor(Math.random()*senders.length)];
+  const subject=subjects[Math.floor(Math.random()*subjects.length)];
+  const body=bodies[Math.floor(Math.random()*bodies.length)];
+  const times=['9:42 AM','11:15 AM','2:03 PM','4:28 PM','Yesterday','Mon','Sun','Sat','8:05 AM','3:17 PM'];
+  return {
+    id: ++mailIdCounter,
+    catId, sender, subject, body,
+    time: times[Math.floor(Math.random()*times.length)],
+    read: false, starred: false
+  };
+}
+
+function generateMails(){
+  document.getElementById('genBtn').disabled=true;
+  document.getElementById('genBtn').textContent='✓ Mails Generated';
+  generatedMails=[];
+  categoryAssignments={};
+  submittedCats={};
+  CATS.forEach(c=>{ categoryAssignments[c.id]=[]; });
+  // Use unequal MAIL_COUNTS — ensures no two categories get same count
+  CATS.forEach(c=>{
+    const count=MAIL_COUNTS[c.id];
+    for(let i=0;i<count;i++) generatedMails.push(makeMail(c.id));
+  });
+  // shuffle
+  for(let i=generatedMails.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [generatedMails[i],generatedMails[j]]=[generatedMails[j],generatedMails[i]];
+  }
+  renderTrainingBody();
+}
+
+function getAvatarColor(mail){
+  return AV_COLORS[mail.id % AV_COLORS.length];
+}
+
+function renderTrainingBody(){
+  const body=document.getElementById('trainingBody');
+  const assignedIds=Object.values(categoryAssignments).flat();
+  const remaining=generatedMails.filter(m=>!assignedIds.includes(m.id));
+
+  body.innerHTML=`
+    <div style="display:flex;gap:0;flex:1;overflow:hidden">
+      <div class="mail-pool" id="mailPool">
+        <div class="pool-title">📬 Unsorted Mails (${remaining.length} remaining)</div>
+        ${remaining.map(m=>{
+          const c=AV_COLORS[m.id%AV_COLORS.length];
+          const initials=m.sender.split('@')[0].slice(0,2).toUpperCase();
+          const lines=m.body.split('\n').filter(l=>l.trim());
+          const preview=lines.length>2?lines[2]:m.body.slice(0,60);
+          return `
+          <div class="pool-mail" draggable="true" id="pm_${m.id}"
+            ondragstart="dragStart(event,${m.id})"
+            onclick="openMailFromPool(${m.id})">
+            <div class="pm-head">
+              <div class="pm-avatar" style="background:${c}">${initials}</div>
+              <div class="pm-sender">${escHtml(m.sender)}</div>
+              <div class="pm-time-small">${m.time}</div>
+            </div>
+            <div class="pm-body">
+              <div class="pm-subject">${escHtml(m.subject)}</div>
+              <div class="pm-preview">${escHtml(preview.trim().slice(0,70))}</div>
+            </div>
+          </div>`;
+        }).join('')}
+        ${remaining.length===0?'<div style="text-align:center;padding:48px 16px;color:var(--text3);font-size:14px"><div style="font-size:48px;margin-bottom:12px">✅</div><strong>All mails sorted!</strong><br>Submit all categories below.</div>':''}
+      </div>
+      <div class="cats-panel" id="catsPanel">
+        <div style="font-size:13px;color:var(--text2);margin-bottom:14px;padding:8px 12px;background:#f7faff;border-radius:10px;line-height:1.6;border:1px solid #e2eaf8">
+          <strong style="color:var(--blue)">How to sort:</strong> Click any mail to read it, then <strong>drag</strong> it into the right category box below. Hit <strong>Submit</strong> for each category when done!
+        </div>
+        ${CATS.map(c=>renderCatBlock(c)).join('')}
+        <div class="progress-info" id="progressInfo">${getProgressText()}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderCatBlock(c){
+  const mails=categoryAssignments[c.id].map(id=>generatedMails.find(m=>m.id===id)).filter(Boolean);
+  const submitted=submittedCats[c.id];
+  return `
+    <div class="cat-block" id="cb_${c.id}"
+      style="border-color:${submitted?c.color:'var(--border)'};background:${submitted?c.bg:'#fff'}"
+      ondragover="dragOver(event,'${c.id}')" ondrop="drop(event,'${c.id}')" ondragleave="dragLeave(event,'${c.id}')">
+      <div class="cat-block-header">
+        <div class="cat-icon" style="background:${c.bg}">${c.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div class="cat-name" style="color:${c.color}">${c.name}</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px">${c.desc}</div>
+        </div>
+        <span class="cat-count" style="background:${c.color}">${mails.length}</span>
+      </div>
+      <div class="cat-mails-zone" id="cmz_${c.id}">
+        ${mails.map(m=>`
+          <div class="dropped-mail">
+            <span style="font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px">${escHtml(m.subject.slice(0,36))}${m.subject.length>36?'…':''}</span>
+            ${submitted?'':'<span class="dm-remove" onclick="removeMail('+m.id+',\''+c.id+'\')">✕</span>'}
+          </div>
+        `).join('')}
+        ${mails.length===0&&!submitted?'<div style="font-size:11px;color:var(--text3);padding:8px 0;width:100%;text-align:center">↓ Drop emails here</div>':''}
+      </div>
+      ${submitted
+        ? `<div class="submitted-badge" style="display:inline-flex;margin-top:6px">✅ Submitted (${mails.length} mails trained)</div>`
+        : `<button class="submit-cat-btn" onclick="submitCat('${c.id}')" ${mails.length===0?'disabled':''}>Submit ${c.name}</button>`}
+    </div>
+  `;
+}
+
+function getProgressText(){
+  const done=Object.keys(submittedCats).length;
+  const total=CATS.length;
+  if(done===total) return `✅ All ${total} categories submitted! <a onclick="showAnalysis()" style="color:var(--blue);cursor:pointer;font-weight:700">View Analysis →</a>`;
+  return `Progress: ${done} / ${total} categories submitted`;
+}
+
+// ── DRAG & DROP ──
+let draggingId=null;
+function dragStart(e,id){
+  draggingId=id;
+  e.dataTransfer.effectAllowed='move';
+  setTimeout(()=>{ const el=document.getElementById('pm_'+id); if(el) el.classList.add('dragging'); },0);
+}
+function dragOver(e,catId){ e.preventDefault(); e.dataTransfer.dropEffect='move'; document.getElementById('cb_'+catId).classList.add('drag-over'); }
+function dragLeave(e,catId){ document.getElementById('cb_'+catId).classList.remove('drag-over'); }
+function drop(e,catId){
+  e.preventDefault();
+  document.getElementById('cb_'+catId).classList.remove('drag-over');
+  if(!draggingId||submittedCats[catId]) return;
+  CATS.forEach(c=>{ categoryAssignments[c.id]=categoryAssignments[c.id].filter(id=>id!==draggingId); });
+  categoryAssignments[catId].push(draggingId);
+  draggingId=null;
+  renderTrainingBody();
+}
+function removeMail(mailId,catId){
+  categoryAssignments[catId]=categoryAssignments[catId].filter(id=>id!==mailId);
+  renderTrainingBody();
+}
+function submitCat(catId){
+  if(categoryAssignments[catId].length===0){ showToast('Add at least one mail before submitting!'); return; }
+  submittedCats[catId]=true;
+  showToast(`✅ ${CATS.find(c=>c.id===catId).name} submitted! Model is learning...`);
+  renderTrainingBody();
+  if(Object.keys(submittedCats).length===CATS.length){
+    setTimeout(()=>{ showAnalysis(); },600);
+  }
+}
+function openMailFromPool(id){
+  const m=generatedMails.find(x=>x.id===id);
+  if(!m) return;
+  openMailView(m,null);
+}
+
+// ── ANALYSIS ──
+function showAnalysis(){
+  const grid=document.getElementById('analysisGrid');
+  const total=generatedMails.length;
+  grid.innerHTML=CATS.map(c=>{
+    const count=categoryAssignments[c.id].length;
+    const pct=Math.round((count/total)*100)||0;
+    return `
+      <div class="analysis-card" style="border-top:3px solid ${c.color}">
+        <div class="ac-label">${c.icon} ${c.name}</div>
+        <div class="ac-count" style="color:${c.color}">${count}</div>
+        <div class="ac-bar"><div class="ac-fill" style="width:${pct}%;background:${c.color}"></div></div>
+        <div style="font-size:11px;color:var(--text3)">${pct}% of all mails</div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById('analysisModal').classList.add('show');
+}
+
+// ── LEVEL 2 ──
+function goToLevel2(){
+  document.getElementById('analysisModal').classList.remove('show');
+  let bestCat=CATS[0], bestCount=0;
+  CATS.forEach(c=>{ if(categoryAssignments[c.id].length>bestCount){ bestCount=categoryAssignments[c.id].length; bestCat=c; }});
+  const otherCats=CATS.filter(c=>c.id!==bestCat.id&&categoryAssignments[c.id].length>0);
+  l2Mails=categoryAssignments[bestCat.id].map(id=>generatedMails.find(m=>m.id===id)).filter(Boolean);
+  const l2Assignments={};
+  otherCats.forEach(c=>{ l2Assignments[c.id]=[]; });
+  window._l2State={bestCat,otherCats,assignments:l2Assignments};
+  document.getElementById('trainingWrap').style.display='none';
+  document.getElementById('l2Wrap').style.display='flex';
+  renderL2();
+}
+
+function renderL2(){
+  const {bestCat,otherCats,assignments}=window._l2State;
+  const assignedIds=Object.values(assignments).flat();
+  const remaining=l2Mails.filter(m=>!assignedIds.includes(m.id));
+  document.getElementById('l2Body').innerHTML=`
+    <div class="l2-left">
+      <div class="l2-main-cat">
+        <span style="font-size:24px">${bestCat.icon}</span>
+        <span style="color:${bestCat.color}">${bestCat.name}</span>
+        <span style="font-size:13px;color:var(--text2);font-weight:400">(${remaining.length} emails to compare)</span>
+      </div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6;background:#fffbf0;border:1px solid #fde68a;border-radius:10px;padding:10px 14px">
+        These emails were sorted as <strong>${bestCat.name}</strong>. But some might also fit into other categories!
+        Drag emails to the right to compare with other categories. This creates the next level of the Decision Tree! 🌲
+      </div>
+      ${remaining.map(m=>{
+        const col=AV_COLORS[m.id%AV_COLORS.length];
+        const init=m.sender.split('@')[0].slice(0,2).toUpperCase();
+        return `<div class="pool-mail" draggable="true" id="l2pm_${m.id}"
+          ondragstart="l2DragStart(event,${m.id})"
+          onclick="openMailView(${JSON.stringify(m).replace(/"/g,'&quot;')},null)">
+          <div class="pm-head">
+            <div class="pm-avatar" style="background:${col}">${init}</div>
+            <div class="pm-sender">${escHtml(m.sender)}</div>
+            <div class="pm-time-small">${m.time}</div>
+          </div>
+          <div class="pm-body">
+            <div class="pm-subject">${escHtml(m.subject)}</div>
+            <div class="pm-preview">${escHtml(m.body.slice(0,70))}</div>
+          </div>
+        </div>`;
+      }).join('')}
+      ${remaining.length===0?'<div style="text-align:center;padding:24px;color:var(--text3);font-size:14px">✅ All emails compared! Click "Complete Training" above.</div>':''}
+    </div>
+    <div class="l2-right">
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px">Compare With Other Categories</div>
+      ${otherCats.map(c=>`
+        <div class="l2-compare-cat" id="l2cb_${c.id}"
+          ondragover="l2DragOver(event,'${c.id}')" ondrop="l2Drop(event,'${c.id}')" ondragleave="l2DragLeave(event,'${c.id}')">
+          <div class="l2-compare-cat-name">
+            <span style="font-size:20px">${c.icon}</span>
+            <span style="color:${c.color};font-weight:700">${c.name}</span>
+            <span style="margin-left:auto;background:${c.color};color:#fff;border-radius:12px;padding:1px 10px;font-size:11px;font-weight:700">${assignments[c.id].length}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text2);margin-bottom:8px">${c.desc}</div>
+          <div class="l2-dropped-zone">
+            ${assignments[c.id].map(id=>{
+              const m=l2Mails.find(x=>x.id===id);
+              return m?`<div class="dropped-mail"><span style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(m.subject.slice(0,32))}${m.subject.length>32?'…':''}</span></div>`:'';
+            }).join('')}
+            ${assignments[c.id].length===0?'<div style="font-size:11px;color:var(--text3);width:100%;text-align:center">↓ Drop emails here</div>':''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+let l2DraggingId=null;
+function l2DragStart(e,id){ l2DraggingId=id; }
+function l2DragOver(e,catId){ e.preventDefault(); document.getElementById('l2cb_'+catId).classList.add('drag-over'); }
+function l2DragLeave(e,catId){ document.getElementById('l2cb_'+catId).classList.remove('drag-over'); }
+function l2Drop(e,catId){
+  e.preventDefault();
+  document.getElementById('l2cb_'+catId).classList.remove('drag-over');
+  if(!l2DraggingId) return;
+  const {assignments}=window._l2State;
+  Object.keys(assignments).forEach(k=>{ assignments[k]=assignments[k].filter(id=>id!==l2DraggingId); });
+  assignments[catId].push(l2DraggingId);
+  l2DraggingId=null;
+  renderL2();
+}
+
+function submitL2(){
+  // Training fully complete — unlock Live Mode
+  unlockLiveMode();
+  showToast('🎉 Training Complete! Live Mode is now unlocked — switch to see AI in action!');
+  document.getElementById('l2Wrap').style.display='none';
+  document.getElementById('trainingWrap').style.display='flex';
+  // Switch to live mode automatically now that training is done
+  switchMode('live');
+}
+
+// ═══════════════════════════════════════
+//  LIVE MODE
+// ═══════════════════════════════════════
+function generateOneLiveMail(){
+  if(liveMailCount>=50){ showToast('You\'ve generated 50 mails! That\'s the limit for this session.'); return; }
+  liveMailCount++;
+  document.getElementById('liveLimit').textContent=`${liveMailCount} / 50`;
+  if(liveMailCount>=50) document.getElementById('liveGenBtn').disabled=true;
+
+  const allCatIds=CATS.map(c=>c.id);
+  const catId=allCatIds[Math.floor(Math.random()*allCatIds.length)];
+  const m=makeMail(catId);
+  const isSpam=SPAM_CATS.includes(catId);
+  m.isSpam=isSpam;
+  m.verdict=isSpam?'spam':'inbox';
+  m.reason=isSpam?(SPAM_REASONS[catId]||'Multiple spam signals detected.'):(INBOX_REASONS[catId]||'No spam signals detected.');
+  liveMails.unshift(m);
+
+  const spamCount=liveMails.filter(x=>x.isSpam).length;
+  const inboxCount=liveMails.filter(x=>!x.isSpam).length;
+  document.getElementById('spamCount').textContent=spamCount;
+  document.getElementById('inboxCount').textContent=inboxCount;
+  document.getElementById('navSpamCount').textContent=spamCount;
+  document.getElementById('navInboxCount').textContent=inboxCount;
+
+  renderLiveBody();
+  showToast(isSpam?`🚫 Spam detected: ${m.subject.slice(0,38)}`:`📥 New inbox mail: ${m.subject.slice(0,38)}`);
+}
+
+function liveFilterTab(tab){
+  liveFilter=tab;
+  ['All','Inbox','Spam'].forEach(t=>{
+    const el=document.getElementById('lt'+t);
+    if(el) el.classList.toggle('active',tab===t.toLowerCase()||(tab==='all'&&t==='All'));
+  });
+  renderLiveBody();
+}
+
+function renderLiveBody(){
+  const body=document.getElementById('liveBody');
+  let filtered=liveMails;
+  if(liveFilter==='spam') filtered=liveMails.filter(m=>m.isSpam);
+  if(liveFilter==='inbox') filtered=liveMails.filter(m=>!m.isSpam);
+
+  if(filtered.length===0){
+    body.innerHTML=`<div class="live-empty"><div class="le-icon">📭</div>${liveMailCount===0?'Click "Generate Mail" to start receiving emails!':'No emails in this category yet.'}</div>`;
+    return;
+  }
+  body.innerHTML=filtered.map((m,i)=>{
+    const col=AV_COLORS[m.id%AV_COLORS.length];
+    const init=m.sender.split('@')[0].slice(0,2).toUpperCase();
+    const previewLines=m.body.split('\n').filter(l=>l.trim());
+    const preview=previewLines.length>1?previewLines[1]:m.body.slice(0,60);
+    return `
+    <div class="live-mail-row ${i===0&&liveMails[0]===m?'new-mail':''}" onclick="openMailView(${JSON.stringify(m).replace(/"/g,'&quot;')},true)">
+      <div class="lm-verdict ${m.verdict}">${m.isSpam?'🚫':'📥'}</div>
+      <div style="width:36px;height:36px;border-radius:50%;background:${col};display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;flex-shrink:0;font-family:'Nunito',sans-serif">${init}</div>
+      <div class="lm-info">
+        <div class="lm-sender">${escHtml(m.sender)}</div>
+        <div class="lm-subject">${escHtml(m.subject)}</div>
+        <div class="lm-preview">${escHtml(preview.trim().slice(0,70))}</div>
+      </div>
+      <div class="lm-meta">
+        <span class="lm-badge ${m.verdict}">${m.isSpam?'Spam':'Inbox'}</span>
+        <div class="lm-time">${m.time}</div>
+      </div>
+    </div>`;
+  }).join('');
+  if(liveMailCount>=50) body.innerHTML+=`<div class="live-limit">You've generated all 50 mails! The AI classified them using what it learned in Training Mode. 🎓</div>`;
+}
+
+// ── INBOX / SPAM SIDEBAR VIEWS ──
+function openInboxView(){ if(currentMode==='live') liveFilterTab('inbox'); else showToast('Switch to Live Mode to see your Inbox!'); }
+function openSpamView(){ if(currentMode==='live') liveFilterTab('spam'); else showToast('Switch to Live Mode to see your Spam folder!'); }
+
+// ═══════════════════════════════════════
+//  MAIL VIEW — improved layout
+// ═══════════════════════════════════════
+function openMailView(mailOrJson, isLive){
+  const m = typeof mailOrJson === 'string' ? JSON.parse(mailOrJson) : mailOrJson;
+  openMailData=m;
+  document.getElementById('mvSubject').textContent=m.subject;
+
+  const ac=AV_COLORS[m.id%AV_COLORS.length];
+  const av=document.getElementById('mvAvatar');
+  av.style.background=ac;
+  av.textContent=m.sender.split('@')[0].slice(0,2).toUpperCase();
+
+  document.getElementById('mvFrom').textContent=m.sender.split('@')[0].replace(/[._-]/g,' ').replace(/\b\w/g,l=>l.toUpperCase());
+  document.getElementById('mvEmailAddr').textContent=m.sender;
+  document.getElementById('mvTo').textContent='me';
+  document.getElementById('mvDate').textContent=m.time||'Today';
+
+  // Format body: paragraphs with better spacing
+  const formattedBody=m.body
+    .split('\n')
+    .map(line=>{
+      line=line.trim();
+      if(!line) return '<br>';
+      // links styled
+      line=line.replace(/(→\s*\S+|www\.\S+|https?:\/\/\S+)/g,'<a href="#" style="color:#1a73e8;font-weight:600;text-decoration:underline">$1</a>');
+      return `<p style="margin-bottom:6px">${escHtml2(line)}</p>`;
+    })
+    .join('');
+  document.getElementById('mvBody').innerHTML=formattedBody;
+
+  // banner
+  const banner=document.getElementById('mvBanner');
+  const catInfo=CATS.find(c=>c.id===m.catId)||{};
+  if(isLive){
+    if(m.isSpam){
+      banner.innerHTML=`<div class="mv-spam-banner">🚫 <strong>Spam Detected</strong> — This email is in your Spam folder. The AI classified it based on your training data.</div>`;
+    } else {
+      banner.innerHTML=`<div class="mv-inbox-banner">📥 <strong>Inbox</strong> — This email passed the AI spam filter and landed safely in your Inbox.</div>`;
+    }
+  } else {
+    banner.innerHTML=catInfo.id?`<div style="margin:16px 24px 0;padding:12px 18px;background:${catInfo.bg};border-radius:12px;font-size:13px;display:flex;align-items:center;gap:10px;border:1.5px solid ${catInfo.color}33;animation:fadeInUp .3s ease both"><span style="font-size:20px">${catInfo.icon}</span> <strong style="color:${catInfo.color}">${catInfo.name}</strong> <span style="color:var(--text2)">— ${catInfo.desc}</span></div>`:'';
+  }
+
+  // reason box
+  const reasonEl=document.getElementById('mvReason');
+  if(isLive && m.reason){
+    reasonEl.innerHTML=`<div class="mv-reason"><strong>🌳 Why did the AI classify this?</strong><br><br>${escHtml(m.reason)}</div>`;
+  } else {
+    reasonEl.innerHTML='';
+  }
+
+  const mv=document.getElementById('mailView');
+  mv.style.display='flex';
+  mv.scrollTop=0;
+}
+
+function closeMailView(){
+  document.getElementById('mailView').style.display='none';
+}
+
+// ═══════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+// Version that allows our formatted spans through (used in body)
+function escHtml2(s){
+  // already contains our HTML span tags — just escape raw & < > that aren't in tags
+  return s;
+}
+
+function showToast(msg, dur=3000){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+// ═══════════════════════════════════════
+//  DISABLE RIGHT-CLICK
+// ═══════════════════════════════════════
+document.addEventListener('contextmenu', function(e){
+  e.preventDefault();
+  return false;
+});
+
+// ═══════════════════════════════════════
+//  DECISION TREE MODAL
+// ═══════════════════════════════════════
+function openDTModal(){
+  buildDecisionTree();
+  document.getElementById('dtModal').classList.add('show');
+}
+function closeDTModal(){
+  document.getElementById('dtModal').classList.remove('show');
+}
+
+function buildDecisionTree(){
+  // Build stats cards
+  const total = generatedMails.length || 1;
+  const statsEl = document.getElementById('dtStats');
+  statsEl.innerHTML = CATS.map(c=>{
+    const count = categoryAssignments[c.id]?.length || 0;
+    const pct = Math.round((count/total)*100);
+    return `<div class="dt-stat-card" style="border-top:3px solid ${c.color};background:${c.bg}">
+      <div class="dt-stat-icon">${c.icon}</div>
+      <div class="dt-stat-name">${c.name}</div>
+      <div class="dt-stat-count" style="color:${c.color}">${count}</div>
+      <div style="font-size:11px;color:var(--text3)">${pct}% of mails</div>
+    </div>`;
+  }).join('');
+
+  // Build SVG decision tree
+  const W = Math.max(820, window.innerWidth - 80);
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} 600`);
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', 600);
+  svg.style.fontFamily = "'Nunito', sans-serif";
+
+  // Tree structure: fixed decision logic based on categories
+  const tree = [
+    // [id, label, x, y, type, parent, branch-label]
+    { id:'q1', label:'Is sender\nunknown?', x:W/2, y:60, type:'q', parent:null, bl:'' },
+    { id:'spam1', label:'🚫 SPAM\n(Unknown Sender)', x:W*0.18, y:200, type:'spam', parent:'q1', bl:'YES' },
+    { id:'q2', label:'Urgent\nlanguage?', x:W*0.75, y:200, type:'q', parent:'q1', bl:'NO' },
+    { id:'spam2', label:'🚫 SPAM\n(Urgent!)', x:W*0.55, y:340, type:'spam', parent:'q2', bl:'YES' },
+    { id:'q3', label:'Too many\nlinks?', x:W*0.88, y:340, type:'q', parent:'q2', bl:'NO' },
+    { id:'spam3', label:'🚫 SPAM\n(Too Many Links)', x:W*0.72, y:480, type:'spam', parent:'q3', bl:'YES' },
+    { id:'q4', label:'Prize or\ncash offer?', x:W*0.96, y:480, type:'q', parent:'q3', bl:'NO' },
+    { id:'spam4', label:'🚫 SPAM\n(Prize Scam)', x:W*0.88, y:560, type:'spam', parent:'q4', bl:'YES', small:true },
+    { id:'q5', label:'Known\nplatform?', x:W*0.35, y:340, type:'q', parent:'q2', bl:'NO↘', hidden:true },
+  ];
+
+  // Simpler, cleaner 3-branch layout
+  const nodes = [
+    { id:'root', label:'Is sender\nunknown?',       x:W/2,    y:55,  type:'q'    },
+    { id:'s1',   label:'🚫 SPAM\nUnknown Sender',   x:W*0.15, y:200, type:'spam' },
+    { id:'q2',   label:'Urgent\nlanguage?',          x:W*0.72, y:200, type:'q'   },
+    { id:'s2',   label:'🚫 SPAM\nUrgent!',           x:W*0.48, y:360, type:'spam' },
+    { id:'q3',   label:'Too many\nlinks?',           x:W*0.88, y:360, type:'q'   },
+    { id:'s3',   label:'🚫 SPAM\nToo Many Links',   x:W*0.72, y:500, type:'spam' },
+    { id:'q4',   label:'Prize / cash\noffer?',       x:W*0.97, y:500, type:'q'   },
+    { id:'s4',   label:'🚫 SPAM\nPrize Scam',       x:W*0.87, y:570, type:'spam', small:true },
+    { id:'i4',   label:'📥 INBOX\nPromo/Social',    x:W*1.0,  y:570, type:'inbox', small:true },
+  ];
+
+  // Simple readable layout
+  const ns = [
+    { id:'root', txt:'Is the sender\nunknown?',     x:W/2,    y:55,  t:'q'     },
+    { id:'s1',   txt:'🚫 SPAM\nUnknown Sender',     x:W*0.14, y:200, t:'spam'  },
+    { id:'q2',   txt:'Has urgent\nlanguage?',        x:W*0.70, y:200, t:'q'    },
+    { id:'s2',   txt:'🚫 SPAM\nUrgent / Threat',    x:W*0.46, y:370, t:'spam'  },
+    { id:'q3',   txt:'Too many\nlinks?',             x:W*0.85, y:370, t:'q'    },
+    { id:'s3',   txt:'🚫 SPAM\nPhishing Links',     x:W*0.69, y:510, t:'spam'  },
+    { id:'q4',   txt:'Prize or\ncash offer?',        x:W*0.95, y:510, t:'q'    },
+    { id:'s4',   txt:'🚫 SPAM\nPrize Scam',         x:W*0.87, y:575, t:'spam', sm:true },
+    { id:'i4',   txt:'📥 INBOX\nSafe Email',        x:W*1.03, y:575, t:'inbox', sm:true },
+    { id:'ip',   txt:'📥 INBOX\nPromo / Social',    x:W*0.21, y:370, t:'inbox'  },
+    { id:'ig',   txt:'📥 INBOX\nGeneral Email',     x:W*0.54, y:510, t:'inbox'  },
+  ];
+
+  const edges = [
+    { from:'root', to:'s1',  lbl:'YES', side:'left'  },
+    { from:'root', to:'q2',  lbl:'NO',  side:'right' },
+    { from:'q2',   to:'s2',  lbl:'YES', side:'left'  },
+    { from:'q2',   to:'q3',  lbl:'NO',  side:'right' },
+    { from:'q2',   to:'ip',  lbl:'',    side:'down'  },
+    { from:'q3',   to:'s3',  lbl:'YES', side:'left'  },
+    { from:'q3',   to:'q4',  lbl:'NO',  side:'right' },
+    { from:'q3',   to:'ig',  lbl:'',    side:'down'  },
+    { from:'q4',   to:'s4',  lbl:'YES', side:'left'  },
+    { from:'q4',   to:'i4',  lbl:'NO',  side:'right' },
+  ];
+
+  function nodeW(n){ return n.sm ? 110 : (n.t==='q' ? 140 : 150); }
+  function nodeH(n){ return n.sm ? 44 : 60; }
+  function nodeColor(n){
+    if(n.t==='q')     return {fill:'#e3f2fd', stroke:'#1565c0', text:'#0d47a1'};
+    if(n.t==='spam')  return {fill:'#ffebee', stroke:'#c62828', text:'#b71c1c'};
+    if(n.t==='inbox') return {fill:'#e8f5e9', stroke:'#2e7d32', text:'#1b5e20'};
+    return {fill:'#fff',stroke:'#999',text:'#333'};
+  }
+
+  // Draw edges first
+  edges.forEach(e=>{
+    const fn = ns.find(n=>n.id===e.from);
+    const tn = ns.find(n=>n.id===e.to);
+    if(!fn||!tn) return;
+    const x1 = fn.x, y1 = fn.y + nodeH(fn)/2;
+    const x2 = tn.x, y2 = tn.y - nodeH(tn)/2;
+    const path = document.createElementNS(svgNS,'path');
+    const mx = (x1+x2)/2, my = (y1+y2)/2;
+    path.setAttribute('d',`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`);
+    path.setAttribute('stroke', e.lbl==='YES'?'#c62828':e.lbl==='NO'?'#2e7d32':'#90a4ae');
+    path.setAttribute('stroke-width','2.5');
+    path.setAttribute('fill','none');
+    path.setAttribute('stroke-dasharray', e.lbl?'none':'5,4');
+    svg.appendChild(path);
+
+    if(e.lbl){
+      const lx = x1 + (e.side==='left'?-28:28);
+      const ly = y1 + 22;
+      const lt = document.createElementNS(svgNS,'text');
+      lt.setAttribute('x', lx); lt.setAttribute('y', ly);
+      lt.setAttribute('text-anchor','middle');
+      lt.setAttribute('font-size','12');
+      lt.setAttribute('font-weight','800');
+      lt.setAttribute('font-family',"'Nunito',sans-serif");
+      lt.setAttribute('fill', e.lbl==='YES'?'#c62828':'#2e7d32');
+      lt.textContent = e.lbl;
+      svg.appendChild(lt);
+    }
+  });
+
+  // Draw nodes
+  ns.forEach(n=>{
+    if(n.x > W+20) return; // clip
+    const w = nodeW(n), h = nodeH(n);
+    const c = nodeColor(n);
+    const rect = document.createElementNS(svgNS,'rect');
+    rect.setAttribute('x', n.x - w/2);
+    rect.setAttribute('y', n.y - h/2);
+    rect.setAttribute('width', w);
+    rect.setAttribute('height', h);
+    rect.setAttribute('rx', n.t==='q'?12:20);
+    rect.setAttribute('fill', c.fill);
+    rect.setAttribute('stroke', c.stroke);
+    rect.setAttribute('stroke-width','2');
+    rect.setAttribute('filter','url(#shadow)');
+    svg.appendChild(rect);
+
+    const lines = n.txt.split('\n');
+    lines.forEach((line,i)=>{
+      const t = document.createElementNS(svgNS,'text');
+      const totalH = lines.length * 16;
+      const startY = n.y - totalH/2 + 12 + i*16;
+      t.setAttribute('x', n.x); t.setAttribute('y', startY);
+      t.setAttribute('text-anchor','middle');
+      t.setAttribute('font-size', n.sm?10:12);
+      t.setAttribute('font-weight','800');
+      t.setAttribute('font-family',"'Nunito',sans-serif");
+      t.setAttribute('fill', c.text);
+      t.textContent = line;
+      svg.appendChild(t);
+    });
+  });
+
+  // Drop shadow filter
+  const defs = document.createElementNS(svgNS,'defs');
+  defs.innerHTML = `<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.12)"/>
+  </filter>`;
+  svg.insertBefore(defs, svg.firstChild);
+
+  const wrap = document.getElementById('dtTreeWrap');
+  wrap.innerHTML = '';
+  wrap.appendChild(svg);
+}
+
+// Also expose DT button in live mode view
+function openDTFromLive(){
+  // Use live data if training not done, else training data
+  openDTModal();
+}
+</script>
+</body>
+</html>
