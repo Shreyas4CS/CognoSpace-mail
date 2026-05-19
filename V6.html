@@ -422,24 +422,23 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .admin-login-cancel:hover{color:#e9d5ff}
 
 /* ── FOOTER ── */
-footer{background:linear-gradient(135deg,#1a1f3c 0%,#2a2f5a 40%,#1a2a4a 100%);padding:0;display:flex;flex-direction:column;flex-shrink:0;position:relative;overflow:hidden;border-top:2px solid transparent}
-footer::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4a90e2,#52b788,#f4b942,#e07070,#9b8dd4,#4a90e2);background-size:400% 100%;animation:footerShimmer 6s linear infinite}
-.footer-inner{display:flex;align-items:center;justify-content:space-between;padding:20px 36px;gap:20px}
-.footer-brand{display:flex;align-items:center;gap:12px;font-family:'Nunito',sans-serif;font-weight:800;color:#fff;font-size:15px}
-.footer-brand .fb-icon{width:32px;height:32px;background:linear-gradient(135deg,#4a90e2,#52b788);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:800;box-shadow:0 2px 8px rgba(74,144,226,.4)}
-.footer-brand .fb-logo-img{width:36px;height:36px;border-radius:10px;object-fit:contain}
-.footer-brand .fb-tagline{font-size:12px;color:rgba(255,255,255,.55);font-weight:500;font-family:'Nunito Sans',sans-serif;margin-top:2px}
-.footer-center{display:flex;flex-direction:column;align-items:center;gap:8px}
-.footer-links{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
-.footer-links a{color:rgba(255,255,255,.6) !important;text-decoration:none !important;transition:color .2s;font-weight:600;font-size:12px;font-family:'Nunito Sans',sans-serif;letter-spacing:.2px}
+footer{background:linear-gradient(135deg,#1e2340 0%,#2a3160 50%,#1a2a50 100%);padding:0;display:flex;flex-direction:column;flex-shrink:0;position:relative;overflow:hidden}
+footer::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#4a90e2,#52b788,#f4b942,#e07070,#9b8dd4,#4a90e2);background-size:400% 100%;animation:footerShimmer 6s linear infinite}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;gap:16px;flex-wrap:wrap}
+.footer-brand{display:flex;align-items:center;gap:10px;font-family:'Nunito',sans-serif;font-weight:800;color:#fff;font-size:14px}
+.footer-brand .fb-icon{width:28px;height:28px;background:linear-gradient(135deg,#4a90e2,#52b788);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;box-shadow:0 2px 8px rgba(74,144,226,.4)}
+.footer-brand .fb-logo-img{width:28px;height:28px;border-radius:8px;object-fit:contain}
+.footer-brand .fb-tagline{font-size:11px;color:rgba(255,255,255,.5);font-weight:500;font-family:'Nunito Sans',sans-serif;margin-top:1px}
+.footer-center{display:flex;flex-direction:column;align-items:center;gap:6px}
+.footer-links{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.footer-links a{color:rgba(255,255,255,.55) !important;text-decoration:none !important;transition:color .2s;font-weight:600;font-size:12px;font-family:'Nunito Sans',sans-serif}
 .footer-links a:hover{color:#fff !important}
-.footer-copy{font-size:11px;color:rgba(255,255,255,.3);font-family:'Nunito Sans',sans-serif;text-align:center;margin-top:2px}
-.footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:12px;color:rgba(255,255,255,.7);font-family:'Nunito',sans-serif;font-weight:600}
-.footer-credit{font-size:12px;color:rgba(255,255,255,.55);font-family:'Nunito Sans',sans-serif;font-weight:500;font-style:italic;text-align:right}
-.footer-mode-badge{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;font-family:'Nunito',sans-serif;letter-spacing:.3px}
-.footer-mode-badge.training{background:rgba(74,144,226,.3);color:#a8c8f8;border:1px solid rgba(74,144,226,.4)}
-.footer-mode-badge.live{background:rgba(82,183,136,.3);color:#90ddb8;border:1px solid rgba(82,183,136,.4)}
-.footer-mode-badge.admin-badge{background:rgba(124,58,237,.3);color:#d4b8fd;border:1px solid rgba(124,58,237,.4)}
+.footer-right{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.6);font-family:'Nunito',sans-serif;font-weight:600}
+.footer-right .heart{color:#e07070;animation:bounce 1.5s ease infinite;display:inline-block}
+.footer-mode-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;font-family:'Nunito',sans-serif;letter-spacing:.3px}
+.footer-mode-badge.training{background:rgba(74,144,226,.25);color:#8ab8f5;border:1px solid rgba(74,144,226,.3)}
+.footer-mode-badge.live{background:rgba(82,183,136,.25);color:#7dd4a8;border:1px solid rgba(82,183,136,.3)}
+.footer-mode-badge.admin-badge{background:rgba(124,58,237,.25);color:#c4b5fd;border:1px solid rgba(124,58,237,.3)}
 
 /* ── TOAST ── */
 #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#2d3142;color:#fff;padding:13px 28px;border-radius:14px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;font-family:'Nunito',sans-serif;font-weight:600;box-shadow:0 6px 24px rgba(45,49,66,.25);white-space:nowrap;max-width:90vw;text-overflow:ellipsis;overflow:hidden}
@@ -480,7 +479,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
     </a>
     <div>
       <div class="logo-text"><span>Cogno</span>Space Mail</div>
-      <div class="by-text">by CognoSpace</div>
+      <div class="by-text">Decision Tree mail APP</div>
     </div>
   </div>
   <div id="signupCard" class="auth-card">
@@ -545,7 +544,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
             <div class="training-title">🎓 Training Mode – Feature-by-Feature Comparison</div>
             <div class="training-desc">
               Step 1: Generate 40 emails → For each spam type, check all mails one-by-one — does this mail have that spam feature? YES = spam, NO = move to next type.<br>
-              <span style="color:#e65100;font-weight:600">🌳 Decision Tree:</span> You teach the AI by identifying features in each mail. No hints — only the feature type is shown! When training is done, you unlock Live Mode and can view your Decision Tree.
+              <span style="color:#e65100;font-weight:600">🌳 Decision Tree:</span> You teach the AI by identifying features in each mail. No hints — only the feature type is shown!
             </div>
           </div>
           <button class="gen-btn" id="genBtn" onclick="generateMails()">⚡ Generate 40 Mails</button>
@@ -564,13 +563,10 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
           <div><div>CognoSpace Mail</div><div class="fb-tagline">AI Learning Platform</div></div>
         </div>
         <div class="footer-center">
-          <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="#">About Decision Trees</a><a href="https://www.cognospace.in" target="_blank">CognoSpace</a></div>
-          <div class="footer-copy">© 2026 CognoSpace. All rights reserved.</div>
+          <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="#">About Decision Trees</a><a href="#">CognoSpace</a></div>
+          <div style="font-size:11px;color:rgba(255,255,255,.28);font-family:'Nunito Sans',sans-serif;margin-top:4px;text-align:center">© 2026 CognoSpace. All rights reserved.</div>
         </div>
-        <div class="footer-right">
-          <span class="footer-mode-badge training">🎓 Training Mode</span>
-          <div class="footer-credit">Designed &amp; Developed by CognoSpace for young minds</div>
-        </div>
+        <div class="footer-right"><span class="footer-mode-badge training">🎓 Training Mode</span> Made with <span class="heart">♥</span> for young learners</div>
       </div></footer>
     </div>
 
@@ -586,7 +582,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
             <div class="live-stat inbox-s" onclick="liveFilterTab('inbox')"><span class="stat-icon">📥</span> Inbox <span class="stat-num" id="inboxCount">0</span></div>
           </div>
           <button class="live-gen-btn" id="liveGenBtn" onclick="generateOneLiveMail()">⚡ Generate Mail</button>
-          <button class="live-gen-btn" style="background:linear-gradient(135deg,#2e7d32,#4caf50);margin-left:4px;box-shadow:0 4px 14px rgba(46,125,50,.4);font-size:14px;padding:10px 20px;border:2px solid rgba(255,255,255,.2);animation:glow 2.5s ease infinite" onclick="openDTModal()">🌳 View My Decision Tree</button>
+          <button class="live-gen-btn" style="background:linear-gradient(135deg,#2e7d32,#4caf50);margin-left:4px" onclick="openDTModal()">🌳 Decision Tree</button>
           <span id="liveLimit" style="font-size:13px;color:var(--text3);flex-shrink:0">0 / 50</span>
         </div>
         <div class="live-tabs">
@@ -604,13 +600,10 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
           <div><div>CognoSpace Mail</div><div class="fb-tagline">AI Learning Platform</div></div>
         </div>
         <div class="footer-center">
-          <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="#">About Decision Trees</a><a href="https://www.cognospace.in" target="_blank">CognoSpace</a></div>
-          <div class="footer-copy">© 2026 CognoSpace. All rights reserved.</div>
+          <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="#">About Decision Trees</a><a href="#">CognoSpace</a></div>
+          <div style="font-size:11px;color:rgba(255,255,255,.28);font-family:'Nunito Sans',sans-serif;margin-top:4px;text-align:center">© 2026 CognoSpace. All rights reserved.</div>
         </div>
-        <div class="footer-right">
-          <span class="footer-mode-badge live">⚡ Live Mode</span>
-          <div class="footer-credit">Designed &amp; Developed by CognoSpace for young minds</div>
-        </div>
+        <div class="footer-right"><span class="footer-mode-badge live">⚡ Live Mode</span> Made with <span class="heart">♥</span> for young learners</div>
       </div></footer>
     </div>
 
@@ -631,13 +624,9 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
           <div><div>CognoSpace Mail</div><div class="fb-tagline">AI Learning Platform</div></div>
         </div>
         <div class="footer-center">
-          <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="https://www.cognospace.in" target="_blank">CognoSpace</a></div>
-          <div class="footer-copy">© 2026 CognoSpace. All rights reserved.</div>
+          <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="#">CognoSpace</a></div>
         </div>
-        <div class="footer-right">
-          <span class="footer-mode-badge training" style="background:rgba(240,128,96,.3);color:#f4c090;border-color:rgba(240,128,96,.4)">🌲 Level 2</span>
-          <div class="footer-credit">Designed &amp; Developed by CognoSpace for young minds</div>
-        </div>
+        <div class="footer-right"><span class="footer-mode-badge training" style="background:rgba(240,128,96,.25);color:#f4b080;border-color:rgba(240,128,96,.3)">🌲 Level 2</span> Made with <span class="heart">♥</span> for young learners</div>
       </div></footer>
     </div>
 
@@ -684,14 +673,8 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
           <img src="cognospace_logo.png" alt="" class="fb-logo-img" onerror="this.outerHTML='<div class=\'fb-icon\'>C</div>'">
           <div><div>CognoSpace Mail</div><div class="fb-tagline">AI Learning Platform</div></div>
         </div>
-        <div class="footer-center">
-          <div class="footer-links"><a href="https://www.cognospace.in" target="_blank">CognoSpace</a></div>
-          <div class="footer-copy">© 2026 CognoSpace. All rights reserved.</div>
-        </div>
-        <div class="footer-right">
-          <span class="footer-mode-badge admin-badge">🔐 Admin Mode</span>
-          <div class="footer-credit">Designed &amp; Developed by CognoSpace for young minds</div>
-        </div>
+        <div class="footer-center"><div class="footer-links"><a href="#">CognoSpace</a></div></div>
+        <div class="footer-right"><span class="footer-mode-badge admin-badge">🔐 Admin Mode</span></div>
       </div></footer>
     </div>
   </div>
@@ -742,7 +725,8 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
     </div>
     <div class="modal-actions">
       <button class="modal-btn" onclick="document.getElementById('analysisModal').classList.remove('show')">Close</button>
-      <button class="modal-btn primary" onclick="finishTrainingAndGoLive()">⚡ Go to Live Mode →</button>
+      <button class="modal-btn" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#1b5e20;border-color:#a5d6a7" onclick="openDTModal()">🌳 See Decision Tree</button>
+      <button class="modal-btn primary" onclick="goToLevel2()">🌲 Level 2 →</button>
     </div>
   </div>
 </div>
@@ -881,9 +865,9 @@ const SPAM_TYPES = [
 const SPAM_CATS_IDS = ['phishing','promo_spam','scam','malware','fakebiz','social','newsletter'];
 const SAFE_CAT_ID = 'safe';
 
-// Mail counts per type: total 40, deliberately varied so each category has a different count
-// Distribution: phishing=9, promo_spam=7, scam=4, malware=6, fakebiz=3, social=5, newsletter=4, safe=2 = 40
-const MAIL_COUNTS = {phishing:9, promo_spam:7, scam:4, malware:6, fakebiz:3, social:5, newsletter:4, safe:2};
+// Mail counts per type: total 40, no two same, no same for spam/not-spam within a type
+// Distribution: phishing=7, promo_spam=6, scam=5, malware=5, fakebiz=5, social=5, newsletter=5, safe=2 = 40
+const MAIL_COUNTS = {phishing:7, promo_spam:6, scam:5, malware:5, fakebiz:5, social:5, newsletter:5, safe:2};
 
 const AV_COLORS=['#4285f4','#ea4335','#fbbc04','#34a853','#8430ce','#007b83','#e67c00','#0097a7','#c2185b','#388e3c'];
 
@@ -1430,7 +1414,7 @@ function renderCompareUI(){
       </div>
       <div class="mail-compare-area">
         <div class="mail-list-panel" id="compareMailPanel">
-          <div class="panel-title">📬 All ${roundMails.length} Mails — ${spamType.id === 'safe' ? 'Is this a Safe / Genuine mail?' : `Does this mail have "${spamType.name}" features?`}</div>
+          <div class="panel-title">📬 All 40 Mails — Does this mail have "${spamType.name}" features?</div>
           ${renderCompareMails()}
         </div>
         <div class="rounds-overview">
@@ -1473,7 +1457,7 @@ function renderCompareMails(){
         <div class="cmc-preview">${escHtml(preview.trim().slice(0,70))}</div>
         ${!decided?`<div style="margin-top: 6px; font-size: 11px; font-weight: 700; color: var(--blue);">👉 Click to open and classify</div>`:''}
       </div>
-      ${decided?`<div style="padding:6px 14px 10px;font-size:12px;font-weight:700;color:${isSpam?(spamType.id==='safe'?'#c0474a':'#c0474a'):'#2d8a5e'}">${isSpam?(spamType.id==='safe'?'🚫 Not Safe — Spam':'🚫 Marked as Spam'):'✅ '+(spamType.id==='safe'?'Safe Mail':'Not Spam')}</div>`:''}
+      ${decided?`<div style="padding:6px 14px 10px;font-size:12px;font-weight:700;color:${isSpam?'#c0474a':'#2d8a5e'}">${isSpam?'🚫 Marked as Spam':'✅ Not Spam'}</div>`:''}
     </div>`;
   }).join('');
 }
@@ -1499,7 +1483,7 @@ function decideMail(mailId,decision){
   else{trainingResults[spamType.id].notSpam.push(m);}
   // Update panel
   const panel=document.getElementById('compareMailPanel');
-  if(panel)panel.innerHTML='<div class="panel-title">📬 All '+roundMails.length+' Mails — '+(spamType.id==='safe'?'Is this a Safe / Genuine mail?':'Does this mail have "'+spamType.name+'" features?')+'</div>'+renderCompareMails();
+  if(panel)panel.innerHTML='<div class="panel-title">📬 All 40 Mails — Does this mail have "'+spamType.name+'" features?</div>'+renderCompareMails();
   // Check if all decided
   const totalDecided=trainingResults[spamType.id].spam.length+trainingResults[spamType.id].notSpam.length;
   if(totalDecided===roundMails.length){
@@ -1569,17 +1553,19 @@ function showAnalysis(){
   document.getElementById('analysisModal').classList.add('show');
 }
 
-// ══ TRAINING COMPLETE (skip Level 2) ══
-function finishTrainingAndGoLive(){
-  document.getElementById('analysisModal').classList.remove('show');
-  unlockLiveMode();
-  showToast('🎉 Training Complete! Live Mode is unlocked — the AI is ready!');
-  switchMode('live');
-}
-
-// ══ LEVEL 2 (kept for reference but not used in flow) ══
+// ══ LEVEL 2 ══
 function goToLevel2(){
-  finishTrainingAndGoLive();
+  document.getElementById('analysisModal').classList.remove('show');
+  let bestCat=SPAM_TYPES[0],bestCount=0;
+  SPAM_TYPES.forEach(t=>{if((trainingResults[t.id]?.spam?.length||0)>bestCount){bestCount=trainingResults[t.id].spam.length;bestCat=t;}});
+  const otherCats=SPAM_TYPES.filter(c=>c.id!==bestCat.id&&(trainingResults[c.id]?.spam?.length||0)>0);
+  l2Mails=trainingResults[bestCat.id]?.spam||[];
+  const l2Assignments={};
+  otherCats.forEach(c=>{l2Assignments[c.id]=[];});
+  window._l2State={bestCat,otherCats,assignments:l2Assignments};
+  document.getElementById('trainingWrap').style.display='none';
+  document.getElementById('l2Wrap').style.display='flex';
+  renderL2();
 }
 
 function renderL2(){
@@ -1627,7 +1613,11 @@ function l2Drop(e,catId){
   l2DraggingId=null;renderL2();
 }
 function submitL2(){
-  finishTrainingAndGoLive();
+  unlockLiveMode();
+  showToast('🎉 Training Complete! Live Mode is unlocked — switch to see AI in action!');
+  document.getElementById('l2Wrap').style.display='none';
+  document.getElementById('trainingWrap').style.display='flex';
+  switchMode('live');
 }
 
 // ══ LIVE MODE ══
@@ -1779,39 +1769,14 @@ function openMailView(mailOrJson,isLive,isCompare){
       'unsubscribe', 'bulk mail', 'mailing list'
     ],
 
-    // Safe / Genuine Mail — 4 features: Known sender, Professional language, No suspicious links, No urgent scam words
-    // Highlight POSITIVE signals of genuine mail in green
-    safe: [
-      // ✅ Feature 1: Known sender — real org names & professional email domains
-      'cognospace', 'city medical centre', 'iit admissions office', 'hr & payroll department',
-      'acme corporation', 'hdfc bank', 'alice johnson', 'bob smith', 'the school administration',
-      'city public school', 'finance department', 'project lead',
-
-      // ✅ Feature 2: Professional language — proper greetings, sign-offs, structure
-      'dear team', 'dear patient', 'dear student', 'dear employee', 'dear parent/guardian',
-      'dear customer', 'dear team and parents',
-      'best,', 'warm regards,', 'looking forward', 'please confirm',
-      'feel free to reply', 'thank you,', 'cheers,', 'regards,',
-
-      // ✅ Feature 3: No suspicious links — real trusted domains only
-      'bluedart.com', 'drive.google.com', 'hr.acmecorp.in', 'payroll@acmecorp.in',
-      'admissions@iit-counselling.edu', 'finance@cognospace.upi',
-
-      // ✅ Feature 4: No urgent scam words — normal transactional / informational language
-      'appointment confirmed', 'order has been confirmed', 'salary credited',
-      'transaction alert', 'slot has been confirmed', 'invoice details',
-      'welcome to the team', 'parent-teacher meeting', 'onboarding schedule',
-      'tracking number', 'estimated delivery', 'net salary credited',
-      'please find below', 'please reply to this email',
-    ],
+    // Safe: no highlights — these are genuine mails
+    safe: [],
   };
 
-  // For the safe round, we highlight positive genuine signals in green instead of spam signals
-  const isSafeRound = isCompare && SPAM_TYPES[currentRoundIdx].id === 'safe';
-  const spamType = isCompare ? SPAM_TYPES[currentRoundIdx] : (isLive && m.catId && m.catId !== 'safe' && m.isSpam ? SPAM_TYPES.find(t=>t.id===m.catId) : null);
-  const keywords = isSafeRound ? (SPAM_KEYWORDS['safe'] || []) : (spamType ? (SPAM_KEYWORDS[spamType.id] || []) : []);
-  const kwColor = isSafeRound ? '#2e7d32' : (spamType ? spamType.color : '#f4b942');
-  const kwBg = isSafeRound ? '#e8f5e9' : (spamType ? spamType.bg : '#fef8e7');
+  const spamType = isCompare ? SPAM_TYPES[currentRoundIdx] : (isLive && m.catId ? SPAM_TYPES.find(t=>t.id===m.catId) : null);
+  const keywords = spamType ? (SPAM_KEYWORDS[spamType.id] || []) : [];
+  const kwColor = spamType ? spamType.color : '#f4b942';
+  const kwBg = spamType ? spamType.bg : '#fef8e7';
 
   function highlightKeywords(text) {
     if (!keywords.length) return text;
@@ -1843,37 +1808,18 @@ function openMailView(mailOrJson,isLive,isCompare){
   // Banner - in training/compare mode: NO category hint, only feature box on top
   const banner=document.getElementById('mvBanner');
   if(isCompare||(!isLive&&!isCompare)){
+    // Training mode: show spam type feature box (no category name of the mail)
     const spamType=SPAM_TYPES[currentRoundIdx]||SPAM_TYPES[0];
-    if(isSafeRound){
-      // Safe round: green banner with genuine mail signals
-      banner.innerHTML=`<div style="margin:16px 24px 0;padding:14px 20px;background:linear-gradient(135deg,#edfbf3,#e8f5e9);border:1.5px solid #52b788;border-radius:14px;animation:fadeInUp .3s ease both">
-        <div style="font-size:12px;font-weight:700;color:#1b5e20;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📋 Currently checking for:</div>
-        <div style="font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;color:#1b5e20;display:flex;align-items:center;gap:8px"><span style="font-size:22px">✅</span>Safe / Genuine Mail</div>
-        <div style="font-size:13px;color:#2d8a5e;margin-top:8px;line-height:1.7">
-          <strong>4 signals of a genuine mail:</strong><br>
-          🧑 <strong>Known sender</strong> — real org name, professional email address<br>
-          🗣️ <strong>Professional language</strong> — proper greeting, polite sign-off, clear purpose<br>
-          🔗 <strong>No suspicious links</strong> — only real, known domains (e.g. bluedart.com, google.com)<br>
-          🚫 <strong>No urgent scam words</strong> — no "act now", "you won", "verify immediately"
-        </div>
-        <div style="font-size:12px;color:#1b5e20;margin-top:10px;font-weight:600">🔍 Is this a safe, genuine email? Look for green highlighted signals!</div>
-        <div style="margin-top:8px;font-size:12px;color:#1b5e20;background:rgba(255,255,255,.6);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px">
-          <mark style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:1px 6px;font-weight:700;border:1px solid #52b78844">highlighted words</mark>
-          = Genuine mail signals — these confirm it's a real, safe email!
-        </div>
-      </div>`;
-    } else {
-      banner.innerHTML=`<div style="margin:16px 24px 0;padding:14px 20px;background:linear-gradient(135deg,#fff8f0,#fff3e0);border:1.5px solid #ffd699;border-radius:14px;animation:fadeInUp .3s ease both">
-        <div style="font-size:12px;font-weight:700;color:#b06000;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📋 Currently checking for:</div>
-        <div style="font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;color:#7c4000;display:flex;align-items:center;gap:8px"><span style="font-size:22px">${spamType.icon}</span>${spamType.name}</div>
-        <div style="font-size:13px;color:#9a6020;margin-top:6px">Features to look for: ${spamType.features}</div>
-        <div style="font-size:12px;color:#b06000;margin-top:8px;font-weight:600">🔍 Does this mail contain any of these features?</div>
-        <div style="margin-top:8px;font-size:12px;color:#7c4000;background:rgba(255,255,255,.6);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px">
-          <mark style="background:${spamType.bg};color:${spamType.color};border-radius:4px;padding:1px 6px;font-weight:700;border:1px solid ${spamType.color}44">highlighted words</mark>
-          = Key spam signals found in this mail — look for these!
-        </div>
-      </div>`;
-    }
+    banner.innerHTML=`<div style="margin:16px 24px 0;padding:14px 20px;background:linear-gradient(135deg,#fff8f0,#fff3e0);border:1.5px solid #ffd699;border-radius:14px;animation:fadeInUp .3s ease both">
+      <div style="font-size:12px;font-weight:700;color:#b06000;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📋 Currently checking for:</div>
+      <div style="font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;color:#7c4000;display:flex;align-items:center;gap:8px"><span style="font-size:22px">${spamType.icon}</span>${spamType.name}</div>
+      <div style="font-size:13px;color:#9a6020;margin-top:6px">Features to look for: ${spamType.features}</div>
+      <div style="font-size:12px;color:#b06000;margin-top:8px;font-weight:600">🔍 Does this mail contain any of these features?</div>
+      <div style="margin-top:8px;font-size:12px;color:#7c4000;background:rgba(255,255,255,.6);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px">
+        <mark style="background:${spamType.bg};color:${spamType.color};border-radius:4px;padding:1px 6px;font-weight:700;border:1px solid ${spamType.color}44">highlighted words</mark>
+        = Key spam signals found in this mail — look for these!
+      </div>
+    </div>`;
   } else if(isLive){
     if(m.isSpam||m.userReported){
       const type=SPAM_TYPES.find(t=>t.id===m.catId)||{};
@@ -1893,7 +1839,7 @@ function openMailView(mailOrJson,isLive,isCompare){
     edgeEl.innerHTML='';
   }
 
-  // Inject compare buttons
+  // NEW: Inject compare Yes/No buttons
   const compareBtnsEl = document.getElementById('mvCompareBtns');
   if (isCompare) {
       const spamType = SPAM_TYPES[currentRoundIdx];
@@ -1902,40 +1848,21 @@ function openMailView(mailOrJson,isLive,isCompare){
       const decided = isSpam || isNotSpam;
 
       if (!decided) {
-          if (isSafeRound) {
-            // Safe/Genuine round: flip button labels — YES means safe, NO means spam
-            compareBtnsEl.innerHTML = `
-              <div style="margin: 0 24px 24px; padding: 24px; background: linear-gradient(135deg, #edfbf3, #e8f5e9); border: 2px dashed #52b788; border-radius: 16px; text-align: center; box-shadow: var(--shadow2);">
-                <div style="font-size: 16px; font-weight: 800; margin-bottom: 6px; font-family: 'Nunito', sans-serif; color: #1b5e20;">Is this a Safe / Genuine Mail?</div>
-                <div style="font-size: 13px; color: #2d8a5e; margin-bottom: 16px;">Look for <mark style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:1px 5px;font-weight:700;border:1px solid #52b78844">green highlighted signals</mark> — known sender, professional language, real links, no scam words.</div>
-                <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                  <button class="cmc-btn no" style="flex:1; min-width: 160px; max-width: 240px; padding: 14px; font-size: 15px; background:linear-gradient(135deg,#52b788,#3d9e73);" onclick="decideMailFromView(${m.id}, 'no')">✅ Safe Mail</button>
-                  <button class="cmc-btn yes" style="flex:1; min-width: 160px; max-width: 240px; padding: 14px; font-size: 15px;" onclick="decideMailFromView(${m.id}, 'yes')">🚫 Not Safe — Spam</button>
-                </div>
-              </div>`;
-          } else {
-            compareBtnsEl.innerHTML = `
+          compareBtnsEl.innerHTML = `
               <div style="margin: 0 24px 24px; padding: 24px; background: linear-gradient(135deg, #f8faff, #eef4ff); border: 2px dashed var(--blue); border-radius: 16px; text-align: center; box-shadow: var(--shadow2);">
                   <div style="font-size: 16px; font-weight: 800; margin-bottom: 16px; font-family: 'Nunito', sans-serif; color: var(--text);">Does this email have "${spamType.name}" features?</div>
                   <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
                       <button class="cmc-btn yes" style="flex:1; min-width: 160px; max-width: 240px; padding: 14px; font-size: 15px;" onclick="decideMailFromView(${m.id}, 'yes')">✅ YES — Spam</button>
                       <button class="cmc-btn no" style="flex:1; min-width: 160px; max-width: 240px; padding: 14px; font-size: 15px;" onclick="decideMailFromView(${m.id}, 'no')">✉️ NO — Not Spam</button>
                   </div>
-              </div>`;
-          }
+              </div>
+          `;
       } else {
-          if (isSafeRound) {
-            // isSpam here means "marked as Not Safe / Spam"; isNotSpam means "marked as Safe"
-            compareBtnsEl.innerHTML = `
-              <div style="margin: 0 24px 24px; padding: 16px; background: ${isNotSpam ? '#edfbf3' : '#fff0f0'}; border: 1.5px solid ${isNotSpam ? '#b4e8cc' : '#f5c0c0'}; border-radius: 16px; text-align: center; font-weight: 700; color: ${isNotSpam ? '#2d8a5e' : '#c0474a'};">
-                ${isNotSpam ? '✅ You marked this as Safe Mail' : '🚫 You marked this as Not Safe — Spam'}
-              </div>`;
-          } else {
-            compareBtnsEl.innerHTML = `
+          compareBtnsEl.innerHTML = `
               <div style="margin: 0 24px 24px; padding: 16px; background: ${isSpam ? '#fff0f0' : '#edfbf3'}; border: 1.5px solid ${isSpam ? '#f5c0c0' : '#b4e8cc'}; border-radius: 16px; text-align: center; font-weight: 700; color: ${isSpam ? '#c0474a' : '#2d8a5e'};">
                   ${isSpam ? '🚫 You marked this as Spam' : '✅ You marked this as Not Spam'}
-              </div>`;
-          }
+              </div>
+          `;
       }
       compareBtnsEl.style.display = 'block';
   } else {
@@ -2031,125 +1958,76 @@ function buildDecisionTree(){
     </div>`;
   }).join('');
 
-  // Whiteboard-style vertical decision chain matching the photo:
-  // Each row: [SPAM bubble] <--YES-- [Question Node] --NO--> continues down
-  // Last NO → INBOX
-  const types = SPAM_TYPES.filter(t => t.id !== 'safe'); // only spam types in tree
-  const svgNS = 'http://www.w3.org/2000/svg';
+  const W=Math.max(820,window.innerWidth-80);
+  const svgNS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(svgNS,'svg');
+  svg.setAttribute('viewBox',`0 0 ${W} 560`);
+  svg.setAttribute('width',W);svg.setAttribute('height',560);
+  svg.style.fontFamily="'Nunito',sans-serif";
 
-  const SVG_W = Math.max(820, window.innerWidth - 100);
-  const ROW_H = 120;        // vertical spacing per row
-  const TOP_PAD = 60;
-  const SVG_H = types.length * ROW_H + TOP_PAD + 100;
-
-  // Layout: question node centred, spam bubble to the left
-  const Q_W = 230, Q_H = 52;
-  const S_W = 150, S_H = 48;
-  const QCX = SVG_W * 0.55;  // question nodes x-centre (slightly right of centre)
-  const SPAM_CX = SVG_W * 0.18; // spam bubbles x-centre (left side)
-
-  const svg = document.createElementNS(svgNS, 'svg');
-  svg.setAttribute('viewBox', `0 0 ${SVG_W} ${SVG_H}`);
-  svg.setAttribute('width', '100%');
-  svg.setAttribute('height', SVG_H);
-  svg.style.fontFamily = "'Nunito',sans-serif";
-  svg.style.display = 'block';
-
-  const defs = document.createElementNS(svgNS, 'defs');
-  defs.innerHTML = `
-    <filter id="dshadow" x="-20%" y="-20%" width="150%" height="150%">
-      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,0.12)"/>
-    </filter>
-    <marker id="arrowRed" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#c62828"/>
-    </marker>
-    <marker id="arrowGreen" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#2e7d32"/>
-    </marker>`;
+  const ns=[
+    {id:'root',txt:'Is the\nsender unknown?',x:W/2,y:55,t:'q'},
+    {id:'s1',txt:'🚫 SPAM\nUnknown Sender',x:W*0.14,y:200,t:'spam'},
+    {id:'q2',txt:'Has urgent\nlanguage?',x:W*0.70,y:200,t:'q'},
+    {id:'s2',txt:'🚫 SPAM\nUrgent/Threat',x:W*0.46,y:370,t:'spam'},
+    {id:'q3',txt:'Too many\nlinks?',x:W*0.85,y:370,t:'q'},
+    {id:'s3',txt:'🚫 SPAM\nPhishing Links',x:W*0.69,y:510,t:'spam'},
+    {id:'q4',txt:'Prize or\ncash offer?',x:W*0.95,y:510,t:'q'},
+    {id:'s4',txt:'🚫 SPAM\nPrize Scam',x:W*0.87,y:555,t:'spam',sm:true},
+    {id:'i4',txt:'📥 INBOX\nSafe Email',x:W*1.03,y:555,t:'inbox',sm:true},
+    {id:'ip',txt:'📥 INBOX\nPromo/Social',x:W*0.21,y:370,t:'inbox'},
+    {id:'ig',txt:'📥 INBOX\nGeneral Email',x:W*0.54,y:510,t:'inbox'},
+  ];
+  const edges=[
+    {from:'root',to:'s1',lbl:'YES',side:'left'},{from:'root',to:'q2',lbl:'NO',side:'right'},
+    {from:'q2',to:'s2',lbl:'YES',side:'left'},{from:'q2',to:'q3',lbl:'NO',side:'right'},{from:'q2',to:'ip',lbl:'',side:'down'},
+    {from:'q3',to:'s3',lbl:'YES',side:'left'},{from:'q3',to:'q4',lbl:'NO',side:'right'},{from:'q3',to:'ig',lbl:'',side:'down'},
+    {from:'q4',to:'s4',lbl:'YES',side:'left'},{from:'q4',to:'i4',lbl:'NO',side:'right'},
+  ];
+  function nW(n){return n.sm?110:(n.t==='q'?140:150);}
+  function nH(n){return n.sm?44:60;}
+  function nC(n){if(n.t==='q')return{fill:'#e3f2fd',stroke:'#1565c0',text:'#0d47a1'};if(n.t==='spam')return{fill:'#ffebee',stroke:'#c62828',text:'#b71c1c'};return{fill:'#e8f5e9',stroke:'#2e7d32',text:'#1b5e20'};}
+  const defs=document.createElementNS(svgNS,'defs');
+  defs.innerHTML=`<filter id="shadow2" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.12)"/></filter>`;
   svg.appendChild(defs);
-
-  function el(tag){ return document.createElementNS(svgNS, tag); }
-
-  function addText(parent, x, y, text, size, weight, fill, anchor='middle'){
-    const t = el('text');
-    t.setAttribute('x', x); t.setAttribute('y', y);
-    t.setAttribute('text-anchor', anchor);
-    t.setAttribute('font-size', size); t.setAttribute('font-weight', weight);
-    t.setAttribute('font-family', "'Nunito',sans-serif");
-    t.setAttribute('fill', fill); t.textContent = text;
-    parent.appendChild(t);
-  }
-
-  function addRect(parent, cx, cy, w, h, rx, fill, stroke, useShadow){
-    const r = el('rect');
-    r.setAttribute('x', cx - w/2); r.setAttribute('y', cy - h/2);
-    r.setAttribute('width', w); r.setAttribute('height', h);
-    r.setAttribute('rx', rx); r.setAttribute('fill', fill);
-    r.setAttribute('stroke', stroke); r.setAttribute('stroke-width', '2');
-    if(useShadow) r.setAttribute('filter', 'url(#dshadow)');
-    parent.appendChild(r);
-  }
-
-  function addLine(parent, x1, y1, x2, y2, color, dash, marker){
-    const l = el('line');
-    l.setAttribute('x1', x1); l.setAttribute('y1', y1);
-    l.setAttribute('x2', x2); l.setAttribute('y2', y2);
-    l.setAttribute('stroke', color); l.setAttribute('stroke-width', '2.5');
-    if(dash) l.setAttribute('stroke-dasharray', dash);
-    if(marker) l.setAttribute('marker-end', `url(#${marker})`);
-    parent.appendChild(l);
-  }
-
-  // Title
-  addText(svg, QCX, 28, '🌳 Your Spam Detection Decision Tree', 15, '800', '#2d3142');
-  addText(svg, QCX, 46, 'For each email: go top to bottom. First YES = that spam type. All NO = Safe Inbox ✅', 10, '600', '#5a6282');
-
-  types.forEach((type, i) => {
-    const qy = TOP_PAD + 30 + i * ROW_H;   // question node centre y
-    const spamY = qy;
-    const count = trainingResults[type.id]?.spam?.length || 0;
-
-    // Vertical connector from previous NO arrow (from bottom of prev question node)
-    if (i > 0) {
-      const prevQY = TOP_PAD + 30 + (i-1) * ROW_H;
-      addLine(svg, QCX, prevQY + Q_H/2, QCX, qy - Q_H/2 - 5, '#2e7d32', null, 'arrowGreen');
-      addText(svg, QCX + 8, prevQY + Q_H/2 + (qy - prevQY - Q_H)/2, 'NO', 11, '800', '#2e7d32', 'start');
-    }
-
-    // Question node — rounded rect
-    addRect(svg, QCX, qy, Q_W, Q_H, 14, '#e3f2fd', '#1565c0', true);
-    addText(svg, QCX, qy - 9, 'Does this email have', 10, '600', '#0d47a1');
-    addText(svg, QCX, qy + 7, `${type.icon} ${type.name}`, 11, '800', '#0d47a1');
-    addText(svg, QCX, qy + 20, 'features?', 10, '600', '#0d47a1');
-
-    // YES arrow: horizontal from left side of question node → spam bubble right side
-    const yesStartX = QCX - Q_W/2;
-    const yesEndX = SPAM_CX + S_W/2 + 4;
-    addLine(svg, yesStartX, qy, yesEndX, spamY, '#c62828', null, 'arrowRed');
-    // YES label on the arrow, midway
-    addText(svg, (yesStartX + yesEndX)/2, qy - 7, 'YES', 11, '800', '#c62828');
-
-    // Spam bubble (left side)
-    addRect(svg, SPAM_CX, spamY, S_W, S_H, 24, type.bg, type.color, true);
-    addText(svg, SPAM_CX, spamY - 11, '🚫 SPAM', 11, '800', type.color);
-    addText(svg, SPAM_CX, spamY + 5, `${type.name}`, 10, '700', type.color);
-    addText(svg, SPAM_CX, spamY + 19, `(${count} found)`, 9, '600', type.color);
-
-    // Last item: NO → INBOX
-    if (i === types.length - 1) {
-      const inboxY = qy + ROW_H;
-      addLine(svg, QCX, qy + Q_H/2, QCX, inboxY - S_H/2 - 5, '#2e7d32', null, 'arrowGreen');
-      addText(svg, QCX + 8, qy + Q_H/2 + (ROW_H - Q_H/2)/2, 'NO', 11, '800', '#2e7d32', 'start');
-      // Inbox box
-      addRect(svg, QCX, inboxY, S_W + 40, S_H, 24, '#e8f5e9', '#2e7d32', true);
-      addText(svg, QCX, inboxY - 9, '📥 INBOX', 13, '800', '#1b5e20');
-      addText(svg, QCX, inboxY + 10, 'Safe / Genuine Mail ✅', 10, '700', '#2e7d32');
+  edges.forEach(e=>{
+    const fn=ns.find(n=>n.id===e.from),tn=ns.find(n=>n.id===e.to);
+    if(!fn||!tn)return;
+    const x1=fn.x,y1=fn.y+nH(fn)/2,x2=tn.x,y2=tn.y-nH(tn)/2;
+    const my=(y1+y2)/2;
+    const path=document.createElementNS(svgNS,'path');
+    path.setAttribute('d',`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`);
+    path.setAttribute('stroke',e.lbl==='YES'?'#c62828':e.lbl==='NO'?'#2e7d32':'#90a4ae');
+    path.setAttribute('stroke-width','2.5');path.setAttribute('fill','none');
+    path.setAttribute('stroke-dasharray',e.lbl?'none':'5,4');
+    svg.appendChild(path);
+    if(e.lbl){
+      const lt=document.createElementNS(svgNS,'text');
+      lt.setAttribute('x',x1+(e.side==='left'?-28:28));lt.setAttribute('y',y1+22);
+      lt.setAttribute('text-anchor','middle');lt.setAttribute('font-size','12');lt.setAttribute('font-weight','800');
+      lt.setAttribute('font-family',"'Nunito',sans-serif");lt.setAttribute('fill',e.lbl==='YES'?'#c62828':'#2e7d32');
+      lt.textContent=e.lbl;svg.appendChild(lt);
     }
   });
-
-  const wrap = document.getElementById('dtTreeWrap');
-  wrap.innerHTML = '';
-  wrap.appendChild(svg);
+  ns.forEach(n=>{
+    if(n.x>W+20)return;
+    const w=nW(n),h=nH(n),c=nC(n);
+    const rect=document.createElementNS(svgNS,'rect');
+    rect.setAttribute('x',n.x-w/2);rect.setAttribute('y',n.y-h/2);
+    rect.setAttribute('width',w);rect.setAttribute('height',h);
+    rect.setAttribute('rx',n.t==='q'?12:20);rect.setAttribute('fill',c.fill);
+    rect.setAttribute('stroke',c.stroke);rect.setAttribute('stroke-width','2');
+    rect.setAttribute('filter','url(#shadow2)');svg.appendChild(rect);
+    n.txt.split('\n').forEach((line,i)=>{
+      const lines=n.txt.split('\n');const totalH=lines.length*16;const startY=n.y-totalH/2+12+i*16;
+      const t=document.createElementNS(svgNS,'text');
+      t.setAttribute('x',n.x);t.setAttribute('y',startY);t.setAttribute('text-anchor','middle');
+      t.setAttribute('font-size',n.sm?10:12);t.setAttribute('font-weight','800');
+      t.setAttribute('font-family',"'Nunito',sans-serif");t.setAttribute('fill',c.text);
+      t.textContent=line;svg.appendChild(t);
+    });
+  });
+  const wrap=document.getElementById('dtTreeWrap');wrap.innerHTML='';wrap.appendChild(svg);
 }
 
 // ══ UTILS ══
