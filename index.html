@@ -136,23 +136,21 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .mail-time{font-size:12px;color:var(--text3);width:56px;text-align:right}
 
 /* ── MAIL OPEN VIEW ── */
-#mailView{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;z-index:100;overflow-y:auto;flex-direction:column;animation:fadeInScale .3s ease both}
-.mv-topbar{display:flex;align-items:center;padding:14px 24px;gap:12px;border-bottom:1.5px solid var(--border);position:sticky;top:0;background:#fff;z-index:10}
+#mailView{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;z-index:100;overflow:hidden;flex-direction:column;animation:fadeInScale .3s ease both}
+.mv-topbar{display:flex;align-items:center;padding:10px 16px;gap:10px;border-bottom:1.5px solid var(--border);position:sticky;top:0;background:#fff;z-index:10;flex-shrink:0}
 .mv-back{font-size:20px;cursor:pointer;border:none;background:var(--hover);padding:9px 14px;border-radius:12px;transition:background .15s,transform .15s;color:var(--text2);font-weight:700}
 .mv-back:hover{background:var(--selected);transform:translateX(-3px);color:var(--blue)}
 .mv-subject{font-size:20px;font-weight:800;font-family:'Nunito',sans-serif;flex:1;color:var(--text);line-height:1.3}
-.mv-card{margin:20px 24px;background:#fff;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;max-height:calc(100vh - 160px);}
-.mv-card-head{padding:20px 28px 18px;background:linear-gradient(135deg,#f7faff 0%,#eef4ff 100%);border-bottom:1.5px solid var(--border);display:flex;align-items:flex-start;gap:16px}
-.mv-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:800;flex-shrink:0;font-family:'Nunito',sans-serif;box-shadow:0 3px 12px rgba(0,0,0,.18)}
+.mv-card{margin:8px 16px;background:#fff;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;flex:1;min-height:0}
+.mv-card-head{padding:12px 20px 10px;background:linear-gradient(135deg,#f7faff 0%,#eef4ff 100%);border-bottom:1.5px solid var(--border);display:flex;align-items:flex-start;gap:12px;flex-shrink:0}
+.mv-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:800;flex-shrink:0;font-family:'Nunito',sans-serif;box-shadow:0 3px 12px rgba(0,0,0,.18)}
 .mv-sender-info{flex:1}
 .mv-from{font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;color:var(--text)}
 .mv-email-addr{font-size:12px;color:var(--text3);margin-top:2px}
 .mv-to-line{font-size:13px;color:var(--text2);margin-top:4px}
 .mv-date{font-size:13px;color:var(--text2);white-space:nowrap;flex-shrink:0;margin-top:4px}
-.mv-body-wrap{padding:28px 32px 36px;font-size:15px;line-height:1.9;color:var(--text);font-family:'Nunito Sans',sans-serif;overflow-y:auto;flex:1;min-height:0;max-height:calc(60vh);}
+.mv-body-wrap{padding:16px 20px 20px;font-size:14px;line-height:1.75;color:var(--text);font-family:'Nunito Sans',sans-serif;overflow-y:auto;flex:1;min-height:0}
 #mailView{overflow-y:auto}
-.mv-card{max-height:calc(100vh - 160px);display:flex;flex-direction:column}
-.mv-body-wrap{max-height:48vh;overflow-y:auto;flex:1;min-height:0}
 .mv-spam-banner{margin:16px 24px 0;padding:14px 20px;background:#fff0f0;border-radius:14px;display:flex;align-items:center;gap:12px;font-size:14px;border:1.5px solid #f5c0c0;animation:fadeInUp .3s ease both}
 .mv-inbox-banner{margin:16px 24px 0;padding:14px 20px;background:#edfbf3;border-radius:14px;display:flex;align-items:center;gap:12px;font-size:14px;border:1.5px solid #b4e8cc;animation:fadeInUp .3s ease both}
 .mv-reason{margin:0 24px 24px;padding:18px 22px;background:#fefce8;border:1.5px solid #f0d878;border-radius:14px;font-size:14px;line-height:1.7;animation:fadeInUp .35s ease both}
@@ -184,11 +182,11 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 
 /* Training compare UI */
 .compare-wrap{display:flex;flex:1;flex-direction:column;overflow:hidden;background:#f8faff}
-.compare-header{padding:16px 20px;background:#fff;border-bottom:1.5px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0;flex-wrap:wrap}
-.spam-type-box{background:linear-gradient(135deg,#fff8f0,#fff3e0);border:1.5px solid #ffd699;border-radius:16px;padding:14px 20px;flex:1;min-width:200px}
-.spam-type-box .stb-label{font-size:12px;font-weight:700;color:#b06000;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-family:'Nunito',sans-serif}
-.spam-type-box .stb-name{font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;color:#7c4000;display:flex;align-items:center;gap:8px}
-.spam-type-box .stb-features{font-size:13px;color:#9a6020;margin-top:6px;line-height:1.6}
+.compare-header{padding:8px 14px;background:#fff;border-bottom:1.5px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;flex-wrap:nowrap}
+.spam-type-box{background:linear-gradient(135deg,#fff8f0,#fff3e0);border:1.5px solid #ffd699;border-radius:10px;padding:7px 12px;flex:1;min-width:0;display:flex;align-items:center;gap:8px;overflow:hidden}
+.spam-type-box .stb-label{font-size:10px;font-weight:700;color:#b06000;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;font-family:'Nunito',sans-serif;flex-shrink:0}
+.spam-type-box .stb-name{font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;color:#7c4000;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.spam-type-box .stb-features{font-size:11px;color:#9a6020;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:0}
 .compare-progress{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2);flex-shrink:0}
 .compare-progress-bar{width:120px;height:8px;background:#e2eaf8;border-radius:4px;overflow:hidden}
 .compare-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1)}
@@ -469,6 +467,200 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
 /* Improved mode toggle animation */
 .mode-btn.active::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,.1),transparent);animation:shimmer 2s infinite;background-size:200% 100%}
 
+/* ══════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════════════ */
+
+/* ── Tablet: ≤900px ── */
+@media(max-width:900px){
+  /* Sidebar collapses to icon-only strip */
+  .sidebar{width:64px;padding:8px 0}
+  .compose-btn{margin:8px 8px 12px;padding:10px;justify-content:center;width:calc(100% - 16px);border-radius:14px}
+  .compose-btn span:last-child{display:none}
+  .nav-item{padding:8px;justify-content:center;margin-right:6px;border-radius:12px}
+  .nav-item .nav-label{display:none}
+  .nav-item .nav-icon{width:auto;margin:0}
+  .nav-count{display:none}
+  .nav-section{display:none}
+  /* Topbar: shrink search */
+  .search-bar{max-width:320px}
+  /* Training panel stacks */
+  .mail-compare-area{flex-direction:column}
+  .rounds-overview{width:100%;border-left:none;border-top:2px solid var(--border);max-height:180px;display:flex;flex-direction:row;flex-wrap:wrap;gap:6px;padding:10px}
+  .ro-round-item{flex:0 0 calc(50% - 3px);margin-bottom:0}
+  /* L2 stacks */
+  .l2-body{flex-direction:column}
+  .l2-right{width:100%}
+  /* Footer */
+  .footer-inner{flex-direction:column;align-items:flex-start;gap:14px;padding:20px 24px}
+  .footer-right{align-items:flex-start}
+  /* Live header wraps */
+  .live-stats{margin-left:0}
+}
+
+/* ── Mobile: ≤640px ── */
+@media(max-width:640px){
+  /* Body: allow scroll on mobile */
+  body{overflow:auto;height:auto;min-height:100dvh}
+  #appWrap{height:auto;min-height:100dvh}
+  .main{flex-direction:column;overflow:visible}
+
+  /* Topbar: compact 2-row on mobile */
+  .topbar{height:auto;flex-wrap:wrap;padding:8px 10px;gap:6px;row-gap:6px}
+  .topbar-logo .logo-text{font-size:15px}
+  .topbar-logo .by-sep{display:none}
+  .search-bar{order:3;width:100%;max-width:100%;margin:0}
+  .topbar-right{order:2;gap:6px}
+  .mode-toggle{font-size:12px}
+  .mode-btn{padding:5px 9px;font-size:12px}
+  .avatar{width:32px;height:32px;font-size:13px}
+
+  /* Sidebar becomes horizontal bottom-docked strip */
+  .sidebar{
+    width:100%;
+    border-right:none;
+    border-top:1.5px solid var(--border);
+    order:10;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding:4px 0;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    height:56px;
+    flex-shrink:0;
+    position:sticky;
+    bottom:0;
+    background:#fff;
+    z-index:50;
+    box-shadow:0 -2px 10px rgba(74,144,226,.1);
+  }
+  .compose-btn{
+    margin:4px 6px;
+    padding:8px 12px;
+    border-radius:18px;
+    white-space:nowrap;
+    flex-shrink:0;
+    width:auto;
+    height:40px;
+    font-size:13px;
+  }
+  .compose-btn span:last-child{display:inline}
+  #sidebarNav{display:flex;flex-direction:row;align-items:center;gap:2px;overflow-x:auto;padding:0 4px;flex:1}
+  .nav-section{display:none}
+  .nav-item{
+    flex-direction:column;
+    padding:4px 8px;
+    margin:0;
+    border-radius:10px;
+    height:auto;
+    min-width:52px;
+    font-size:10px;
+    gap:2px;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .nav-item .nav-label{display:block;font-size:9px;color:var(--text3);font-weight:600}
+  .nav-item .nav-icon{font-size:16px;width:auto;margin:0}
+  .nav-count{display:block;margin-left:0;padding:1px 5px;font-size:9px}
+
+  /* Main content area */
+  .content{margin:0;border-radius:0;box-shadow:none}
+
+  /* Auth page */
+  .auth-card{padding:28px 22px 24px}
+  .auth-card h2{font-size:20px}
+  .auth-logo .logo-text{font-size:21px}
+
+  /* Mail list */
+  .mail-sender{width:110px}
+  .mail-row{padding:0 10px;height:56px}
+
+  /* Mail open view */
+  .mv-topbar{padding:10px 14px;gap:8px}
+  .mv-subject{font-size:16px}
+  .mv-card{margin:10px 10px;border-radius:14px}
+  .mv-card-head{padding:14px 16px;gap:10px}
+  .mv-body-wrap{padding:16px 18px 24px;font-size:14px}
+  .mv-spam-banner,.mv-inbox-banner,.mv-reason{margin-left:10px;margin-right:10px}
+
+  /* Training header */
+  .training-header{padding:12px 14px;gap:10px}
+  .training-title{font-size:16px}
+  .training-desc{font-size:12px}
+  .gen-btn{padding:9px 16px;font-size:13px}
+
+  /* Compare view: single column */
+  .mail-compare-area{flex-direction:column}
+  .mail-list-panel{border-right:none;border-bottom:2px solid var(--border);max-height:260px;padding:10px}
+  .compare-header{padding:10px 12px;gap:8px}
+  .spam-type-box{min-width:160px}
+  .rounds-overview{width:100%;max-height:160px}
+  .ro-round-item{flex:0 0 calc(50% - 3px)}
+
+  /* Live mode header */
+  .live-header{padding:10px 14px;gap:8px}
+  .live-title{font-size:16px}
+  .live-stats{margin-left:0;gap:8px}
+  .live-stat{padding:6px 10px;font-size:12px}
+  .live-stat .stat-num{font-size:15px;min-width:20px}
+  .live-gen-btn{padding:8px 14px;font-size:13px}
+  #liveLimit{font-size:12px}
+
+  /* Live tabs */
+  .live-tab{padding:10px 14px;font-size:13px}
+
+  /* Live mail rows */
+  .live-mail-row{padding:10px 12px;gap:8px}
+  .lm-spam-type{max-width:90px;font-size:9px}
+
+  /* Admin */
+  .admin-header{padding:10px 14px}
+  .admin-title{font-size:16px}
+  .admin-mail-grid{grid-template-columns:1fr}
+  .admin-logs-panel.open{width:100%;position:fixed;top:0;left:0;right:0;bottom:0;border-left:none;z-index:400}
+
+  /* Modals */
+  .modal{padding:24px 18px;border-radius:18px}
+  .modal h2{font-size:20px}
+  .analysis-grid{grid-template-columns:1fr}
+  .round-popup-box{padding:28px 20px}
+  .round-popup-stats{gap:10px}
+  .rp-stat{padding:12px 16px}
+
+  /* Decision tree modal */
+  .dt-container{border-radius:18px;width:100%;max-height:95dvh}
+  .dt-header{padding:18px 20px 14px}
+  .dt-title{font-size:18px}
+  .dt-body{padding:16px 14px 24px}
+
+  /* L2 layout */
+  .l2-body{flex-direction:column;gap:8px;padding:8px}
+  .l2-right{width:100%}
+  .mail-pool{border-right:none;border-bottom:2px solid var(--border);max-height:200px}
+  .cats-panel{width:100%}
+
+  /* Footer */
+  .footer-inner{flex-direction:column;align-items:flex-start;gap:10px;padding:16px 18px}
+  .footer-links{gap:12px}
+  .footer-right{align-items:flex-start}
+  .footer-credit{text-align:left}
+
+  /* Toast */
+  #toast{font-size:13px;padding:10px 20px;max-width:92vw}
+
+  /* Topbar CS logo: hide on very small screens */
+  .topbar-cs-logo{display:none}
+}
+
+/* ── Extra small: ≤380px ── */
+@media(max-width:380px){
+  .mode-btn{padding:4px 7px;font-size:11px}
+  .topbar-logo .logo-text{font-size:13px}
+  .auth-card{padding:22px 16px 20px}
+  .live-stat{padding:5px 8px}
+  .live-gen-btn{padding:7px 11px;font-size:12px}
+}
 
 </style>
 </head>
@@ -1168,12 +1360,12 @@ function logout() {
 function buildSidebar(){
   const nav=document.getElementById('sidebarNav');
   nav.innerHTML=`
-    <div class="nav-item active" id="navInbox" onclick="openInboxView()"><span class="nav-icon">📥</span> Inbox <span class="nav-count" id="navInboxCount">0</span></div>
-    <div class="nav-item" onclick="showToast('Sent mail feature coming soon!')"><span class="nav-icon">📤</span> Sent</div>
-    <div class="nav-item" onclick="showToast('Drafts feature coming soon!')"><span class="nav-icon">📝</span> Drafts</div>
-    <div class="nav-item" id="navSpam" onclick="openSpamView()"><span class="nav-icon">🚫</span> Spam <span class="nav-count" id="navSpamCount">0</span></div>
+    <div class="nav-item active" id="navInbox" onclick="openInboxView()"><span class="nav-icon">📥</span><span class="nav-label">Inbox</span> <span class="nav-count" id="navInboxCount">0</span></div>
+    <div class="nav-item" onclick="showToast('Sent mail feature coming soon!')"><span class="nav-icon">📤</span><span class="nav-label">Sent</span></div>
+    <div class="nav-item" onclick="showToast('Drafts feature coming soon!')"><span class="nav-icon">📝</span><span class="nav-label">Drafts</span></div>
+    <div class="nav-item" id="navSpam" onclick="openSpamView()"><span class="nav-icon">🚫</span><span class="nav-label">Spam</span> <span class="nav-count" id="navSpamCount">0</span></div>
     <div class="nav-section">Spam Types</div>
-    ${SPAM_TYPES.map(c=>`<div class="nav-item" onclick="showToast('${c.name}: identify in Training Mode!')"><div class="cat-dot" style="background:${c.color}"></div>${c.name}</div>`).join('')}
+    ${SPAM_TYPES.map(c=>`<div class="nav-item" onclick="showToast('${c.name}: identify in Training Mode!')"><div class="cat-dot" style="background:${c.color}"></div><span class="nav-label">${c.name}</span></div>`).join('')}
   `;
 }
 
@@ -1419,9 +1611,9 @@ function renderCompareUI(){
     <div class="compare-wrap">
       <div class="compare-header">
         <div class="spam-type-box">
-          <div class="stb-label">Currently Checking For:</div>
-          <div class="stb-name"><span style="font-size:22px">${spamType.icon}</span> ${spamType.name}</div>
-          <div class="stb-features">📋 Features: ${spamType.features}</div>
+          <div class="stb-label">Checking:</div>
+          <div class="stb-name"><span style="font-size:18px">${spamType.icon}</span> ${spamType.name}</div>
+          <div class="stb-features">📋 ${spamType.features}</div>
         </div>
         <div class="compare-progress">
           <div style="font-size:12px;font-weight:700;color:var(--text2);text-align:center">
@@ -1857,33 +2049,18 @@ function openMailView(mailOrJson,isLive,isCompare){
   if(isCompare||(!isLive&&!isCompare)){
     const spamType=SPAM_TYPES[currentRoundIdx]||SPAM_TYPES[0];
     if(isSafeRound){
-      // Safe round: green banner with genuine mail signals
-      banner.innerHTML=`<div style="margin:16px 24px 0;padding:14px 20px;background:linear-gradient(135deg,#edfbf3,#e8f5e9);border:1.5px solid #52b788;border-radius:14px;animation:fadeInUp .3s ease both">
-        <div style="font-size:12px;font-weight:700;color:#1b5e20;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📋 Currently checking for:</div>
-        <div style="font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;color:#1b5e20;display:flex;align-items:center;gap:8px"><span style="font-size:22px">✅</span>Safe / Genuine Mail</div>
-        <div style="font-size:13px;color:#2d8a5e;margin-top:8px;line-height:1.7">
-          <strong>4 signals of a genuine mail:</strong><br>
-          🧑 <strong>Known sender</strong> — real org name, professional email address<br>
-          🗣️ <strong>Professional language</strong> — proper greeting, polite sign-off, clear purpose<br>
-          🔗 <strong>No suspicious links</strong> — only real, known domains (e.g. bluedart.com, google.com)<br>
-          🚫 <strong>No urgent scam words</strong> — no "act now", "you won", "verify immediately"
-        </div>
-        <div style="font-size:12px;color:#1b5e20;margin-top:10px;font-weight:600">🔍 Is this a safe, genuine email? Look for green highlighted signals!</div>
-        <div style="margin-top:8px;font-size:12px;color:#1b5e20;background:rgba(255,255,255,.6);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px">
-          <mark style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:1px 6px;font-weight:700;border:1px solid #52b78844">highlighted words</mark>
-          = Genuine mail signals — these confirm it's a real, safe email!
-        </div>
+      // Safe round: compact chip banner
+      banner.innerHTML=`<div style="margin:8px 16px 0;padding:7px 14px;background:linear-gradient(135deg,#edfbf3,#e8f5e9);border:1.5px solid #52b788;border-radius:10px;animation:fadeInUp .3s ease both;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span style="font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;color:#1b5e20;white-space:nowrap">✅ Safe / Genuine Mail</span>
+        <span style="font-size:11px;color:#2d8a5e;flex:1">Known sender · Professional language · No suspicious links · No scam words</span>
+        <span style="font-size:11px;color:#1b5e20;background:rgba(255,255,255,.6);border-radius:6px;padding:2px 8px;display:flex;align-items:center;gap:5px;white-space:nowrap"><mark style="background:#e8f5e9;color:#2e7d32;border-radius:3px;padding:0 4px;font-weight:700;border:1px solid #52b78844">highlighted</mark> = genuine signals</span>
       </div>`;
     } else {
-      banner.innerHTML=`<div style="margin:16px 24px 0;padding:14px 20px;background:linear-gradient(135deg,#fff8f0,#fff3e0);border:1.5px solid #ffd699;border-radius:14px;animation:fadeInUp .3s ease both">
-        <div style="font-size:12px;font-weight:700;color:#b06000;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📋 Currently checking for:</div>
-        <div style="font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;color:#7c4000;display:flex;align-items:center;gap:8px"><span style="font-size:22px">${spamType.icon}</span>${spamType.name}</div>
-        <div style="font-size:13px;color:#9a6020;margin-top:6px">Features to look for: ${spamType.features}</div>
-        <div style="font-size:12px;color:#b06000;margin-top:8px;font-weight:600">🔍 Does this mail contain any of these features?</div>
-        <div style="margin-top:8px;font-size:12px;color:#7c4000;background:rgba(255,255,255,.6);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px">
-          <mark style="background:${spamType.bg};color:${spamType.color};border-radius:4px;padding:1px 6px;font-weight:700;border:1px solid ${spamType.color}44">highlighted words</mark>
-          = Key spam signals found in this mail — look for these!
-        </div>
+      banner.innerHTML=`<div style="margin:8px 16px 0;padding:7px 14px;background:linear-gradient(135deg,#fff8f0,#fff3e0);border:1.5px solid #ffd699;border-radius:10px;animation:fadeInUp .3s ease both;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span style="font-size:18px">${spamType.icon}</span>
+        <span style="font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;color:#7c4000;white-space:nowrap">${spamType.name}</span>
+        <span style="font-size:11px;color:#9a6020;flex:1">📋 ${spamType.features}</span>
+        <span style="font-size:11px;color:#7c4000;background:rgba(255,255,255,.6);border-radius:6px;padding:2px 8px;display:flex;align-items:center;gap:5px;white-space:nowrap"><mark style="background:${spamType.bg};color:${spamType.color};border-radius:3px;padding:0 4px;font-weight:700;border:1px solid ${spamType.color}44">highlighted</mark> = spam signals</span>
       </div>`;
     }
   } else if(isLive){
@@ -1917,34 +2094,32 @@ function openMailView(mailOrJson,isLive,isCompare){
           if (isSafeRound) {
             // Safe/Genuine round: flip button labels — YES means safe, NO means spam
             compareBtnsEl.innerHTML = `
-              <div style="margin: 0 24px 24px; padding: 24px; background: linear-gradient(135deg, #edfbf3, #e8f5e9); border: 2px dashed #52b788; border-radius: 16px; text-align: center; box-shadow: var(--shadow2);">
-                <div style="font-size: 16px; font-weight: 800; margin-bottom: 6px; font-family: 'Nunito', sans-serif; color: #1b5e20;">Is this a Safe / Genuine Mail?</div>
-                <div style="font-size: 13px; color: #2d8a5e; margin-bottom: 16px;">Look for <mark style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:1px 5px;font-weight:700;border:1px solid #52b78844">green highlighted signals</mark> — known sender, professional language, real links, no scam words.</div>
-                <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                  <button class="cmc-btn no" style="flex:1; min-width: 160px; max-width: 240px; padding: 14px; font-size: 15px; background:linear-gradient(135deg,#52b788,#3d9e73);" onclick="decideMailFromView(${m.id}, 'no')">✅ Safe Mail</button>
-                  <button class="cmc-btn yes" style="flex:1; min-width: 160px; max-width: 240px; padding: 14px; font-size: 15px;" onclick="decideMailFromView(${m.id}, 'yes')">🚫 Not Safe — Spam</button>
+              <div style="margin: 0 16px 12px; padding: 12px 16px; background: linear-gradient(135deg, #edfbf3, #e8f5e9); border: 2px dashed #52b788; border-radius: 12px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <div style="font-size: 13px; font-weight: 800; font-family: 'Nunito', sans-serif; color: #1b5e20; flex:1; min-width:180px;">Is this a Safe / Genuine Mail?</div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                  <button class="cmc-btn no" style="padding: 8px 18px; font-size: 13px; background:linear-gradient(135deg,#52b788,#3d9e73);" onclick="decideMailFromView(${m.id}, 'no')">✅ Safe</button>
+                  <button class="cmc-btn yes" style="padding: 8px 18px; font-size: 13px;" onclick="decideMailFromView(${m.id}, 'yes')">🚫 Spam</button>
                 </div>
               </div>`;
           } else {
             compareBtnsEl.innerHTML = `
-              <div style="margin: 0 24px 24px; padding: 24px; background: linear-gradient(135deg, #f8faff, #eef4ff); border: 2px dashed var(--blue); border-radius: 16px; text-align: center; box-shadow: var(--shadow2);">
-                  <div style="font-size: 16px; font-weight: 800; margin-bottom: 16px; font-family: 'Nunito', sans-serif; color: var(--text);">Does this email have "${spamType.name}" features?</div>
-                  <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                      <button class="cmc-btn yes" style="flex:1; min-width: 160px; max-width: 240px; padding: 14px; font-size: 15px;" onclick="decideMailFromView(${m.id}, 'yes')">✅ YES — Spam</button>
-                      <button class="cmc-btn no" style="flex:1; min-width: 160px; max-width: 240px; padding: 14px; font-size: 15px;" onclick="decideMailFromView(${m.id}, 'no')">✉️ NO — Not Spam</button>
+              <div style="margin: 0 16px 12px; padding: 12px 16px; background: linear-gradient(135deg, #f8faff, #eef4ff); border: 2px dashed var(--blue); border-radius: 12px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                  <div style="font-size: 13px; font-weight: 800; font-family: 'Nunito', sans-serif; color: var(--text); flex:1; min-width:180px;">Has "${spamType.name}" features?</div>
+                  <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                      <button class="cmc-btn yes" style="padding: 8px 18px; font-size: 13px;" onclick="decideMailFromView(${m.id}, 'yes')">✅ YES — Spam</button>
+                      <button class="cmc-btn no" style="padding: 8px 18px; font-size: 13px;" onclick="decideMailFromView(${m.id}, 'no')">✉️ NO — Safe</button>
                   </div>
               </div>`;
           }
       } else {
           if (isSafeRound) {
-            // isSpam here means "marked as Not Safe / Spam"; isNotSpam means "marked as Safe"
             compareBtnsEl.innerHTML = `
-              <div style="margin: 0 24px 24px; padding: 16px; background: ${isNotSpam ? '#edfbf3' : '#fff0f0'}; border: 1.5px solid ${isNotSpam ? '#b4e8cc' : '#f5c0c0'}; border-radius: 16px; text-align: center; font-weight: 700; color: ${isNotSpam ? '#2d8a5e' : '#c0474a'};">
+              <div style="margin: 0 16px 12px; padding: 10px 16px; background: ${isNotSpam ? '#edfbf3' : '#fff0f0'}; border: 1.5px solid ${isNotSpam ? '#b4e8cc' : '#f5c0c0'}; border-radius: 10px; font-weight: 700; color: ${isNotSpam ? '#2d8a5e' : '#c0474a'}; font-size:13px;">
                 ${isNotSpam ? '✅ You marked this as Safe Mail' : '🚫 You marked this as Not Safe — Spam'}
               </div>`;
           } else {
             compareBtnsEl.innerHTML = `
-              <div style="margin: 0 24px 24px; padding: 16px; background: ${isSpam ? '#fff0f0' : '#edfbf3'}; border: 1.5px solid ${isSpam ? '#f5c0c0' : '#b4e8cc'}; border-radius: 16px; text-align: center; font-weight: 700; color: ${isSpam ? '#c0474a' : '#2d8a5e'};">
+              <div style="margin: 0 16px 12px; padding: 10px 16px; background: ${isSpam ? '#fff0f0' : '#edfbf3'}; border: 1.5px solid ${isSpam ? '#f5c0c0' : '#b4e8cc'}; border-radius: 10px; font-weight: 700; color: ${isSpam ? '#c0474a' : '#2d8a5e'}; font-size:13px;">
                   ${isSpam ? '🚫 You marked this as Spam' : '✅ You marked this as Not Spam'}
               </div>`;
           }
