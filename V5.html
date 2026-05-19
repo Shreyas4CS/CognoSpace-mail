@@ -479,7 +479,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
     </a>
     <div>
       <div class="logo-text"><span>Cogno</span>Space Mail</div>
-      <div class="by-text">by CognoSpace</div>
+      <div class="by-text">Decision tree mail APP</div>
     </div>
   </div>
   <div id="signupCard" class="auth-card">
@@ -507,7 +507,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
   <div class="topbar">
     <div class="topbar-logo">
       <a href="https://www.cognospace.in" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;text-decoration:none" title="Visit CognoSpace">
-        <img src="cognospace_logo.png" alt="CognoSpace" style="height:40px;width:auto;object-fit:contain" onerror="this.style.display='none'">
+        <img src="cognospace_logo.png" alt="CognoSpace" style="height:50px;width:auto;object-fit:contain" onerror="this.style.display='none'">
         <div class="logo-text"><span>Cogno</span>Space Mail</div>
       </a>
     </div>
@@ -1697,80 +1697,16 @@ function openMailView(mailOrJson,isLive,isCompare){
   document.getElementById('mvDate').textContent=m.time||'Today';
 
   // Format body — suspicious links grey, valid links blue
-  // Keywords are STRICTLY per category based on the official Spam Types & Features table.
-  // No word appears in more than one category to prevent wrong highlights.
+  // Build keyword highlight sets per spam type
   const SPAM_KEYWORDS = {
-    // Phishing: Fake links, Urgent language, Unknown sender, Fake bank/company names
-    phishing: [
-      'verify your', 'verify now', 'verification required', 'identity verification',
-      'suspended', 'suspension', 'your account has been', 'account will be deleted',
-      'unrecognized device', 'unknown device', 'sign-in attempt', 'login attempt',
-      'act now', 'action required', 'immediately', 'within 24 hours', 'within 48 hours',
-      'restore access', 'restore your account', 'account terminated',
-      'enter your otp', 'confirm your identity', 'update your billing',
-      'paypal-verify', 'secure-login', 'bankaccount-alert', 'apple-support-center',
-      'microsoft-accountverify', 'paypal-helpdesk', 'amazon-account-verify',
-      'bank-of-india-secure', 'google-security-team'
-    ],
-
-    // Promotion Spam: Prize words, Discounts, Cashback, Sale offers
-    promo_spam: [
-      'flash sale', '% off', 'discount', 'cashback', 'sale offer', 'sale alert',
-      'buy 2 get', 'shop now', 'personal discount code', 'discount code expires',
-      'weekend special', 'today only', 'before midnight', 'claim before it expires',
-      'exclusive deal', 'big sale', 'up to 80%', 'up to 70%', '₹500 is waiting',
-      'coupon', 'promo code', 'vip deal', 'limited offer'
-    ],
-
-    // Scam / Fraud: "You won lottery", Asking money transfer, Fake rewards, Emotional stories
-    scam: [
-      'you have won', 'you\'ve won', 'you have been selected', 'lucky winner',
-      'congratulations', 'lottery', 'unclaimed inheritance', 'wire transfer',
-      'money transfer', 'million waiting', 'claim your prize', 'claim within',
-      'prize within', 'no catch', 'this is a gift', 'millionaire club',
-      'no lottery', 'special award', 'emotional', 'confidentiality',
-      'awaiting your response', 'transfer of', '₹80,00,000', '$50,000', '$2.5 million'
-    ],
-
-    // Malware Spam: Suspicious attachments, Download links, Unknown files, Executable files
-    malware: [
-      'click to download', 'download immediately', 'download and review',
-      'open attached', 'open the attached', 'attached document', 'shared file',
-      '.exe', '.zip', '.rar', 'invoice #', 'salary_revision', 'project_report',
-      'e-signature is required', 'file from colleague', 'secure-docs',
-      'fileshare-urgent', 'cloudstorage99', 'docusign-verify', 'quickdrop-share'
-    ],
-
-    // Fake Business/Support Spam: Professional-looking mail, Fake company logo, Account warnings, Unknown domain
-    fakebiz: [
-      'temporarily restricted', 'access has been', 'account security',
-      'icloud storage is full', 'subscription expires', 'renew immediately',
-      'unauthorized access attempt', 'important notice about your account',
-      'helpdesk', 'paypal-helpdesk-x', 'amazon-account-verify.net',
-      'apple-support-center.biz', 'microsoft-help-desk', 'bank-of-india-secure.xyz',
-      'your account access', 'act now'
-    ],
-
-    // Social Media Spam: Fake followers, Viral content, Clickbait, Trending topics
-    social: [
-      'new followers', 'followers waiting', 'get 10,000', 'real instagram followers',
-      'going viral', 'video of you', 'thousands of views', 'viral thread',
-      'trending', 'your post is', 'see reactions', 'check it out',
-      'mentioned in a viral', 'boost your followers', 'boost any post',
-      'verified badge', 'sociaflow', 'friendsapp', 'photoshare', 'trendfeed', 'viralpost'
-    ],
-
-    // Newsletter / Bulk Mail: Offers, Updates, Subscription mails
-    newsletter: [
-      'newsletter', 'weekly digest', 'monthly bulletin', 'this week\'s top',
-      'curated just for you', 'subscription confirmed', 'first edition',
-      'top stories this week', 'articles you\'ll love', 'updates from our team',
-      'newsdaily', 'weeklydigest', 'informer-hub', 'magazineplus', 'topicflow',
-      'unsubscribe', 'bulk mail', 'mailing list'
-    ],
-
-    // Safe: no highlights — these are genuine mails
-    safe: [],
+    phishing:   ['verify','verification','suspended','suspension','limited','terminate','click','login','password','account','urgent','immediately','24 hours','48 hours','restore','confirm','otp','billing','update','unusual','suspicious','identity','unrecognized'],
+    promo_spam: ['discount','sale','offer','cashback','free','deal','buy','shop','expire','limited','only','flash','exclusive','% off','coupon','prize','win','claim','special','today only','midnight'],
+    scam:       ['congratulations','winner','won','lottery','prize','claim','inheritance','million','transfer','reward','selected','lucky','ticket','award','money'],
+    malware:    ['download','attachment','click to download','open now','file','invoice','document','shared','signature','zip','exe','urgent','review','colleague'],
+    fakebiz:    ['restricted','temporarily','security','access','unauthorized','account','alert','notice','icloud','subscription','renew','expires','helpdesk','support'],
+    social:     ['followers','viral','trending','instagram','followers','views','mention','likes','post','free','10,000','reactions'],
+    newsletter: ['newsletter','digest','bulletin','curated','edition','subscription','weekly','monthly','updates','reads'],
+    safe:       [],
   };
 
   const spamType = isCompare ? SPAM_TYPES[currentRoundIdx] : (isLive && m.catId ? SPAM_TYPES.find(t=>t.id===m.catId) : null);
@@ -1780,9 +1716,8 @@ function openMailView(mailOrJson,isLive,isCompare){
 
   function highlightKeywords(text) {
     if (!keywords.length) return text;
-    // Sort longest first so multi-word phrases match before single words
-    const sorted = [...keywords].sort((a,b) => b.length - a.length);
-    const escaped = sorted.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    // Escape regex special chars
+    const escaped = keywords.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
     const regex = new RegExp('(' + escaped.join('|') + ')', 'gi');
     return text.replace(regex, `<mark style="background:${kwBg};color:${kwColor};border-radius:4px;padding:1px 4px;font-weight:700;border:1px solid ${kwColor}44">$1</mark>`);
   }
