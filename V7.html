@@ -339,10 +339,8 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .live-empty{text-align:center;padding:64px 24px;color:var(--text3);font-size:15px;font-family:'Nunito',sans-serif}
 .live-empty .le-icon{font-size:72px;margin-bottom:18px;opacity:.5;animation:bounce 2s ease infinite}
 .live-limit{text-align:center;padding:18px;font-size:13px;color:var(--text3);border-top:1px solid var(--border)}
-/* Spam type indicator on live mail row */
-.lm-spam-type{display:inline-block;background:linear-gradient(135deg,#e07070,#c0474a);color:#fff;padding:2px 8px;font-size:10px;font-weight:800;border-radius:10px;font-family:"Nunito",sans-serif;letter-spacing:.2px;white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;align-self:center}
-
-
+/* Spam type indicator on live mail row edge */
+.lm-spam-type{position:absolute;right:0;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#e07070,#c0474a);color:#fff;padding:4px 6px;font-size:9px;font-weight:800;writing-mode:vertical-rl;text-orientation:mixed;border-radius:6px 0 0 6px;font-family:'Nunito',sans-serif;letter-spacing:.3px;opacity:0.9}
 
 /* ── ADMIN MODE ── */
 #adminWrap{display:none;flex:1;flex-direction:column;overflow:hidden}
@@ -883,10 +881,9 @@ const SPAM_TYPES = [
 const SPAM_CATS_IDS = ['phishing','promo_spam','scam','malware','fakebiz','social','newsletter'];
 const SAFE_CAT_ID = 'safe';
 
-// Mail counts per type: total 40
-// Safe = 20 (>20 safe mails guaranteed), spam types varied (each at least 2, totaling 20)
-// Distribution: phishing=5, promo_spam=4, scam=2, malware=3, fakebiz=2, social=2, newsletter=2, safe=20 = 40
-const MAIL_COUNTS = {phishing:5, promo_spam:4, scam:2, malware:3, fakebiz:2, social:2, newsletter:2, safe:20};
+// Mail counts per type: total 40, deliberately varied so each category has a different count
+// Distribution: phishing=9, promo_spam=7, scam=4, malware=6, fakebiz=3, social=5, newsletter=4, safe=2 = 40
+const MAIL_COUNTS = {phishing:9, promo_spam:7, scam:4, malware:6, fakebiz:3, social:5, newsletter:4, safe:2};
 
 const AV_COLORS=['#4285f4','#ea4335','#fbbc04','#34a853','#8430ce','#007b83','#e67c00','#0097a7','#c2185b','#388e3c'];
 
@@ -1639,17 +1636,8 @@ function generateOneLiveMail(){
   liveMailCount++;
   document.getElementById('liveLimit').textContent=`${liveMailCount} / 50`;
   if(liveMailCount>=50)document.getElementById('liveGenBtn').disabled=true;
-  // Guarantee ≥10 safe mails out of 50: if not enough slots remain for needed safe mails, force safe
-  const safeCount=liveMails.filter(x=>!x.isSpam&&!x.userReported).length;
-  const slotsAfterThis=50-liveMailCount;
-  const safeNeeded=Math.max(0,10-safeCount);
-  let typeId;
-  if(safeNeeded>slotsAfterThis){
-    typeId='safe';
-  } else {
-    const allTypeIds=SPAM_TYPES.map(t=>t.id);
-    typeId=allTypeIds[Math.floor(Math.random()*allTypeIds.length)];
-  }
+  const allTypeIds=SPAM_TYPES.map(t=>t.id);
+  const typeId=allTypeIds[Math.floor(Math.random()*allTypeIds.length)];
   const m=makeLiveMail(typeId);
   liveMails.unshift(m);
   const spamCount=liveMails.filter(x=>x.isSpam&&!x.userReported).length+liveMails.filter(x=>x.userReported).length;
@@ -1693,9 +1681,9 @@ function renderLiveBody(){
       </div>
       <div class="lm-meta">
         <span class="lm-badge ${m.userReported?'user-reported':verdict}">${m.userReported?'⚠️ Reported':badgeLabel}</span>
-        ${showSpamType?`<span class="lm-spam-type">${m.spamTypeName}</span>`:''}
         <div class="lm-time">${m.time}</div>
       </div>
+      ${showSpamType?`<div class="lm-spam-type">${m.spamTypeName}</div>`:''}
     </div>`;
   }).join('');
   if(liveMailCount>=50)body.innerHTML+=`<div class="live-limit">All 50 mails generated! The AI classified them using Training data. 🎓</div>`;
