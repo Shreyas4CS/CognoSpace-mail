@@ -66,8 +66,8 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 
 /* ── APP SHELL ── */
 #appWrap{display:none;height:100vh;flex-direction:column;animation:fadeInScale .35s ease both}
-.topbar{height:72px;display:flex;align-items:center;padding:0 16px;background:#fff;gap:8px;flex-shrink:0;border-bottom:1.5px solid var(--border);box-shadow:0 2px 8px rgba(74,144,226,.07)}
-.topbar-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.topbar{height:64px;display:flex;align-items:center;padding:0 16px;background:#fff;gap:8px;flex-shrink:0;border-bottom:1.5px solid var(--border);box-shadow:0 2px 8px rgba(74,144,226,.07)}
+.topbar-logo{display:flex;align-items:center;gap:10px;width:240px;flex-shrink:0}
 .topbar-logo .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#4a90e2,#52b788);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:800;font-family:'Nunito',sans-serif;box-shadow:0 2px 8px rgba(74,144,226,.25);transition:transform .2s}
 .topbar-logo .logo-icon:hover{transform:rotate(-8deg) scale(1.08)}
 .topbar-logo .cs-logo-img{width:30px;height:30px;border-radius:8px;object-fit:contain;box-shadow:0 2px 8px rgba(74,144,226,.25);transition:transform .2s;cursor:pointer}
@@ -75,7 +75,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .topbar-logo .logo-text{font-size:18px;font-family:'Nunito',sans-serif;font-weight:800;color:var(--text)}
 .topbar-logo .logo-text span{color:var(--blue)}
 .topbar-logo .by-sep{font-size:12px;color:var(--text3);margin:0 4px}
-.search-bar{flex:1;max-width:560px;background:#f0f4ff;border-radius:28px;display:flex;align-items:center;padding:0 18px;height:44px;transition:background .2s,box-shadow .2s;gap:10px;border:1.5px solid transparent;position:relative;margin:0 auto}
+.search-bar{flex:1;max-width:600px;background:#f0f4ff;border-radius:28px;display:flex;align-items:center;padding:0 18px;height:44px;transition:background .2s,box-shadow .2s;gap:10px;border:1.5px solid transparent;position:relative}
 .search-bar:focus-within{background:#fff;box-shadow:var(--shadow2);border-color:var(--blue)}
 .search-bar input{flex:1;border:none;background:transparent;font-size:15px;outline:none;color:var(--text);font-family:'Nunito Sans',sans-serif}
 .search-icon{color:var(--text2);font-size:18px}
@@ -87,11 +87,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .search-result-sender{font-weight:700;color:var(--text);font-family:'Nunito',sans-serif}
 .search-result-subject{color:var(--text2);font-size:13px}
 .search-no-results{padding:20px;text-align:center;color:var(--text3);font-size:14px}
-.topbar-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.topbar-cs-logo{display:flex;align-items:center;gap:8px;padding:6px 12px;background:#f0f4ff;border:1.5px solid var(--border);border-radius:12px;margin-left:4px;transition:box-shadow .2s,transform .2s;cursor:default}
-.topbar-cs-logo:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
-.topbar-cs-logo-img{width:36px;height:36px;border-radius:9px;object-fit:contain;display:block}
-.topbar-cs-logo-fallback{display:flex;align-items:center;gap:6px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
 .mode-toggle{display:flex;background:#eef2fc;border-radius:28px;overflow:hidden;font-size:13px;font-family:'Nunito',sans-serif;font-weight:700;border:1.5px solid var(--border);padding:3px;gap:2px}
 .mode-btn{padding:7px 14px;cursor:pointer;transition:all .25s;color:var(--text2);border:none;background:transparent;border-radius:22px;font-family:'Nunito',sans-serif;font-weight:600;position:relative}
 .mode-btn.active{background:linear-gradient(135deg,var(--blue),#6aa8f0);color:#fff;box-shadow:0 2px 10px rgba(74,144,226,.35);transform:scale(1.04)}
@@ -106,7 +102,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 
 /* ── MAIN LAYOUT ── */
 .main{display:flex;flex:1;overflow:hidden}
-.sidebar{width:300px;flex-shrink:0;padding:10px 0;overflow-y:auto;background:#fff;border-right:1.5px solid var(--border)}
+.sidebar{width:240px;flex-shrink:0;padding:10px 0;overflow-y:auto;background:#fff;border-right:1.5px solid var(--border)}
 .compose-btn{margin:10px 14px 16px;background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:12px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:var(--shadow);font-size:14px;font-family:'Nunito',sans-serif;font-weight:700;color:var(--text);transition:transform .2s,box-shadow .2s,background .2s;width:calc(100% - 28px)}
 .compose-btn:hover{box-shadow:var(--shadow2);background:var(--blue-light);transform:translateY(-2px)}
 .compose-btn .pencil{font-size:20px;transition:transform .3s}
@@ -141,7 +137,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .mv-back{font-size:20px;cursor:pointer;border:none;background:var(--hover);padding:9px 14px;border-radius:12px;transition:background .15s,transform .15s;color:var(--text2);font-weight:700}
 .mv-back:hover{background:var(--selected);transform:translateX(-3px);color:var(--blue)}
 .mv-subject{font-size:20px;font-weight:800;font-family:'Nunito',sans-serif;flex:1;color:var(--text);line-height:1.3}
-.mv-card{margin:20px 24px;background:#fff;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;max-height:calc(100vh - 160px);}
+.mv-card{margin:20px 24px;background:#fff;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
 .mv-card-head{padding:20px 28px 18px;background:linear-gradient(135deg,#f7faff 0%,#eef4ff 100%);border-bottom:1.5px solid var(--border);display:flex;align-items:flex-start;gap:16px}
 .mv-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:800;flex-shrink:0;font-family:'Nunito',sans-serif;box-shadow:0 3px 12px rgba(0,0,0,.18)}
 .mv-sender-info{flex:1}
@@ -149,10 +145,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .mv-email-addr{font-size:12px;color:var(--text3);margin-top:2px}
 .mv-to-line{font-size:13px;color:var(--text2);margin-top:4px}
 .mv-date{font-size:13px;color:var(--text2);white-space:nowrap;flex-shrink:0;margin-top:4px}
-.mv-body-wrap{padding:28px 32px 36px;font-size:15px;line-height:1.9;color:var(--text);font-family:'Nunito Sans',sans-serif;overflow-y:auto;flex:1;min-height:0;max-height:calc(60vh);}
-#mailView{overflow-y:auto}
-.mv-card{max-height:calc(100vh - 160px);display:flex;flex-direction:column}
-.mv-body-wrap{max-height:48vh;overflow-y:auto;flex:1;min-height:0}
+.mv-body-wrap{padding:28px 32px 36px;font-size:15px;line-height:1.9;color:var(--text);font-family:'Nunito Sans',sans-serif}
 .mv-spam-banner{margin:16px 24px 0;padding:14px 20px;background:#fff0f0;border-radius:14px;display:flex;align-items:center;gap:12px;font-size:14px;border:1.5px solid #f5c0c0;animation:fadeInUp .3s ease both}
 .mv-inbox-banner{margin:16px 24px 0;padding:14px 20px;background:#edfbf3;border-radius:14px;display:flex;align-items:center;gap:12px;font-size:14px;border:1.5px solid #b4e8cc;animation:fadeInUp .3s ease both}
 .mv-reason{margin:0 24px 24px;padding:18px 22px;background:#fefce8;border:1.5px solid #f0d878;border-radius:14px;font-size:14px;line-height:1.7;animation:fadeInUp .35s ease both}
@@ -349,13 +342,13 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .admin-subtitle{font-size:13px;color:#c4b5fd;margin-top:2px}
 .admin-body{flex:1;overflow-y:auto;padding:16px;background:#0f0521}
 .admin-mail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-.admin-mail-card{background:#1a0a2e;border:1.5px solid #3b1f6e;border-radius:14px;overflow:hidden;transition:transform .2s,box-shadow .2s;animation:cardAppear .3s ease both;cursor:pointer; display:flex; flex-direction:column; justify-content:space-between;}
+.admin-mail-card{background:#1a0a2e;border:1.5px solid #3b1f6e;border-radius:14px;overflow:hidden;transition:transform .2s,box-shadow .2s;animation:cardAppear .3s ease both;cursor:pointer}
 .admin-mail-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(109,40,217,.3)}
 .amc-head{padding:12px 14px 10px;border-bottom:1px solid #2d1057;display:flex;align-items:center;gap:10px}
 .amc-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800;flex-shrink:0}
 .amc-sender{font-size:12px;font-weight:700;color:#e9d5ff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .amc-type-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;flex-shrink:0;font-family:'Nunito',sans-serif}
-.amc-body{padding:10px 14px 12px; flex:1;}
+.amc-body{padding:10px 14px 12px}
 .amc-subject{font-size:12px;font-weight:700;color:#ddd6fe;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .amc-preview{font-size:11px;color:#a78bfa;line-height:1.5;max-height:44px;overflow:hidden}
 .amc-verdict{padding:6px 14px 10px;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif}
@@ -364,23 +357,6 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .admin-filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
 .admin-filter-btn{padding:6px 16px;border-radius:20px;border:1.5px solid #3b1f6e;background:transparent;color:#c4b5fd;font-size:13px;font-family:'Nunito',sans-serif;font-weight:600;cursor:pointer;transition:all .2s}
 .admin-filter-btn:hover,.admin-filter-btn.active{background:#6d28d9;color:#fff;border-color:#6d28d9}
-/* Admin mail full view */
-.admin-mail-full{background:#1a0a2e;border:1.5px solid #6d28d9;border-radius:14px;margin-top:12px;overflow:hidden;animation:cardAppear .3s ease both}
-.amf-head{padding:16px 18px 12px;border-bottom:1px solid #3b1f6e;background:linear-gradient(135deg,#2d1057,#1e0a3c)}
-.amf-body{padding:16px 18px;font-size:13px;color:#c4b5fd;line-height:1.8;white-space:pre-wrap;font-family:'Nunito Sans',sans-serif;max-height:300px;overflow-y:auto;background:#0f0521}
-.amf-verdict-bar{padding:12px 18px;background:linear-gradient(135deg,#1e0a3c,#2d1057);border-top:1px solid #3b1f6e;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-/* Logs panel */
-.admin-logs-panel{width:0;flex-shrink:0;overflow:hidden;background:#1a0a2e;border-left:2px solid #3b1f6e;transition:width .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
-.admin-logs-panel.open{width:320px}
-.admin-logs-header{padding:14px 16px;background:linear-gradient(135deg,#2d1057,#1e0a3c);border-bottom:1px solid #3b1f6e;display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:700;color:#e9d5ff;font-family:'Nunito',sans-serif;flex-shrink:0}
-.admin-logs-body{flex:1;overflow-y:auto;padding:12px}
-.admin-logs-footer{padding:10px 12px;border-top:1px solid #3b1f6e;flex-shrink:0}
-.admin-log-entry{background:#0f0521;border:1px solid #3b1f6e;border-radius:10px;padding:8px 12px;margin-bottom:8px;font-size:12px;color:#c4b5fd;font-family:'Nunito Sans',sans-serif;animation:cardAppear .25s ease both}
-.admin-log-entry .log-time{font-size:10px;color:#6d28d9;font-weight:700;margin-bottom:3px;font-family:'Nunito',sans-serif}
-.admin-log-entry .log-msg{line-height:1.5}
-.admin-log-entry.log-spam{border-left:3px solid #f87171}
-.admin-log-entry.log-inbox{border-left:3px solid #6ee7b7}
-.admin-log-entry.log-info{border-left:3px solid #8b5cf6}
 
 /* ── DECISION TREE MODAL ── */
 #dtModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(45,49,66,.6);backdrop-filter:blur(6px);z-index:500;align-items:center;justify-content:center;padding:16px;animation:fadeInScale .3s ease both}
@@ -466,17 +442,47 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
 /* Improved mode toggle animation */
 .mode-btn.active::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,.1),transparent);animation:shimmer 2s infinite;background-size:200% 100%}
 
-
+@media(max-width:768px){
+  body{overflow:auto}
+  #appWrap{height:auto;min-height:100vh}
+  .main{flex-direction:column}
+  .sidebar{width:100%;border-right:none;border-bottom:1.5px solid var(--border);padding:6px 0;display:flex;flex-wrap:wrap;align-items:center;gap:4px;overflow-x:auto}
+  .compose-btn{width:auto;margin:6px 8px;padding:8px 16px;font-size:13px;flex-shrink:0}
+  #sidebarNav{display:flex;flex-wrap:nowrap;gap:2px;padding:4px;overflow-x:auto}
+  .nav-item{height:auto;padding:5px 12px;margin-right:0;border-radius:20px;font-size:12px;white-space:nowrap;flex-shrink:0}
+  .nav-section{display:none}
+  .topbar-logo .logo-text{font-size:16px}
+  .search-bar{max-width:100%;font-size:13px;flex:1;min-width:80px}
+  .mode-btn{padding:6px 10px;font-size:12px}
+  .training-body{flex-direction:column}
+  .auth-card{padding:32px 24px 24px}
+  .mv-body-wrap{padding:20px 20px 28px}
+  .mv-card{margin:12px}
+  .mv-topbar{padding:10px 16px}
+  .analysis-grid{grid-template-columns:1fr}
+  .dt-container{border-radius:20px}
+  .dt-header{padding:20px 20px 16px}
+  .dt-body{padding:16px}
+  .dt-stats{grid-template-columns:repeat(2,1fr)}
+  .rounds-overview{width:100%;border-left:none;border-top:1.5px solid var(--border)}
+  .mail-compare-area{flex-direction:column}
+}
+@media(max-width:480px){
+  .topbar{padding:0 10px;gap:4px;height:56px}
+  .topbar-logo .logo-text{display:none}
+  .search-bar{padding:0 10px;height:36px;font-size:12px}
+  .avatar{width:32px;height:32px;font-size:13px}
+  .mode-btn{padding:5px 8px;font-size:11px}
+}
 </style>
 </head>
 <body>
 
+<!-- ══ AUTH ══ -->
 <div id="authWrap">
-
-  <div class="auth-logo" style="flex-direction:column;align-items:center;text-align:center">
-    <a href="https://www.cognospace.in" target="_blank" rel="noopener" style="display:block;text-decoration:none;margin-bottom:12px">
-      <img src="cognospace_logo.png" alt="CognoSpace Logo" style="max-width:200px;height:auto;object-fit:contain;display:block;margin:0 auto" onerror="this.style.display='none'">
-    </a>
+  <div class="auth-logo">
+    <img src="cognospace_logo.png" alt="CognoSpace" class="cs-logo-img" onerror="this.style.display='none';document.getElementById('authFallbackIcon').style.display='flex'">
+    <div class="logo-icon" id="authFallbackIcon" style="display:flex">C</div>
     <div>
       <div class="logo-text"><span>Cogno</span>Space Mail</div>
       <div class="by-text">by CognoSpace</div>
@@ -503,20 +509,21 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
   </div>
 </div>
 
+<!-- ══ APP ══ -->
 <div id="appWrap">
   <div class="topbar">
     <div class="topbar-logo">
-      <a href="https://www.cognospace.in" target="_blank" rel="noopener" style="text-decoration:none" title="Visit CognoSpace">
+      <img src="cognospace_logo.png" alt="CognoSpace" class="cs-logo-img" onerror="this.style.display='none';document.getElementById('topbarFallbackIcon').style.display='flex'">
+      <div class="logo-icon" id="topbarFallbackIcon" style="display:flex">C</div>
+      <div>
         <div class="logo-text"><span>Cogno</span>Space Mail</div>
-      </a>
+      </div>
     </div>
-
     <div class="search-bar" id="searchBarWrap">
       <span class="search-icon">🔍</span>
       <input type="text" id="searchInput" placeholder="Search mail…" oninput="handleSearch(this.value)" onblur="setTimeout(()=>closeSearch(),200)">
       <div class="search-results-dropdown" id="searchDropdown"></div>
     </div>
-
     <div class="topbar-right">
       <div class="mode-toggle">
         <button class="mode-btn active" id="trainModeBtn" onclick="switchMode('training')">🎓 Training</button>
@@ -524,7 +531,6 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
         <button class="mode-btn admin-btn" onclick="openAdminLogin()">🔐 Admin</button>
       </div>
       <div class="avatar" id="userAvatar" title="Account">A</div>
-      <button id="logoutBtn" onclick="logout()" style="display:none;padding:8px 16px;border-radius:10px;border:none;background:linear-gradient(135deg,#e07070,#f08060);color:#fff;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;font-size:13px;transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">Logout</button>
     </div>
   </div>
 
@@ -536,6 +542,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
       <div id="sidebarNav"></div>
     </div>
 
+    <!-- ══ TRAINING MODE ══ -->
     <div id="trainingWrap" style="display:flex;flex:1;flex-direction:column;overflow:hidden">
       <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
         <div class="training-header">
@@ -569,6 +576,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
       </div></footer>
     </div>
 
+    <!-- ══ LIVE MODE ══ -->
     <div id="liveWrap" style="display:none;flex:1;flex-direction:column;overflow:hidden">
       <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
         <div class="live-header">
@@ -595,7 +603,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
       </div>
       <footer><div class="footer-inner">
         <div class="footer-brand">
-          <img src="cognospace_logo.png" alt="" class="fb-logo-img" onerror="this.outerHTML='<div class=\'fb-icon\'>C</div>'">
+          <img src="cognospace-logo.png" alt="" class="fb-logo-img" onerror="this.outerHTML='<div class=\'fb-icon\'>C</div>'">
           <div><div>CognoSpace Mail</div><div class="fb-tagline">AI Learning Platform</div></div>
         </div>
         <div class="footer-center">
@@ -606,6 +614,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
       </div></footer>
     </div>
 
+    <!-- ══ LEVEL 2 WRAP ══ -->
     <div id="l2Wrap" style="display:none;flex:1;flex-direction:column;overflow:hidden">
       <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
         <div class="l2-header">
@@ -619,7 +628,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
       </div>
       <footer><div class="footer-inner">
         <div class="footer-brand">
-          <img src="cognospace_logo.png" alt="" class="fb-logo-img" onerror="this.outerHTML='<div class=\'fb-icon\'>C</div>'">
+          <img src="cognospace-logo.png" alt="" class="fb-logo-img" onerror="this.outerHTML='<div class=\'fb-icon\'>C</div>'">
           <div><div>CognoSpace Mail</div><div class="fb-tagline">AI Learning Platform</div></div>
         </div>
         <div class="footer-center">
@@ -629,47 +638,24 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
       </div></footer>
     </div>
 
+    <!-- ══ ADMIN MODE ══ -->
     <div id="adminWrap" style="display:none;flex:1;flex-direction:column;overflow:hidden">
       <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
         <div class="admin-header">
           <div style="flex:1">
-            <div class="admin-title">🔐 Admin Dashboard — Answer Key</div>
-            <div class="admin-subtitle">All generated mails with true categories revealed. Add new mails anytime via the data arrays in code.</div>
+            <div class="admin-title">🔐 Admin Dashboard — Mail Key</div>
+            <div class="admin-subtitle">All generated mails with their true category and verdict revealed</div>
           </div>
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <button class="gen-btn" style="background:linear-gradient(135deg,#0f766e,#14b8a6);font-size:13px;padding:9px 18px" onclick="toggleAdminLogs()">📋 Logs</button>
-            <button class="gen-btn" style="background:linear-gradient(135deg,#7c3aed,#a855f7)" onclick="switchMode('training')">← Back to Training</button>
-          </div>
+          <button class="gen-btn" style="background:linear-gradient(135deg,#7c3aed,#a855f7)" onclick="switchMode('training')">← Back to Training</button>
         </div>
-        <div class="admin-body" style="display:flex;gap:0;overflow:hidden;padding:0">
-          <div style="flex:1;overflow-y:auto;padding:16px">
-            
-            <div style="background: #1a0a2e; border: 1.5px solid #3b1f6e; border-radius: 14px; padding: 16px; margin-bottom: 16px;">
-              <h3 style="color:#e9d5ff; font-family:'Nunito',sans-serif; margin-bottom: 12px; font-size: 15px;">🗝️ Answer Key & Category Guide</h3>
-              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;" id="adminLegendKeys">
-                </div>
-            </div>
-
-            <div class="admin-filter-bar" id="adminFilterBar"></div>
-            <div class="admin-mail-grid" id="adminGrid"></div>
-          </div>
-          <div class="admin-logs-panel" id="adminLogsPanel">
-            <div class="admin-logs-header">
-              <span>📋 Admin Logs</span>
-              <button onclick="toggleAdminLogs()" style="border:none;background:rgba(255,255,255,.1);color:#e9d5ff;border-radius:8px;padding:4px 10px;cursor:pointer;font-size:12px;font-family:'Nunito',sans-serif;font-weight:700">✕ Close</button>
-            </div>
-            <div class="admin-logs-body" id="adminLogsBody">
-              <div style="color:#8b5cf6;font-size:13px;text-align:center;padding:20px 0">No actions logged yet.<br><span style="font-size:11px;color:#6d28d9">Actions will appear here as you use the app.</span></div>
-            </div>
-            <div class="admin-logs-footer">
-              <button onclick="clearAdminLogs()" style="border:none;background:rgba(239,68,68,.2);color:#fca5a5;border-radius:8px;padding:6px 14px;cursor:pointer;font-size:12px;font-family:'Nunito',sans-serif;font-weight:700;width:100%;transition:background .2s" onmouseover="this.style.background='rgba(239,68,68,.35)'" onmouseout="this.style.background='rgba(239,68,68,.2)'">🗑️ Clear Logs</button>
-            </div>
-          </div>
+        <div class="admin-body">
+          <div class="admin-filter-bar" id="adminFilterBar"></div>
+          <div class="admin-mail-grid" id="adminGrid"></div>
         </div>
       </div>
       <footer><div class="footer-inner">
         <div class="footer-brand">
-          <img src="cognospace_logo.png" alt="" class="fb-logo-img" onerror="this.outerHTML='<div class=\'fb-icon\'>C</div>'">
+          <img src="cognospace-logo.png" alt="" class="fb-logo-img" onerror="this.outerHTML='<div class=\'fb-icon\'>C</div>'">
           <div><div>CognoSpace Mail</div><div class="fb-tagline">AI Learning Platform</div></div>
         </div>
         <div class="footer-center"><div class="footer-links"><a href="#">CognoSpace</a></div></div>
@@ -679,6 +665,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
   </div>
 </div>
 
+<!-- ══ MAIL VIEW ══ -->
 <div id="mailView">
   <div class="mv-topbar">
     <button class="mv-back" onclick="closeMailView()">← Back</button>
@@ -704,13 +691,11 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
     </div>
     <div class="mv-body-wrap" id="mvBody"></div>
   </div>
-  
-  <div id="mvCompareBtns" style="display:none;"></div>
-  
   <div id="mvReportBtn"></div>
   <div id="mvReason"></div>
 </div>
 
+<!-- ══ ANALYSIS MODAL ══ -->
 <div class="modal-overlay" id="analysisModal">
   <div class="modal">
     <h2>📊 Training Analysis</h2>
@@ -730,6 +715,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
   </div>
 </div>
 
+<!-- ══ DECISION TREE MODAL ══ -->
 <div id="dtModal">
   <div class="dt-container">
     <div class="dt-header">
@@ -754,6 +740,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
   </div>
 </div>
 
+<!-- ══ ROUND POPUP ══ -->
 <div class="round-popup" id="roundPopup">
   <div class="round-popup-box">
     <div class="round-popup-icon" id="rpIcon">🎉</div>
@@ -767,6 +754,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
   </div>
 </div>
 
+<!-- ══ ADMIN LOGIN MODAL ══ -->
 <div id="adminLoginModal">
   <div class="admin-login-box">
     <div style="font-size:48px;margin-bottom:12px;animation:bounce 2s ease infinite">🔐</div>
@@ -784,47 +772,10 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
 
 <script>
 // ══════════════════════════════════════════
-//  DATA & STATE (with localStorage persistence)
+//  DATA & STATE
 // ══════════════════════════════════════════
 let currentUser = null;
 let accounts = {};
-
-// Load accounts and session from localStorage
-function loadAccounts() {
-  try {
-    const acc = localStorage.getItem('cs_accounts');
-    if (acc) accounts = JSON.parse(acc);
-  } catch (e) { accounts = {}; }
-}
-function saveAccounts() {
-  localStorage.setItem('cs_accounts', JSON.stringify(accounts));
-}
-function saveSession() {
-  if (currentUser && currentUser.email) {
-    localStorage.setItem('cs_currentUser', currentUser.email);
-  } else {
-    localStorage.removeItem('cs_currentUser');
-  }
-}
-function loadSession() {
-  const email = localStorage.getItem('cs_currentUser');
-  if (email && accounts[email]) {
-    currentUser = accounts[email];
-    return true;
-  }
-  return false;
-}
-
-// On page load, load accounts and session
-loadAccounts();
-if (loadSession()) {
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('userAvatar').textContent = currentUser.name[0].toUpperCase();
-    document.getElementById('authWrap').style.display = 'none';
-    document.getElementById('appWrap').style.display = 'flex';
-    initApp();
-  });
-}
 let currentMode = 'training';
 let trainingComplete = false;
 let generatedMails = [];
@@ -869,12 +820,6 @@ const SAFE_CAT_ID = 'safe';
 const MAIL_COUNTS = {phishing:7, promo_spam:6, scam:5, malware:5, fakebiz:5, social:5, newsletter:5, safe:2};
 
 const AV_COLORS=['#4285f4','#ea4335','#fbbc04','#34a853','#8430ce','#007b83','#e67c00','#0097a7','#c2185b','#388e3c'];
-
-// ==========================================
-// 💡 ADD NEW MAILS HERE IN THE FUTURE
-// Add new entries to these arrays to expand the app's database.
-// The UI and logic will automatically include them!
-// ==========================================
 
 // ══ MAIL DATA (TRAINING - 160 unique mails) ══
 const SENDERS_BY_TYPE = {
@@ -964,66 +909,1171 @@ const SUBJECTS_BY_TYPE = {
 
 const BODIES_BY_TYPE = {
   phishing:[
-    `Dear Valued Customer,\n\nWe have detected suspicious activity on your account from an unrecognized device located in Delhi, India at 11:47 PM. For your protection, we have temporarily suspended your access.\n\nTo restore your account access, you must complete identity verification within the next 24 hours. Failure to do so will result in permanent account termination and all associated data will be erased.\n\n⚠️ What you need to do:\n1. Click the secure verification link below\n2. Enter your full name, date of birth, and account number\n3. Provide your OTP for final confirmation\n\n👉 Verify My Account Now → www.secure-login-verify.com/acct-restore-2026\n\nThis link expires in 24 hours. Please do not share this email with anyone.\n\nIf you did not receive this alert, your account may already be compromised. Contact our security team immediately at support@secure-login-verify.com.\n\nRegards,\nAccount Security Team\nGlobal Banking Services`,
-    `Hello,\n\nYour PayPal account has been permanently limited due to unusual activity we detected on May 14, 2026.\n\nWe noticed:\n• 3 failed login attempts from unknown IP addresses\n• Transaction of ₹49,999 flagged for review\n• Account information mismatch detected\n\nTo remove these limitations and restore full access, you must verify your identity immediately.\n\n📋 Steps to verify:\nStep 1: Click the link below\nStep 2: Log in with your email and password\nStep 3: Update your billing information\n\n👉 Restore PayPal Access → http://paypal-verify-id.net/restore\n\n⏰ WARNING: If you do not complete verification within 48 hours, your account will be permanently closed and all pending transactions will be cancelled.\n\nPayPal Customer Protection Team`,
-    `IMPORTANT SECURITY NOTICE\n\nWe detected a sign-in to your Apple ID from a new device:\n\nDevice: iPhone 14 Pro\nLocation: Mumbai, Maharashtra\nDate & Time: May 15, 2026 — 2:33 AM IST\nIP Address: 192.168.44.21\n\nIf this was you, you can ignore this message.\n\nIf this was NOT you — your Apple ID is at serious risk. Your photos, contacts, and payment information may have been accessed.\n\n🔐 Secure your account NOW:\n→ Change your password immediately\n→ Verify your trusted phone numbers\n→ Review recent purchases\n\n👉 Click here to secure your Apple ID → https://appleid-locked.info/verify-now\n\nThis link expires in 6 hours. Do not share it with anyone.\n\nApple Security Team`,
-    `Dear Amazon Customer,\n\nYour recent order (#112-7843902-2847261) has been placed on hold due to a billing issue. We were unable to process your payment with the card on file.\n\nORDER DETAILS:\n• iPhone 15 Pro Max (256GB) — ₹1,34,900\n• Apple AirPods Pro — ₹26,900\n• Total: ₹1,61,800\n\nTo release your order and prevent cancellation, please update your payment details within the next 12 hours.\n\n👉 Update Payment Details → http://amazon-security-check.org/billing-update\n\nIf you do not update by 11:59 PM tonight, your order will be automatically cancelled and your account may be suspended.\n\nNote: Do not reply to this email. Use the link above for all account actions.\n\nAmazon Customer Service Team`,
-    `Dear Google Account Holder,\n\nWe detected an unauthorized sign-in attempt to your Google Account (you@gmail.com) from:\n\nLocation: Lagos, Nigeria\nDevice: Unknown Android Device\nTime: May 16, 2026 at 4:12 AM\n\nThis sign-in was blocked for your safety. However, if the attacker continues, your Gmail, Google Drive, YouTube, and Google Pay data may be compromised.\n\n✅ Immediate Actions Required:\n1. Verify it was not you using the button below\n2. Update your account recovery options\n3. Enable 2-factor authentication\n\n👉 Review Sign-in Activity → https://google-security-team.biz/verify-device\n\nYour prompt action will keep your account safe.\n\nGoogle Security Team\ngoogle-security-team.biz`,
-    `FINAL WARNING — Microsoft Account\n\nYour Microsoft account is scheduled for deletion in 24 hours due to:\n\n• Violation of Microsoft Terms of Service (Section 4.2)\n• Suspicious usage patterns detected\n• Unverified account information\n\nThis will affect:\n❌ All your emails and Outlook data\n❌ OneDrive files and documents\n❌ Xbox Game Pass and subscriptions\n❌ Office 365 access\n\nTo prevent deletion, you MUST verify your account now.\n\n👉 VERIFY MY ACCOUNT → https://microsoft-accountverify.com/save-account\n\nWarning: This verification link expires in 24 hours. Once expired, account deletion CANNOT be stopped.\n\nMicrosoft Trust & Safety Team`,
-    `URGENT: Bank of India Security Alert\n\nDear Customer,\n\nA transaction of ₹95,000 was initiated from your account ending in **4421 at 1:23 AM from an unrecognized device.\n\nTransaction Reference: TXN-BOI-2026-98234\n\nIf you DID NOT authorize this transaction, your funds are at risk. You must:\n\n1. Click the secure link below immediately\n2. Verify your NetBanking credentials\n3. Cancel the unauthorized transaction\n\n👉 Secure My Account → https://bank-of-india-secure.xyz/verify-txn\n\n⚠️ If you fail to act within 2 hours, the transaction will be processed and funds cannot be recovered.\n\nBank of India Digital Security Team\nToll-free: 1800-XXX-XXXX (Fake Number)`,
+    `Dear Valued Customer,
+
+We have detected suspicious activity on your account from an unrecognized device located in Delhi, India at 11:47 PM. For your protection, we have temporarily suspended your access.
+
+To restore your account access, you must complete identity verification within the next 24 hours. Failure to do so will result in permanent account termination and all associated data will be erased.
+
+⚠️ What you need to do:
+1. Click the secure verification link below
+2. Enter your full name, date of birth, and account number
+3. Provide your OTP for final confirmation
+
+👉 Verify My Account Now → www.secure-login-verify.com/acct-restore-2026
+
+This link expires in 24 hours. Please do not share this email with anyone.
+
+If you did not receive this alert, your account may already be compromised. Contact our security team immediately at support@secure-login-verify.com.
+
+Regards,
+Account Security Team
+Global Banking Services`,
+    `Hello,
+
+Your PayPal account has been permanently limited due to unusual activity we detected on May 14, 2026.
+
+We noticed:
+• 3 failed login attempts from unknown IP addresses
+• Transaction of ₹49,999 flagged for review
+• Account information mismatch detected
+
+To remove these limitations and restore full access, you must verify your identity immediately.
+
+📋 Steps to verify:
+Step 1: Click the link below
+Step 2: Log in with your email and password
+Step 3: Update your billing information
+
+👉 Restore PayPal Access → http://paypal-verify-id.net/restore
+
+⏰ WARNING: If you do not complete verification within 48 hours, your account will be permanently closed and all pending transactions will be cancelled.
+
+PayPal Customer Protection Team`,
+    `IMPORTANT SECURITY NOTICE
+
+We detected a sign-in to your Apple ID from a new device:
+
+Device: iPhone 14 Pro
+Location: Mumbai, Maharashtra
+Date & Time: May 15, 2026 — 2:33 AM IST
+IP Address: 192.168.44.21
+
+If this was you, you can ignore this message.
+
+If this was NOT you — your Apple ID is at serious risk. Your photos, contacts, and payment information may have been accessed.
+
+🔐 Secure your account NOW:
+→ Change your password immediately
+→ Verify your trusted phone numbers
+→ Review recent purchases
+
+👉 Click here to secure your Apple ID → https://appleid-locked.info/verify-now
+
+This link expires in 6 hours. Do not share it with anyone.
+
+Apple Security Team`,
+    `Dear Amazon Customer,
+
+Your recent order (#112-7843902-2847261) has been placed on hold due to a billing issue. We were unable to process your payment with the card on file.
+
+ORDER DETAILS:
+• iPhone 15 Pro Max (256GB) — ₹1,34,900
+• Apple AirPods Pro — ₹26,900
+• Total: ₹1,61,800
+
+To release your order and prevent cancellation, please update your payment details within the next 12 hours.
+
+👉 Update Payment Details → http://amazon-security-check.org/billing-update
+
+If you do not update by 11:59 PM tonight, your order will be automatically cancelled and your account may be suspended.
+
+Note: Do not reply to this email. Use the link above for all account actions.
+
+Amazon Customer Service Team`,
+    `Dear Google Account Holder,
+
+We detected an unauthorized sign-in attempt to your Google Account (you@gmail.com) from:
+
+Location: Lagos, Nigeria
+Device: Unknown Android Device
+Time: May 16, 2026 at 4:12 AM
+
+This sign-in was blocked for your safety. However, if the attacker continues, your Gmail, Google Drive, YouTube, and Google Pay data may be compromised.
+
+✅ Immediate Actions Required:
+1. Verify it was not you using the button below
+2. Update your account recovery options
+3. Enable 2-factor authentication
+
+👉 Review Sign-in Activity → https://google-security-team.biz/verify-device
+
+Your prompt action will keep your account safe.
+
+Google Security Team
+google-security-team.biz`,
+    `FINAL WARNING — Microsoft Account
+
+Your Microsoft account is scheduled for deletion in 24 hours due to:
+
+• Violation of Microsoft Terms of Service (Section 4.2)
+• Suspicious usage patterns detected
+• Unverified account information
+
+This will affect:
+❌ All your emails and Outlook data
+❌ OneDrive files and documents
+❌ Xbox Game Pass and subscriptions
+❌ Office 365 access
+
+To prevent deletion, you MUST verify your account now.
+
+👉 VERIFY MY ACCOUNT → https://microsoft-accountverify.com/save-account
+
+Warning: This verification link expires in 24 hours. Once expired, account deletion CANNOT be stopped.
+
+Microsoft Trust & Safety Team`,
+    `URGENT: Bank of India Security Alert
+
+Dear Customer,
+
+A transaction of ₹95,000 was initiated from your account ending in **4421 at 1:23 AM from an unrecognized device.
+
+Transaction Reference: TXN-BOI-2026-98234
+
+If you DID NOT authorize this transaction, your funds are at risk. You must:
+
+1. Click the secure link below immediately
+2. Verify your NetBanking credentials
+3. Cancel the unauthorized transaction
+
+👉 Secure My Account → https://bank-of-india-secure.xyz/verify-txn
+
+⚠️ If you fail to act within 2 hours, the transaction will be processed and funds cannot be recovered.
+
+Bank of India Digital Security Team
+Toll-free: 1800-XXX-XXXX (Fake Number)`,
   ],
   promo_spam:[
-    `Hey there! 👋\n\n🔥 FLASH SALE — 70% OFF everything!\n\nThis is your LAST CHANCE to grab the biggest deals of the year. Our annual Mega Sale is LIVE for the next 3 hours only. After that, prices go back to normal forever.\n\n🏷️ Today's Hottest Deals:\n• Apple iPhone 15 — ₹49,999 (was ₹1,34,900) — 63% OFF\n• Samsung Galaxy S24 — ₹39,999 (was ₹79,999) — 50% OFF\n• Sony Headphones — ₹4,999 (was ₹19,999) — 75% OFF\n• Nike Air Max Shoes — ₹2,499 (was ₹9,999) — 75% OFF\n• Laptop Backpack — ₹999 (was ₹3,499) — 71% OFF\n\n🎁 FREE GIFT on orders above ₹2,999!\n\nUse code: MEGASALE70 at checkout to apply your additional discount.\n\n⏰ Sale ends at 11:59 PM tonight. Don't miss out!\n\n👉 SHOP NOW → ShopaDeal.com\n\nHappy Shopping!\nThe ShopaDeal Team`,
-    `Exclusive Deal Just For You! 🎁\n\nHi Valued Member,\n\nAs one of our premium customers, you've been personally selected for a SPECIAL OFFER that isn't available to the general public.\n\n🌟 YOUR EXCLUSIVE BENEFITS:\n✅ 40% OFF on all products — No minimum order\n✅ FREE next-day delivery on every purchase\n✅ Extra 500 loyalty points on your first order this week\n✅ Priority customer service access\n\nYour personal discount code: LOYAL40VIP\n⏰ Valid until: Sunday, May 19, 2026, 11:59 PM\n\nBest sellers this week:\n• Wireless Earbuds — ₹1,999 (was ₹3,499) — Use code\n• Smart Watch — ₹4,499 (was ₹8,999) — Use code\n• Running Shoes — ₹2,199 (was ₹4,499) — Use code\n\n⚠️ This exclusive code is single-use and cannot be shared. Act fast — only limited stock available!\n\n👉 SHOP NOW → www.flashdeals.shop\n\nThe FlashDeals VIP Team`,
-    `🚨 YOUR CASHBACK IS EXPIRING! 🚨\n\nDear Customer,\n\nYou have an unclaimed cashback of ₹500 in your account that will expire in 24 hours if not redeemed!\n\nThis cashback was credited to you from your last 3 purchases. Don't let it go to waste!\n\nHOW TO CLAIM YOUR ₹500 CASHBACK:\nStep 1: Click the button below\nStep 2: Add any item to your cart\nStep 3: Your cashback will be auto-applied at checkout\n\nBONUS: If you shop today, you'll earn an EXTRA ₹200 cashback on top!\n\nProducts trending near you:\n🔥 Protein Powder — ₹1,299 → Pay only ₹799 after cashback\n🔥 Yoga Mat — ₹699 → Pay only ₹199 after cashback\n🔥 Study Desk Lamp — ₹999 → Pay only ₹499 after cashback\n\n👉 CLAIM CASHBACK NOW → www.weeklysale.net/cashback\n\n⏰ Expires: Tonight at 11:59 PM\nDon't miss out — this is a one-time offer!\n\nTeam WeeklySale`,
-    `WEEKEND SPECIAL — This Sunday Only! 🎉\n\nHi,\n\nCelebrate the weekend with our biggest deals ever:\n\n🛒 BUY 2 GET 3 FREE — All Categories\n🎁 FREE gift wrapping on all orders\n🚀 Same-day delivery in select cities\n💰 Extra 20% cashback via UPI payment\n\nThis weekend's SPOTLIGHT DEALS:\n★ Gaming Headset — ₹3,999 (Reg: ₹9,999)\n★ Bluetooth Speaker — ₹1,499 (Reg: ₹4,999)\n★ Formal Shirts (Pack of 3) — ₹1,299 (Reg: ₹3,999)\n★ Stainless Water Bottle — ₹299 (Reg: ₹999)\n★ Engineering Drawing Kit — ₹599 (Reg: ₹1,499)\n\nDon't forget: Use code WEEKEND20 for additional 20% off any order!\n\n🕐 Offer valid: Saturday & Sunday ONLY\n\n👉 START SHOPPING → www.bigstore.com/weekend\n\nSee you this weekend!\nBigStore Team`,
-    `New Arrivals Alert! 🆕 Just For You\n\nHello,\n\nBased on your browsing history, we've handpicked items we think you'll absolutely love:\n\nPERSONAL PICKS FOR YOU:\n💻 Smart Desk Lamp with USB charging — ₹1,499\n📱 Wireless Phone Charger (15W) — ₹999\n🎧 True Wireless Earbuds — ₹2,499\n👟 Running Shoes (Latest Collection) — ₹3,299\n🎒 Anti-theft Laptop Backpack — ₹2,199\n📚 Bestseller Book Bundle (5 books) — ₹999\n\nEXTRA SAVINGS:\n→ Use code NEW20 for 20% off any new arrival\n→ Free shipping on orders above ₹999\n→ 15-day easy returns on all items\n\nPlus: Check out our new collections in Electronics, Fashion, Books, and Sports!\n\n👉 SEE YOUR PICKS → www.techbazaar.io/new-arrivals\n\nHappy browsing!\nTechBazaar Team`,
-    `⚡ LIGHTNING DEALS — Next 2 Hours Only!\n\nHi,\n\nLightning deals are LIVE right now. These prices disappear after 2 hours — don't miss them!\n\n⚡ DEAL 1: Smart TV 43" — ₹22,999 (MRP ₹54,990) — 58% OFF — 67% CLAIMED\n⚡ DEAL 2: Air Purifier — ₹7,499 (MRP ₹19,999) — 63% OFF — 45% CLAIMED\n⚡ DEAL 3: Robot Vacuum — ₹12,999 (MRP ₹34,990) — 63% OFF — 82% CLAIMED\n⚡ DEAL 4: DSLR Camera — ₹34,999 (MRP ₹89,990) — 61% OFF — 23% CLAIMED\n⚡ DEAL 5: Electric Toothbrush — ₹1,499 (MRP ₹5,490) — 73% OFF — 91% CLAIMED\n\n⏰ Deals expire at: 3:00 PM today\n\nNote: Items with 80%+ claimed may sell out before the deal ends!\n\n👉 GRAB DEALS NOW → www.brandclub.shop/lightning\n\nAct fast!\nBrandClub Deals Team`,
+    `Hey there! 👋
+
+🔥 FLASH SALE — 70% OFF everything!
+
+This is your LAST CHANCE to grab the biggest deals of the year. Our annual Mega Sale is LIVE for the next 3 hours only. After that, prices go back to normal forever.
+
+🏷️ Today's Hottest Deals:
+• Apple iPhone 15 — ₹49,999 (was ₹1,34,900) — 63% OFF
+• Samsung Galaxy S24 — ₹39,999 (was ₹79,999) — 50% OFF
+• Sony Headphones — ₹4,999 (was ₹19,999) — 75% OFF
+• Nike Air Max Shoes — ₹2,499 (was ₹9,999) — 75% OFF
+• Laptop Backpack — ₹999 (was ₹3,499) — 71% OFF
+
+🎁 FREE GIFT on orders above ₹2,999!
+
+Use code: MEGASALE70 at checkout to apply your additional discount.
+
+⏰ Sale ends at 11:59 PM tonight. Don't miss out!
+
+👉 SHOP NOW → ShopaDeal.com
+
+Happy Shopping!
+The ShopaDeal Team`,
+    `Exclusive Deal Just For You! 🎁
+
+Hi Valued Member,
+
+As one of our premium customers, you've been personally selected for a SPECIAL OFFER that isn't available to the general public.
+
+🌟 YOUR EXCLUSIVE BENEFITS:
+✅ 40% OFF on all products — No minimum order
+✅ FREE next-day delivery on every purchase
+✅ Extra 500 loyalty points on your first order this week
+✅ Priority customer service access
+
+Your personal discount code: LOYAL40VIP
+⏰ Valid until: Sunday, May 19, 2026, 11:59 PM
+
+Best sellers this week:
+• Wireless Earbuds — ₹1,999 (was ₹3,499) — Use code
+• Smart Watch — ₹4,499 (was ₹8,999) — Use code
+• Running Shoes — ₹2,199 (was ₹4,499) — Use code
+
+⚠️ This exclusive code is single-use and cannot be shared. Act fast — only limited stock available!
+
+👉 SHOP NOW → www.flashdeals.shop
+
+The FlashDeals VIP Team`,
+    `🚨 YOUR CASHBACK IS EXPIRING! 🚨
+
+Dear Customer,
+
+You have an unclaimed cashback of ₹500 in your account that will expire in 24 hours if not redeemed!
+
+This cashback was credited to you from your last 3 purchases. Don't let it go to waste!
+
+HOW TO CLAIM YOUR ₹500 CASHBACK:
+Step 1: Click the button below
+Step 2: Add any item to your cart
+Step 3: Your cashback will be auto-applied at checkout
+
+BONUS: If you shop today, you'll earn an EXTRA ₹200 cashback on top!
+
+Products trending near you:
+🔥 Protein Powder — ₹1,299 → Pay only ₹799 after cashback
+🔥 Yoga Mat — ₹699 → Pay only ₹199 after cashback
+🔥 Study Desk Lamp — ₹999 → Pay only ₹499 after cashback
+
+👉 CLAIM CASHBACK NOW → www.weeklysale.net/cashback
+
+⏰ Expires: Tonight at 11:59 PM
+Don't miss out — this is a one-time offer!
+
+Team WeeklySale`,
+    `WEEKEND SPECIAL — This Sunday Only! 🎉
+
+Hi,
+
+Celebrate the weekend with our biggest deals ever:
+
+🛒 BUY 2 GET 3 FREE — All Categories
+🎁 FREE gift wrapping on all orders
+🚀 Same-day delivery in select cities
+💰 Extra 20% cashback via UPI payment
+
+This weekend's SPOTLIGHT DEALS:
+★ Gaming Headset — ₹3,999 (Reg: ₹9,999)
+★ Bluetooth Speaker — ₹1,499 (Reg: ₹4,999)
+★ Formal Shirts (Pack of 3) — ₹1,299 (Reg: ₹3,999)
+★ Stainless Water Bottle — ₹299 (Reg: ₹999)
+★ Engineering Drawing Kit — ₹599 (Reg: ₹1,499)
+
+Don't forget: Use code WEEKEND20 for additional 20% off any order!
+
+🕐 Offer valid: Saturday & Sunday ONLY
+
+👉 START SHOPPING → www.bigstore.com/weekend
+
+See you this weekend!
+BigStore Team`,
+    `New Arrivals Alert! 🆕 Just For You
+
+Hello,
+
+Based on your browsing history, we've handpicked items we think you'll absolutely love:
+
+PERSONAL PICKS FOR YOU:
+💻 Smart Desk Lamp with USB charging — ₹1,499
+📱 Wireless Phone Charger (15W) — ₹999
+🎧 True Wireless Earbuds — ₹2,499
+👟 Running Shoes (Latest Collection) — ₹3,299
+🎒 Anti-theft Laptop Backpack — ₹2,199
+📚 Bestseller Book Bundle (5 books) — ₹999
+
+EXTRA SAVINGS:
+→ Use code NEW20 for 20% off any new arrival
+→ Free shipping on orders above ₹999
+→ 15-day easy returns on all items
+
+Plus: Check out our new collections in Electronics, Fashion, Books, and Sports!
+
+👉 SEE YOUR PICKS → www.techbazaar.io/new-arrivals
+
+Happy browsing!
+TechBazaar Team`,
+    `⚡ LIGHTNING DEALS — Next 2 Hours Only!
+
+Hi,
+
+Lightning deals are LIVE right now. These prices disappear after 2 hours — don't miss them!
+
+⚡ DEAL 1: Smart TV 43" — ₹22,999 (MRP ₹54,990) — 58% OFF — 67% CLAIMED
+⚡ DEAL 2: Air Purifier — ₹7,499 (MRP ₹19,999) — 63% OFF — 45% CLAIMED
+⚡ DEAL 3: Robot Vacuum — ₹12,999 (MRP ₹34,990) — 63% OFF — 82% CLAIMED
+⚡ DEAL 4: DSLR Camera — ₹34,999 (MRP ₹89,990) — 61% OFF — 23% CLAIMED
+⚡ DEAL 5: Electric Toothbrush — ₹1,499 (MRP ₹5,490) — 73% OFF — 91% CLAIMED
+
+⏰ Deals expire at: 3:00 PM today
+
+Note: Items with 80%+ claimed may sell out before the deal ends!
+
+👉 GRAB DEALS NOW → www.brandclub.shop/lightning
+
+Act fast!
+BrandClub Deals Team`,
   ],
   scam:[
-    `Dear Friend,\n\nCONGRATULATIONS! 🎉🎊\n\nYour email address has been randomly selected as the GRAND PRIZE WINNER of our International Email Lottery Draw for May 2026!\n\nPRIZE DETAILS:\n💰 Cash Prize: USD $10,000 (approx. ₹8,30,000)\n🎫 Reference Number: WIN-2026-GL-48291\n🏆 Lottery Name: Global Email Lottery — May 2026 Draw\n\nTo claim your prize, you must respond within 48 HOURS with the following:\n1. Your full legal name\n2. Your residential address\n3. Your phone number\n4. A processing fee of $50 (fully refundable upon prize disbursement)\n5. Bank account details for wire transfer\n\n⚠️ IMPORTANT: This prize will be forfeited if not claimed within 48 hours.\n\nContact our Claims Agent:\nName: Mr. James Collins\nEmail: james.collins@lottery-global.com\nWhatsApp: +1 (555) 0123-4567\n\nWarmly,\nGlobal Email Lottery Prize Committee\nRef: WIN-2026-GL-48291`,
-    `🏆 FINAL NOTICE — YOU HAVE WON $50,000 USD\n\nThis is your FINAL NOTICE before your prize is reallocated.\n\nDear Winner,\n\nYour email address was the winning entry in our international prize draw sponsored by a consortium of charitable organizations. Your prize amount is:\n\n💵 FIFTY THOUSAND US DOLLARS ($50,000 USD)\n\nThis is equivalent to approximately ₹41,50,000 at current exchange rates.\n\nWHY YOU WON:\nYour email was randomly selected from a global database of 14 million entries during our quarterly draw on May 1, 2026.\n\nTO CLAIM YOUR PRIZE:\n⏰ You have exactly 72 hours from receipt of this email.\n\nRequired information:\n→ Scan of government ID (Aadhaar/Passport)\n→ Bank account number and IFSC code\n→ A small transfer fee of ₹2,500 (for processing — fully refunded)\n\nReply to: claims@cashwinners.net\nOr WhatsApp: +44 7700 123456\n\nDO NOT SHARE THIS EMAIL with anyone until your prize is secured.\n\nThe Prize Disbursement Team\nInternational Charitable Lottery Organization`,
-    `URGENT: Unclaimed Inheritance — ₹8,00,00,000 (Eight Crore Rupees)\n\nDear Friend,\n\nMy name is Barrister Samuel Okonkwo, a senior legal practitioner in Lagos, Nigeria. I am reaching out to you on a matter of utmost confidentiality and urgency.\n\nMy client, the late Dr. Rajiv Kapoor (a non-resident Indian businessman), passed away intestate (without a will) in 2019, leaving behind an estate valued at ₹8 crore in a European bank. Due to the absence of a next-of-kin, this money faces government confiscation within 60 days.\n\nSince you share the same surname as my late client, I propose that you stand in as the legal beneficiary. We will split the funds 60-40 in your favour.\n\nAll I need from you:\n• Full name and address\n• A copy of your ID proof\n• An advance fee of ₹15,000 for legal documentation\n\nThis arrangement is 100% legal and risk-free. Your identity will be fully protected.\n\nPlease respond URGENTLY as time is running out.\n\nWith trust,\nBarrister Samuel Okonkwo\nLagos, Nigeria\nokonkwo.legal@inheritance-transfer.org`,
-    `🎰 YOUR LOTTERY TICKET HAS WON — CLAIM NOW!\n\nDear Ticket Holder,\n\nThis is an official notice from the National Lottery Award Centre.\n\nYour lottery ticket number: LT-2026-9987-INDIA\n\nHas been matched in our system and you have WON:\n\nPRIZE AMOUNT: ₹80,00,000 (Eighty Lakhs)\n\nThis prize has been waiting unclaimed since March 2026. We have traced this ticket to your email address through our national database.\n\nURGENT: To prevent forfeiture of your prize, contact us immediately:\n\nClaims Officer: Mrs. Priya Sharma\nPhone: +91-98765-43210\nEmail: priya.sharma@lotto-award-center.biz\nWhatsApp: +91-98765-43210\n\nYou will need:\n✓ National ID or Aadhaar Card\n✓ Tax clearance certificate (we can arrange — fee: ₹3,500)\n✓ Bank details for transfer\n\n⚠️ Do NOT tell anyone about this prize until funds are transferred.\n\nNational Lottery Award Centre\nOfficial Reg. No.: NLAC-2026-007 (FAKE)`,
-    `STRICTLY CONFIDENTIAL — Special Award Notice\n\nDear Friend,\n\nOn behalf of the Board of Directors of the Millionaire Club International, I write to inform you of a special monetary award in your name.\n\nThe sum of USD 2,000,000 (Two Million US Dollars) has been earmarked for transfer to a deserving individual from your region as part of our annual global humanitarian initiative.\n\nYour email was shortlisted from a global pool of 50 million emails. You were selected based on your email domain's history of responsible communication.\n\nTRANSFER PROCESS:\nPhase 1: Documentation ($200 processing fee — fully deductible from your award)\nPhase 2: Identity verification (ID + Bank details)\nPhase 3: Wire transfer within 5 banking days\n\nThis is not a lottery. This is a GIFT. No catch.\n\nPlease treat this with absolute confidentiality.\n\nContact: Richard.Moore@millionaireclub.net\n\nAwaiting your response,\nRichard Moore\nExecutive Director, Millionaire Club International`,
+    `Dear Friend,
+
+CONGRATULATIONS! 🎉🎊
+
+Your email address has been randomly selected as the GRAND PRIZE WINNER of our International Email Lottery Draw for May 2026!
+
+PRIZE DETAILS:
+💰 Cash Prize: USD $10,000 (approx. ₹8,30,000)
+🎫 Reference Number: WIN-2026-GL-48291
+🏆 Lottery Name: Global Email Lottery — May 2026 Draw
+
+To claim your prize, you must respond within 48 HOURS with the following:
+1. Your full legal name
+2. Your residential address
+3. Your phone number
+4. A processing fee of $50 (fully refundable upon prize disbursement)
+5. Bank account details for wire transfer
+
+⚠️ IMPORTANT: This prize will be forfeited if not claimed within 48 hours.
+
+Contact our Claims Agent:
+Name: Mr. James Collins
+Email: james.collins@lottery-global.com
+WhatsApp: +1 (555) 0123-4567
+
+Warmly,
+Global Email Lottery Prize Committee
+Ref: WIN-2026-GL-48291`,
+    `🏆 FINAL NOTICE — YOU HAVE WON $50,000 USD
+
+This is your FINAL NOTICE before your prize is reallocated.
+
+Dear Winner,
+
+Your email address was the winning entry in our international prize draw sponsored by a consortium of charitable organizations. Your prize amount is:
+
+💵 FIFTY THOUSAND US DOLLARS ($50,000 USD)
+
+This is equivalent to approximately ₹41,50,000 at current exchange rates.
+
+WHY YOU WON:
+Your email was randomly selected from a global database of 14 million entries during our quarterly draw on May 1, 2026.
+
+TO CLAIM YOUR PRIZE:
+⏰ You have exactly 72 hours from receipt of this email.
+
+Required information:
+→ Scan of government ID (Aadhaar/Passport)
+→ Bank account number and IFSC code
+→ A small transfer fee of ₹2,500 (for processing — fully refunded)
+
+Reply to: claims@cashwinners.net
+Or WhatsApp: +44 7700 123456
+
+DO NOT SHARE THIS EMAIL with anyone until your prize is secured.
+
+The Prize Disbursement Team
+International Charitable Lottery Organization`,
+    `URGENT: Unclaimed Inheritance — ₹8,00,00,000 (Eight Crore Rupees)
+
+Dear Friend,
+
+My name is Barrister Samuel Okonkwo, a senior legal practitioner in Lagos, Nigeria. I am reaching out to you on a matter of utmost confidentiality and urgency.
+
+My client, the late Dr. Rajiv Kapoor (a non-resident Indian businessman), passed away intestate (without a will) in 2019, leaving behind an estate valued at ₹8 crore in a European bank. Due to the absence of a next-of-kin, this money faces government confiscation within 60 days.
+
+Since you share the same surname as my late client, I propose that you stand in as the legal beneficiary. We will split the funds 60-40 in your favour.
+
+All I need from you:
+• Full name and address
+• A copy of your ID proof
+• An advance fee of ₹15,000 for legal documentation
+
+This arrangement is 100% legal and risk-free. Your identity will be fully protected.
+
+Please respond URGENTLY as time is running out.
+
+With trust,
+Barrister Samuel Okonkwo
+Lagos, Nigeria
+okonkwo.legal@inheritance-transfer.org`,
+    `🎰 YOUR LOTTERY TICKET HAS WON — CLAIM NOW!
+
+Dear Ticket Holder,
+
+This is an official notice from the National Lottery Award Centre.
+
+Your lottery ticket number: LT-2026-9987-INDIA
+
+Has been matched in our system and you have WON:
+
+PRIZE AMOUNT: ₹80,00,000 (Eighty Lakhs)
+
+This prize has been waiting unclaimed since March 2026. We have traced this ticket to your email address through our national database.
+
+URGENT: To prevent forfeiture of your prize, contact us immediately:
+
+Claims Officer: Mrs. Priya Sharma
+Phone: +91-98765-43210
+Email: priya.sharma@lotto-award-center.biz
+WhatsApp: +91-98765-43210
+
+You will need:
+✓ National ID or Aadhaar Card
+✓ Tax clearance certificate (we can arrange — fee: ₹3,500)
+✓ Bank details for transfer
+
+⚠️ Do NOT tell anyone about this prize until funds are transferred.
+
+National Lottery Award Centre
+Official Reg. No.: NLAC-2026-007 (FAKE)`,
+    `STRICTLY CONFIDENTIAL — Special Award Notice
+
+Dear Friend,
+
+On behalf of the Board of Directors of the Millionaire Club International, I write to inform you of a special monetary award in your name.
+
+The sum of USD 2,000,000 (Two Million US Dollars) has been earmarked for transfer to a deserving individual from your region as part of our annual global humanitarian initiative.
+
+Your email was shortlisted from a global pool of 50 million emails. You were selected based on your email domain's history of responsible communication.
+
+TRANSFER PROCESS:
+Phase 1: Documentation ($200 processing fee — fully deductible from your award)
+Phase 2: Identity verification (ID + Bank details)
+Phase 3: Wire transfer within 5 banking days
+
+This is not a lottery. This is a GIFT. No catch.
+
+Please treat this with absolute confidentiality.
+
+Contact: Richard.Moore@millionaireclub.net
+
+Awaiting your response,
+Richard Moore
+Executive Director, Millionaire Club International`,
   ],
   malware:[
-    `Hello,\n\nPlease find attached the document you requested. It contains the complete project report along with the financial breakdown for Q1 and Q2 2026.\n\n📎 Attached: Project_Report_Q2_2026.exe\n\nIMPORTANT INSTRUCTIONS:\n1. Download the file to your desktop\n2. Right-click and select "Run as Administrator"\n3. If Windows Defender blocks it, click "More info" → "Run anyway"\n4. The document will open automatically after a brief installation\n\nThe file is password protected for security. Password: doc2026open\n\nIf you face any issues opening the file, reply to this email or call us at the number below.\n\nPlease review urgently as the deadline is tomorrow.\n\nRegards,\nTeam FilShare`,
-    `Hi,\n\nYour invoice is attached for immediate review and payment.\n\nInvoice #: INV-2026-4421-FINAL\nAmount Due: ₹47,500\nDue Date: May 20, 2026\n\n📎 DOWNLOAD INVOICE: Invoice_Final_4421.zip\n\nNote: The ZIP file contains the invoice PDF along with payment instructions. Please extract and open "Invoice_Open_Me.exe" inside to view.\n\nPayment can be made via NEFT/RTGS to our account:\nBank: Fake National Bank\nAccount: 9988776655\nIFSC: FNB0000123\n\nIf you have already made payment, please disregard. Otherwise, late payment fees of 2% per week apply.\n\nFor queries: billing@cloudstorage99.biz\n\nThank You,\nFinance Department`,
-    `Hi,\n\nYour colleague has shared an important file with you via CloudDrop.\n\nSender: Rahul Verma (rahul.verma@workplace.com)\nFile Name: Salary_Revision_2026.exe\nFile Size: 24.3 MB\nShared on: May 16, 2026\n\nThis file has been flagged as CONFIDENTIAL by the sender.\n\n👉 Download File → http://fileshare-urgent.com/get/SalaryRev2026\n\n⚠️ This link expires in 4 hours.\n\nNote: Since this is an executable, your browser may warn you. To open:\n1. Click "Keep" when Chrome warns you\n2. Right-click → Run as Administrator\n3. Enter company password: WrkPlc2026 when prompted\n\nRegards,\nCloudDrop Secure File Sharing`,
-    `Dear User,\n\nYou have received a document that requires your electronic signature.\n\nDocument: Employment_Contract_Amendment.zip\nSent by: HR Department, TechCorp Pvt. Ltd.\nCreated: May 15, 2026\nExpires: May 18, 2026\n\nThis document is legally binding once signed. Please review and sign at your earliest convenience.\n\n📎 Download Document Package → http://docusign-verify.xyz/doc-package\n\nInstructions:\n1. Download and extract the ZIP file\n2. Open "Sign_Here_Employment.exe"\n3. Follow on-screen instructions to sign digitally\n4. Your signed copy will be emailed automatically\n\nIf you did not request this document, please contact HR immediately.\n\nDocuSign Verification Services (FAKE)`,
-    `URGENT: Files Shared With You — Action Required\n\nHi,\n\n3 confidential files have been shared with you by your team manager. These files contain sensitive data and must be reviewed before the project deadline tomorrow.\n\nFiles:\n📄 Annual_Report_2026_FINAL.exe (12.4 MB)\n📊 Client_Database_Export.zip (8.7 MB)\n📋 Salary_Sheet_May2026.rar (5.2 MB)\n\n👉 Access Files → http://quickdrop-share.io/files/urgent-2026\n\nAccess Code: QD-4421-URGENT\n\nInstructions for opening:\n• Disable antivirus temporarily (these are safe company files)\n• Right-click each file → Run as Administrator\n• Enter access code when prompted\n\nDeadline: Tonight by 10 PM\n\nPlease don't delay — the manager has asked for confirmation by EOD.\n\nQuick Drop File Services`,
+    `Hello,
+
+Please find attached the document you requested. It contains the complete project report along with the financial breakdown for Q1 and Q2 2026.
+
+📎 Attached: Project_Report_Q2_2026.exe
+
+IMPORTANT INSTRUCTIONS:
+1. Download the file to your desktop
+2. Right-click and select "Run as Administrator"
+3. If Windows Defender blocks it, click "More info" → "Run anyway"
+4. The document will open automatically after a brief installation
+
+The file is password protected for security. Password: doc2026open
+
+If you face any issues opening the file, reply to this email or call us at the number below.
+
+Please review urgently as the deadline is tomorrow.
+
+Regards,
+Team FilShare`,
+    `Hi,
+
+Your invoice is attached for immediate review and payment.
+
+Invoice #: INV-2026-4421-FINAL
+Amount Due: ₹47,500
+Due Date: May 20, 2026
+
+📎 DOWNLOAD INVOICE: Invoice_Final_4421.zip
+
+Note: The ZIP file contains the invoice PDF along with payment instructions. Please extract and open "Invoice_Open_Me.exe" inside to view.
+
+Payment can be made via NEFT/RTGS to our account:
+Bank: Fake National Bank
+Account: 9988776655
+IFSC: FNB0000123
+
+If you have already made payment, please disregard. Otherwise, late payment fees of 2% per week apply.
+
+For queries: billing@cloudstorage99.biz
+
+Thank You,
+Finance Department`,
+    `Hi,
+
+Your colleague has shared an important file with you via CloudDrop.
+
+Sender: Rahul Verma (rahul.verma@workplace.com)
+File Name: Salary_Revision_2026.exe
+File Size: 24.3 MB
+Shared on: May 16, 2026
+
+This file has been flagged as CONFIDENTIAL by the sender.
+
+👉 Download File → http://fileshare-urgent.com/get/SalaryRev2026
+
+⚠️ This link expires in 4 hours.
+
+Note: Since this is an executable, your browser may warn you. To open:
+1. Click "Keep" when Chrome warns you
+2. Right-click → Run as Administrator
+3. Enter company password: WrkPlc2026 when prompted
+
+Regards,
+CloudDrop Secure File Sharing`,
+    `Dear User,
+
+You have received a document that requires your electronic signature.
+
+Document: Employment_Contract_Amendment.zip
+Sent by: HR Department, TechCorp Pvt. Ltd.
+Created: May 15, 2026
+Expires: May 18, 2026
+
+This document is legally binding once signed. Please review and sign at your earliest convenience.
+
+📎 Download Document Package → http://docusign-verify.xyz/doc-package
+
+Instructions:
+1. Download and extract the ZIP file
+2. Open "Sign_Here_Employment.exe"
+3. Follow on-screen instructions to sign digitally
+4. Your signed copy will be emailed automatically
+
+If you did not request this document, please contact HR immediately.
+
+DocuSign Verification Services (FAKE)`,
+    `URGENT: Files Shared With You — Action Required
+
+Hi,
+
+3 confidential files have been shared with you by your team manager. These files contain sensitive data and must be reviewed before the project deadline tomorrow.
+
+Files:
+📄 Annual_Report_2026_FINAL.exe (12.4 MB)
+📊 Client_Database_Export.zip (8.7 MB)
+📋 Salary_Sheet_May2026.rar (5.2 MB)
+
+👉 Access Files → http://quickdrop-share.io/files/urgent-2026
+
+Access Code: QD-4421-URGENT
+
+Instructions for opening:
+• Disable antivirus temporarily (these are safe company files)
+• Right-click each file → Run as Administrator
+• Enter access code when prompted
+
+Deadline: Tonight by 10 PM
+
+Please don't delay — the manager has asked for confirmation by EOD.
+
+Quick Drop File Services`,
   ],
   fakebiz:[
-    `Dear PayPal Customer,\n\nWe have identified unusual activity on your PayPal account (ending in **4221). To protect your financial information, we have temporarily restricted your account.\n\nYour account has been limited because:\n• We detected a login from an unrecognized device in Singapore\n• A payment of $289.00 USD was declined due to security concerns\n• Your security questions were answered incorrectly 3 times\n\nTO RESTORE YOUR ACCOUNT:\nPlease verify your identity by clicking the button below and completing our secure verification process.\n\n👉 Verify My PayPal Account → http://paypal-helpdesk-x.com/verify-2026\n\nYou will need:\n• Your email address and password\n• Linked bank account or card details\n• Government-issued ID for verification\n\n⚠️ If you do not verify within 48 hours, your account will be permanently closed and any pending payments will be reversed.\n\nPayPal Customer Protection\npaypal-helpdesk-x.com`,
-    `Important Notice from Amazon\n\nDear Customer,\n\nWe regret to inform you that your Amazon account has been flagged for suspicious activity. Multiple purchase attempts were made from your account using an unrecognized payment method.\n\nFor your security, we have placed a temporary hold on your account. You will not be able to:\n• Make new purchases\n• Access your order history\n• Use Amazon Prime benefits\n\nTO RESTORE ACCESS:\nComplete the account verification process below within 24 hours.\n\n👉 Verify Amazon Account → http://amazon-account-verify.net/restore\n\nVerification steps:\n1. Confirm your name and email\n2. Re-enter your credit/debit card details\n3. Upload a photo ID (Aadhaar/Passport)\n\nYour orders (including any active Prime Video subscriptions) will resume once verification is complete.\n\nAmazon Account Services\namazon-account-verify.net`,
-    `Apple Support — iCloud Storage Full\n\nDear Apple User,\n\nYour iCloud storage (youremail@gmail.com) is 100% full.\n\nCurrent Storage: 5 GB used of 5 GB\nStatus: FULL ⛔\n\nDue to full storage, the following services have been paused:\n• iCloud Backup\n• Photos & Videos Sync\n• iMessage and FaceTime data\n\n⚠️ Your data is at risk of being deleted if storage is not increased within 72 hours.\n\nUPGRADE YOUR STORAGE PLAN:\n→ 50 GB — ₹75/month (RECOMMENDED)\n→ 200 GB — ₹219/month\n→ 2 TB — ₹749/month\n\n👉 Upgrade Now → http://apple-support-center.biz/icloud-upgrade\n\nIMPORTANT: Use the link above to upgrade. Do NOT upgrade through the Settings app, as there is a known bug that may cause data loss.\n\nApple Support Team\napple-support-center.biz`,
-    `Microsoft Subscription Alert\n\nDear Microsoft Customer,\n\nYour Microsoft 365 subscription is due to expire TODAY at 11:59 PM.\n\nSubscription Details:\n• Plan: Microsoft 365 Family\n• Expiry: May 18, 2026\n• Renewal Amount: ₹4,899/year\n\nIf your subscription expires, you will IMMEDIATELY lose access to:\n❌ Word, Excel, PowerPoint (all devices)\n❌ Outlook email and calendar\n❌ OneDrive (1 TB cloud storage)\n❌ Teams for personal use\n\nRENEW NOW — SPECIAL OFFER:\nGet 3 months FREE if you renew before midnight tonight!\n\n👉 Renew Microsoft 365 → http://microsoft-help-desk.org/renew-365\n\nUse your existing Microsoft credentials to log in and complete renewal.\n\n⚠️ If payment fails, your account data may be permanently deleted after 30 days.\n\nMicrosoft Subscription Services\nmicrosoft-help-desk.org`,
-    `SECURITY ALERT — Bank Account Notification\n\nDear Account Holder,\n\nWe have detected an unauthorized access attempt on your bank account linked to this email address.\n\nINCIDENT DETAILS:\n• Date: May 16, 2026, 3:14 AM\n• Location: Attempted from IP: 102.89.34.1 (Lagos, Nigeria)\n• Action: Attempt to modify linked mobile number\n• Status: BLOCKED — Action Required\n\nAlthough we blocked this attempt, your account remains at risk. The attacker may try again.\n\nIMMEDIATE STEPS REQUIRED:\n1. Click the link below within 2 hours\n2. Verify your identity with Aadhaar OTP\n3. Change your NetBanking password\n4. Review all recent transactions\n\n👉 Secure My Account → https://bank-of-india-secure.xyz/account-protect\n\nIf you do not act within 2 hours, we will be forced to freeze your account as a precautionary measure.\n\nDigital Banking Security Team\nNational Bank Security Division`,
+    `Dear PayPal Customer,
+
+We have identified unusual activity on your PayPal account (ending in **4221). To protect your financial information, we have temporarily restricted your account.
+
+Your account has been limited because:
+• We detected a login from an unrecognized device in Singapore
+• A payment of $289.00 USD was declined due to security concerns
+• Your security questions were answered incorrectly 3 times
+
+TO RESTORE YOUR ACCOUNT:
+Please verify your identity by clicking the button below and completing our secure verification process.
+
+👉 Verify My PayPal Account → http://paypal-helpdesk-x.com/verify-2026
+
+You will need:
+• Your email address and password
+• Linked bank account or card details
+• Government-issued ID for verification
+
+⚠️ If you do not verify within 48 hours, your account will be permanently closed and any pending payments will be reversed.
+
+PayPal Customer Protection
+paypal-helpdesk-x.com`,
+    `Important Notice from Amazon
+
+Dear Customer,
+
+We regret to inform you that your Amazon account has been flagged for suspicious activity. Multiple purchase attempts were made from your account using an unrecognized payment method.
+
+For your security, we have placed a temporary hold on your account. You will not be able to:
+• Make new purchases
+• Access your order history
+• Use Amazon Prime benefits
+
+TO RESTORE ACCESS:
+Complete the account verification process below within 24 hours.
+
+👉 Verify Amazon Account → http://amazon-account-verify.net/restore
+
+Verification steps:
+1. Confirm your name and email
+2. Re-enter your credit/debit card details
+3. Upload a photo ID (Aadhaar/Passport)
+
+Your orders (including any active Prime Video subscriptions) will resume once verification is complete.
+
+Amazon Account Services
+amazon-account-verify.net`,
+    `Apple Support — iCloud Storage Full
+
+Dear Apple User,
+
+Your iCloud storage (youremail@gmail.com) is 100% full.
+
+Current Storage: 5 GB used of 5 GB
+Status: FULL ⛔
+
+Due to full storage, the following services have been paused:
+• iCloud Backup
+• Photos & Videos Sync
+• iMessage and FaceTime data
+
+⚠️ Your data is at risk of being deleted if storage is not increased within 72 hours.
+
+UPGRADE YOUR STORAGE PLAN:
+→ 50 GB — ₹75/month (RECOMMENDED)
+→ 200 GB — ₹219/month
+→ 2 TB — ₹749/month
+
+👉 Upgrade Now → http://apple-support-center.biz/icloud-upgrade
+
+IMPORTANT: Use the link above to upgrade. Do NOT upgrade through the Settings app, as there is a known bug that may cause data loss.
+
+Apple Support Team
+apple-support-center.biz`,
+    `Microsoft Subscription Alert
+
+Dear Microsoft Customer,
+
+Your Microsoft 365 subscription is due to expire TODAY at 11:59 PM.
+
+Subscription Details:
+• Plan: Microsoft 365 Family
+• Expiry: May 18, 2026
+• Renewal Amount: ₹4,899/year
+
+If your subscription expires, you will IMMEDIATELY lose access to:
+❌ Word, Excel, PowerPoint (all devices)
+❌ Outlook email and calendar
+❌ OneDrive (1 TB cloud storage)
+❌ Teams for personal use
+
+RENEW NOW — SPECIAL OFFER:
+Get 3 months FREE if you renew before midnight tonight!
+
+👉 Renew Microsoft 365 → http://microsoft-help-desk.org/renew-365
+
+Use your existing Microsoft credentials to log in and complete renewal.
+
+⚠️ If payment fails, your account data may be permanently deleted after 30 days.
+
+Microsoft Subscription Services
+microsoft-help-desk.org`,
+    `SECURITY ALERT — Bank Account Notification
+
+Dear Account Holder,
+
+We have detected an unauthorized access attempt on your bank account linked to this email address.
+
+INCIDENT DETAILS:
+• Date: May 16, 2026, 3:14 AM
+• Location: Attempted from IP: 102.89.34.1 (Lagos, Nigeria)
+• Action: Attempt to modify linked mobile number
+• Status: BLOCKED — Action Required
+
+Although we blocked this attempt, your account remains at risk. The attacker may try again.
+
+IMMEDIATE STEPS REQUIRED:
+1. Click the link below within 2 hours
+2. Verify your identity with Aadhaar OTP
+3. Change your NetBanking password
+4. Review all recent transactions
+
+👉 Secure My Account → https://bank-of-india-secure.xyz/account-protect
+
+If you do not act within 2 hours, we will be forced to freeze your account as a precautionary measure.
+
+Digital Banking Security Team
+National Bank Security Division`,
   ],
   social:[
-    `Hi! 👋\n\nYou have 47 new follower requests waiting!\n\nHere's what's happening on your SociaFlow profile this week:\n\n📊 YOUR WEEKLY STATS:\n• 47 new followers requested to follow you\n• 312 people viewed your profile\n• Your last post got 156 likes!\n• 23 direct messages waiting in your inbox\n\n🔥 TRENDING IN YOUR NETWORK:\n"Top 10 Study Hacks for Exams" — 4,821 views\n"Viral Dance Challenge #SchoolLife" — 12,390 views\n\n💬 New messages from:\n• Sarah: "Hey! Saw your post — loved it!"\n• Rajan: "Can we collaborate on a project?"\n• TrendFeed Team: "Your content is going viral!"\n\n👉 View All Notifications → notifications@sociaflow.com\n\nKeep sharing — your content is getting popular! 🌟\n\nThe SociaFlow Team`,
-    `VIRAL ALERT 🚨 Someone posted a video of you!\n\nHi,\n\nWe detected a video on TrendFeed that appears to feature you or someone who looks like you. This video has already been viewed 14,200 times in the last 3 hours!\n\nVIDEO DETAILS:\n📹 Title: "Caught on Camera — School Prank Gone Wrong"\n👁️ Views: 14,200 and CLIMBING\n❤️ Likes: 2,847\n💬 Comments: 389 (many tagging you!)\n\nYou have the right to request removal of this video if it features you without consent.\n\n👉 VIEW THE VIDEO & TAKE ACTION → http://trendfeed.social/viral-you-2026\n\nOptions available to you:\n• Watch and confirm it's you\n• Request takedown (free)\n• Report to platform moderators\n\nAct quickly — viral content spreads fast. The sooner you act, the less reach it gets.\n\nTrendFeed Content Monitoring Team`,
-    `🎯 LIMITED TIME: Get 10,000 Real Instagram Followers FREE!\n\nHi there!\n\nWe are offering a SPECIAL PROMOTION for a limited time only:\n\nGET 10,000 REAL, ACTIVE INSTAGRAM FOLLOWERS — 100% FREE!\n\nNo bots. No fake accounts. Real people who will engage with your posts.\n\nThis is how it works:\nStep 1: Click the link below\nStep 2: Enter your Instagram username (NO password needed)\nStep 3: Choose your follower package (10K, 50K, or 100K)\nStep 4: Followers start arriving within 6 hours!\n\n👉 CLAIM FREE FOLLOWERS → http://viralpost-updates.com/free-followers\n\n⚠️ This offer is available to only 500 users per day. Once slots are filled, the offer closes.\n\nBONUS: Get 5,000 FREE likes on your last 3 posts when you sign up today!\n\nAlready 3,847 people claimed today. Only 1,153 slots left!\n\nSocialGrow Team`,
-    `You've Been Mentioned in a Viral Thread! 🔥\n\nHi,\n\nYour name and profile were mentioned in a thread that's currently trending on FriendsApp with over 8,000 interactions!\n\nTHREAD DETAILS:\n💬 "Who is the smartest person in your school?" — 8,241 replies\n📍 Location: Your school/college community group\n🔗 Your mention: Post #47 — 312 people tagged you!\n\nPeople are saying great things about you. Don't miss the conversation!\n\n👉 See Your Mentions → http://friendsapp.net/mentions-viral\n\nAlso: You have 12 unread DMs and 5 pending friend requests.\n\nRecent activity in your network:\n• Anjali liked your profile picture\n• Arjun sent you a friend request\n• Your city's local group added you\n\nFriendsApp — Stay Connected\nnotifications@friendsapp.net`,
-    `📱 Your Social Media Report — This Week\n\nHi!\n\nHere's your weekly activity summary across all connected platforms:\n\nINSTAGRAM:\n• Followers gained: +28 (Total: 1,247)\n• Post likes: 234 | Stories views: 891\n• Profile visits: 312\n\nFACEBOOK:\n• New friend requests: 7\n• Post reach: 1,834 people\n• Events nearby: 3 events this weekend\n\nTWITTER/X:\n• Impressions: 4,211 | Mentions: 14\n• New followers: 12\n\n📈 YOUR PROFILE IS GROWING! Want more?\n\n🚀 BOOST YOUR FOLLOWERS TODAY:\n→ Get 50,000 followers for just ₹499 (one-time fee)\n→ Boost any post for ₹99 and reach 10,000 people\n→ Verified badge service — ₹1,499/month\n\n👉 GROW NOW → http://photoshare.io/boost-profile\n\nSocial Media Analytics Team`,
+    `Hi! 👋
+
+You have 47 new follower requests waiting!
+
+Here's what's happening on your SociaFlow profile this week:
+
+📊 YOUR WEEKLY STATS:
+• 47 new followers requested to follow you
+• 312 people viewed your profile
+• Your last post got 156 likes!
+• 23 direct messages waiting in your inbox
+
+🔥 TRENDING IN YOUR NETWORK:
+"Top 10 Study Hacks for Exams" — 4,821 views
+"Viral Dance Challenge #SchoolLife" — 12,390 views
+
+💬 New messages from:
+• Sarah: "Hey! Saw your post — loved it!"
+• Rajan: "Can we collaborate on a project?"
+• TrendFeed Team: "Your content is going viral!"
+
+👉 View All Notifications → notifications@sociaflow.com
+
+Keep sharing — your content is getting popular! 🌟
+
+The SociaFlow Team`,
+    `VIRAL ALERT 🚨 Someone posted a video of you!
+
+Hi,
+
+We detected a video on TrendFeed that appears to feature you or someone who looks like you. This video has already been viewed 14,200 times in the last 3 hours!
+
+VIDEO DETAILS:
+📹 Title: "Caught on Camera — School Prank Gone Wrong"
+👁️ Views: 14,200 and CLIMBING
+❤️ Likes: 2,847
+💬 Comments: 389 (many tagging you!)
+
+You have the right to request removal of this video if it features you without consent.
+
+👉 VIEW THE VIDEO & TAKE ACTION → http://trendfeed.social/viral-you-2026
+
+Options available to you:
+• Watch and confirm it's you
+• Request takedown (free)
+• Report to platform moderators
+
+Act quickly — viral content spreads fast. The sooner you act, the less reach it gets.
+
+TrendFeed Content Monitoring Team`,
+    `🎯 LIMITED TIME: Get 10,000 Real Instagram Followers FREE!
+
+Hi there!
+
+We are offering a SPECIAL PROMOTION for a limited time only:
+
+GET 10,000 REAL, ACTIVE INSTAGRAM FOLLOWERS — 100% FREE!
+
+No bots. No fake accounts. Real people who will engage with your posts.
+
+This is how it works:
+Step 1: Click the link below
+Step 2: Enter your Instagram username (NO password needed)
+Step 3: Choose your follower package (10K, 50K, or 100K)
+Step 4: Followers start arriving within 6 hours!
+
+👉 CLAIM FREE FOLLOWERS → http://viralpost-updates.com/free-followers
+
+⚠️ This offer is available to only 500 users per day. Once slots are filled, the offer closes.
+
+BONUS: Get 5,000 FREE likes on your last 3 posts when you sign up today!
+
+Already 3,847 people claimed today. Only 1,153 slots left!
+
+SocialGrow Team`,
+    `You've Been Mentioned in a Viral Thread! 🔥
+
+Hi,
+
+Your name and profile were mentioned in a thread that's currently trending on FriendsApp with over 8,000 interactions!
+
+THREAD DETAILS:
+💬 "Who is the smartest person in your school?" — 8,241 replies
+📍 Location: Your school/college community group
+🔗 Your mention: Post #47 — 312 people tagged you!
+
+People are saying great things about you. Don't miss the conversation!
+
+👉 See Your Mentions → http://friendsapp.net/mentions-viral
+
+Also: You have 12 unread DMs and 5 pending friend requests.
+
+Recent activity in your network:
+• Anjali liked your profile picture
+• Arjun sent you a friend request
+• Your city's local group added you
+
+FriendsApp — Stay Connected
+notifications@friendsapp.net`,
+    `📱 Your Social Media Report — This Week
+
+Hi!
+
+Here's your weekly activity summary across all connected platforms:
+
+INSTAGRAM:
+• Followers gained: +28 (Total: 1,247)
+• Post likes: 234 | Stories views: 891
+• Profile visits: 312
+
+FACEBOOK:
+• New friend requests: 7
+• Post reach: 1,834 people
+• Events nearby: 3 events this weekend
+
+TWITTER/X:
+• Impressions: 4,211 | Mentions: 14
+• New followers: 12
+
+📈 YOUR PROFILE IS GROWING! Want more?
+
+🚀 BOOST YOUR FOLLOWERS TODAY:
+→ Get 50,000 followers for just ₹499 (one-time fee)
+→ Boost any post for ₹99 and reach 10,000 people
+→ Verified badge service — ₹1,499/month
+
+👉 GROW NOW → http://photoshare.io/boost-profile
+
+Social Media Analytics Team`,
   ],
   newsletter:[
-    `Hello Subscriber,\n\nWelcome to the May 2026 Edition of NewsDailyDigest — your weekly roundup of the most important stories, curated from 500+ sources!\n\n📰 THIS WEEK'S TOP STORIES:\n\n🌍 WORLD NEWS:\n• G7 Summit concludes with new climate agreements\n• Global inflation rates show first signs of cooling\n• UN Peace talks resume in Middle East\n\n💻 TECHNOLOGY:\n• AI models surpass human performance on new benchmarks\n• India's space mission to Mars enters final phase\n• Electric vehicle sales hit record high globally\n\n📚 EDUCATION & SCIENCE:\n• New study: Daily reading improves memory by 34%\n• CBSE announces new AI literacy curriculum for 2026-27\n• Scientists discover potential treatment for common cold\n\n🏏 SPORTS:\n• IPL 2026: Final standings and MVP announced\n• India wins gold at Asian Athletics Championship\n• FIFA World Cup 2026 qualifier results\n\n👉 Read Full Articles → www.newsdaily.com/may-2026\n\nTo unsubscribe from this newsletter, click here.\n\nNewsDailyDigest Team`,
-    `Your Weekly Digest Is Here! 📖\n\nHi Reader,\n\nThis week we've curated 15 handpicked articles from across the web — ranging from science to lifestyle to career tips. Here's your summary:\n\nFEATURED READS:\n\n1. "How to Study Smarter, Not Harder" — 12 min read\n   Backed by neuroscience research from Oxford University.\n\n2. "The Future of AI in Education" — 8 min read\n   How schools worldwide are integrating AI tools.\n\n3. "10 Financial Habits of Successful People" — 6 min read\n   Simple habits that make a big difference.\n\n4. "Climate Solutions That Actually Work" — 10 min read\n   Real-world examples from 5 countries.\n\n5. "Why Sleep Matters More Than You Think" — 7 min read\n   The science of sleep and peak performance.\n\n...and 10 more articles inside!\n\n👉 READ ALL 15 ARTICLES → www.weeklydigest.org/may-2026\n\n⚙️ Manage Preferences | Unsubscribe\n\nWeeklyDigest — Knowledge, Delivered Weekly`,
-    `Monthly Bulletin — May 2026\n\nDear Subscriber,\n\nHere is your monthly update from the Informer Hub community.\n\nCOMMUNITY HIGHLIGHTS:\n\n📌 Events This Month:\n• Tech Talk: "Intro to Machine Learning" — May 20, 4 PM (Free)\n• Career Fair 2026 — May 23-24 at City Convention Center\n• Book Club: "The Innovator's Dilemma" — May 25, 6 PM\n\n📊 Platform Updates:\n• New discussion forum launched — 2,400 members joined!\n• Monthly challenges section redesigned\n• Mobile app updated with new features\n\n🏆 Community Shoutouts:\n• Most Helpful Member: @Priya_R (342 helpful answers!)\n• Best Discussion Thread: "Future of Renewable Energy"\n• Top Contributor: @DevKumar_AI\n\n📚 Free Resources This Month:\n→ Machine Learning Basics PDF Guide\n→ Career Planning Template (Excel)\n→ 20 Free Online Courses — May Special\n\n👉 ACCESS YOUR ACCOUNT → www.informer-hub.net\n\nWarm regards,\nThe Informer Hub Team`,
-    `This Week's Top Reads — Curated For You 📚\n\nHi there,\n\nBased on your reading history, here are this week's must-read articles:\n\n⭐ EDITOR'S PICK:\n"Why Critical Thinking Is the Skill of the Decade"\nA fascinating look at how the most successful people approach problem-solving.\n→ Estimated read time: 9 minutes\n\nFOR YOU BASED ON YOUR INTERESTS:\n\nIf you liked technology articles:\n→ "5 Ways AI Is Changing Healthcare in 2026"\n→ "India's Rising Role in Global Tech Innovation"\n\nIf you liked education content:\n→ "The New Rules of Online Learning"\n→ "Study Tips from Top University Students"\n\nIf you liked science news:\n→ "Webb Telescope Discovers New Exoplanet Class"\n→ "Breakthrough in Quantum Computing Explained Simply"\n\n📧 NEW THIS WEEK:\nTopicFlow Podcast is now live! Listen to expert discussions on your commute.\n\n👉 READ NOW → www.topicflow.com/weekly-picks\n\nUnsubscribe | Manage Preferences\n\nTopicFlow Editorial Team`,
-    `Welcome! Your Subscription Is Confirmed ✅\n\nHi,\n\nThank you for subscribing to MagazinePlus — your all-in-one knowledge subscription!\n\nYOUR SUBSCRIPTION DETAILS:\n• Plan: Monthly Standard\n• Start Date: May 18, 2026\n• Next Renewal: June 18, 2026\n• Monthly Fee: ₹99\n\nWHAT YOU GET:\n✅ Access to 500+ magazines and journals\n✅ Daily news briefing (7 AM delivery)\n✅ Weekly curated article bundles\n✅ Offline reading on mobile app\n✅ Ad-free reading experience\n✅ Cancel anytime — no questions asked\n\nTO GET STARTED:\n👉 Set Up Your Reading Profile → www.magazineplus.io/setup\n\nRecommended first reads for new subscribers:\n• "Best of Science 2026" — National Science Journal\n• "India Rising" — Business & Economy Weekly\n• "Tech Trends" — Digital Future Magazine\n\nIf you have any questions, reply to this email or visit our Help Centre.\n\nWelcome aboard!\nMagazinePlus Team`,
+    `Hello Subscriber,
+
+Welcome to the May 2026 Edition of NewsDailyDigest — your weekly roundup of the most important stories, curated from 500+ sources!
+
+📰 THIS WEEK'S TOP STORIES:
+
+🌍 WORLD NEWS:
+• G7 Summit concludes with new climate agreements
+• Global inflation rates show first signs of cooling
+• UN Peace talks resume in Middle East
+
+💻 TECHNOLOGY:
+• AI models surpass human performance on new benchmarks
+• India's space mission to Mars enters final phase
+• Electric vehicle sales hit record high globally
+
+📚 EDUCATION & SCIENCE:
+• New study: Daily reading improves memory by 34%
+• CBSE announces new AI literacy curriculum for 2026-27
+• Scientists discover potential treatment for common cold
+
+🏏 SPORTS:
+• IPL 2026: Final standings and MVP announced
+• India wins gold at Asian Athletics Championship
+• FIFA World Cup 2026 qualifier results
+
+👉 Read Full Articles → www.newsdaily.com/may-2026
+
+To unsubscribe from this newsletter, click here.
+
+NewsDailyDigest Team`,
+    `Your Weekly Digest Is Here! 📖
+
+Hi Reader,
+
+This week we've curated 15 handpicked articles from across the web — ranging from science to lifestyle to career tips. Here's your summary:
+
+FEATURED READS:
+
+1. "How to Study Smarter, Not Harder" — 12 min read
+   Backed by neuroscience research from Oxford University.
+
+2. "The Future of AI in Education" — 8 min read
+   How schools worldwide are integrating AI tools.
+
+3. "10 Financial Habits of Successful People" — 6 min read
+   Simple habits that make a big difference.
+
+4. "Climate Solutions That Actually Work" — 10 min read
+   Real-world examples from 5 countries.
+
+5. "Why Sleep Matters More Than You Think" — 7 min read
+   The science of sleep and peak performance.
+
+...and 10 more articles inside!
+
+👉 READ ALL 15 ARTICLES → www.weeklydigest.org/may-2026
+
+⚙️ Manage Preferences | Unsubscribe
+
+WeeklyDigest — Knowledge, Delivered Weekly`,
+    `Monthly Bulletin — May 2026
+
+Dear Subscriber,
+
+Here is your monthly update from the Informer Hub community.
+
+COMMUNITY HIGHLIGHTS:
+
+📌 Events This Month:
+• Tech Talk: "Intro to Machine Learning" — May 20, 4 PM (Free)
+• Career Fair 2026 — May 23-24 at City Convention Center
+• Book Club: "The Innovator's Dilemma" — May 25, 6 PM
+
+📊 Platform Updates:
+• New discussion forum launched — 2,400 members joined!
+• Monthly challenges section redesigned
+• Mobile app updated with new features
+
+🏆 Community Shoutouts:
+• Most Helpful Member: @Priya_R (342 helpful answers!)
+• Best Discussion Thread: "Future of Renewable Energy"
+• Top Contributor: @DevKumar_AI
+
+📚 Free Resources This Month:
+→ Machine Learning Basics PDF Guide
+→ Career Planning Template (Excel)
+→ 20 Free Online Courses — May Special
+
+👉 ACCESS YOUR ACCOUNT → www.informer-hub.net
+
+Warm regards,
+The Informer Hub Team`,
+    `This Week's Top Reads — Curated For You 📚
+
+Hi there,
+
+Based on your reading history, here are this week's must-read articles:
+
+⭐ EDITOR'S PICK:
+"Why Critical Thinking Is the Skill of the Decade"
+A fascinating look at how the most successful people approach problem-solving.
+→ Estimated read time: 9 minutes
+
+FOR YOU BASED ON YOUR INTERESTS:
+
+If you liked technology articles:
+→ "5 Ways AI Is Changing Healthcare in 2026"
+→ "India's Rising Role in Global Tech Innovation"
+
+If you liked education content:
+→ "The New Rules of Online Learning"
+→ "Study Tips from Top University Students"
+
+If you liked science news:
+→ "Webb Telescope Discovers New Exoplanet Class"
+→ "Breakthrough in Quantum Computing Explained Simply"
+
+📧 NEW THIS WEEK:
+TopicFlow Podcast is now live! Listen to expert discussions on your commute.
+
+👉 READ NOW → www.topicflow.com/weekly-picks
+
+Unsubscribe | Manage Preferences
+
+TopicFlow Editorial Team`,
+    `Welcome! Your Subscription Is Confirmed ✅
+
+Hi,
+
+Thank you for subscribing to MagazinePlus — your all-in-one knowledge subscription!
+
+YOUR SUBSCRIPTION DETAILS:
+• Plan: Monthly Standard
+• Start Date: May 18, 2026
+• Next Renewal: June 18, 2026
+• Monthly Fee: ₹99
+
+WHAT YOU GET:
+✅ Access to 500+ magazines and journals
+✅ Daily news briefing (7 AM delivery)
+✅ Weekly curated article bundles
+✅ Offline reading on mobile app
+✅ Ad-free reading experience
+✅ Cancel anytime — no questions asked
+
+TO GET STARTED:
+👉 Set Up Your Reading Profile → www.magazineplus.io/setup
+
+Recommended first reads for new subscribers:
+• "Best of Science 2026" — National Science Journal
+• "India Rising" — Business & Economy Weekly
+• "Tech Trends" — Digital Future Magazine
+
+If you have any questions, reply to this email or visit our Help Centre.
+
+Welcome aboard!
+MagazinePlus Team`,
   ],
   safe:[
-    `Hi Team,\n\nJust a quick reminder about our team meeting this Friday, May 20, 2026 at 3:00 PM in Conference Room B (Building 2, Floor 3).\n\nAGENDA:\n1. Q2 project status updates (15 min)\n2. Resource planning for Q3 (20 min)\n3. New onboarding process review (15 min)\n4. Open discussion / Q&A (10 min)\n\nPlease bring:\n• Your project progress report (even a brief verbal update is fine)\n• Any blockers you'd like the team to help resolve\n• Ideas for the Q3 roadmap\n\nIf you cannot attend in person, the meeting will also be available on Teams. Link will be shared 30 minutes before the meeting.\n\nPlease confirm your attendance by replying to this email.\n\nLooking forward to seeing everyone!\n\nBest,\nAlice Johnson\nProject Lead, CognoSpace Team`,
-    `Hi,\n\nGreat news! Your order has been confirmed and is on its way to you.\n\nORDER SUMMARY:\nOrder #: CS-45231-MAY2026\nItems: (1) Wireless Study Headphones + (1) USB-C Hub\n\nSHIPPING DETAILS:\n• Carrier: BlueDart Express\n• Tracking Number: BDT89234567IN\n• Estimated Delivery: Thursday, May 21, 2026\n• Delivery Time Window: 10:00 AM – 6:00 PM\n\nYou can track your order in real time at:\nhttps://www.bluedart.com/tracking (this is a real link)\n\nIf you have any questions about your order, please reply to this email or call our customer service at 1800-xxx-xxxx (Mon–Sat, 9 AM – 6 PM).\n\nThank you for shopping with us!\n\nWarm regards,\nThe CognoSpace Store Team`,
-    `Hi Team,\n\nThe Q2 Project Report is now ready for your review. I've attached the document to this email (it's also accessible on our shared Google Drive folder).\n\nKEY HIGHLIGHTS:\n\n✅ Project Alpha — Completed 3 days ahead of schedule\n   Outcome: Delivered 40% performance improvement\n\n⏳ Project Beta — 80% complete, on track for June 15 deadline\n   Note: Minor delay in UI testing phase; compensated by parallel backend work\n\n🔄 Project Gamma — Facing a 5-day delay\n   New deadline: June 20, 2026\n   Reason: Third-party API integration issues\n\n📊 Budget Status: 94% utilized (within approved limits)\n\nPlease review the full document and share your feedback or questions by EOD Friday.\n\nThe full report is in our shared folder at:\n→ drive.google.com/shared-project-reports (real link)\n\nThank you,\nBob Smith\nProject Manager`,
-    `Hey!\n\nAre you free for lunch tomorrow (Thursday)? A new place called "The Green Bowl" just opened near office — apparently they have amazing Korean-Indian fusion food 🌶️\n\nA few colleagues are going around 12:45 PM. The place is just a 5-minute walk from the office entrance.\n\nLet me know by this evening if you can join, so I can make a reservation for the right number of people. They get busy quickly at lunchtime!\n\nAlso — if you have any dietary restrictions (vegetarian, gluten-free, etc.), let me know and I'll check the menu for options.\n\nHope to see you there!\n\nCheers,\nSam`,
-    `Dear Team and Parents,\n\nWe are pleased to share the May 2026 edition of our monthly newsletter from CognoSpace Learning!\n\nTHIS MONTH'S HIGHLIGHTS:\n\n📌 New AI & Robotics curriculum launched for Grades 6–9 starting June 2026\n📌 STEAM activity kits now available — shipping from June 1\n📌 Student project showcase: 24 student projects featured this month\n📌 Upcoming webinar: "Introduction to Robotics" — May 25, 4:00 PM (Free for all students)\n\nSTUDENT ACHIEVEMENTS:\n🏆 Anika Sharma (Grade 8): Won State-level Science Olympiad\n🏆 Rahul Mehta (Grade 9): Published first research paper on AI ethics\n🏆 Team BrainBots: Won Regional Robotics Competition\n\nUPCOMING EVENTS:\n• May 25 — Robotics Webinar (Online, Free)\n• June 1 — STEAM Kit distribution begins\n• June 10 — End-of-year project presentations\n\nWishing everyone a great learning month ahead!\n\nThe CognoSpace Team`,
-    `Dear Team,\n\nPlease find below your invoice details for April 2026.\n\nInvoice #: CS-INV-4521\nPeriod: April 1–30, 2026\nTotal Amount Due: ₹24,500\n\nBREAKDOWN:\n• Platform subscription (Monthly) — ₹15,000\n• Additional student licenses (x5) — ₹7,500\n• Technical support package — ₹2,000\n• Total — ₹24,500\n\nPAYMENT DETAILS:\nDue Date: May 20, 2026\nBank: HDFC Bank\nAccount Name: CognoSpace Pvt. Ltd.\nAccount Number: 50200034567890\nIFSC Code: HDFC0001234\nReference: INV-4521\n\nYou can also pay via UPI: finance@cognospace.upi\n\nIf you have already made payment, please share the transaction reference number. For any queries, please reply to this email.\n\nThank you,\nFinance Department\nCognoSpace Pvt. Ltd.`,
-    `Hi,\n\nWelcome to the team! We are absolutely thrilled to have you join CognoSpace. 🎉\n\nYour official start date is Monday, May 25, 2026. Here's your onboarding schedule for the first week:\n\n📅 DAY 1 — Monday, May 25:\n9:00 AM — Meet HR at reception (Building 1, Ground Floor)\n10:00 AM — Office tour and team introductions\n11:30 AM — IT setup: laptop, email, and system access\n2:00 PM — Orientation with CEO (45 min)\n\n📅 DAY 2 — Tuesday, May 26:\nTools training: Slack, Jira, Confluence, Google Workspace\nSecurity and data privacy briefing (mandatory)\n\n📅 DAY 3 — Wednesday, May 27:\n9:30 AM — Project briefing with your manager\n11:00 AM — Meet your buddy/mentor\n2:00 PM — First team standup meeting\n\nWHAT TO BRING ON DAY 1:\n• Original photo ID (Aadhaar/Passport)\n• 2 passport photographs\n• Educational certificates (originals)\n\nAny questions before Monday? Feel free to reply to this email.\n\nLooking forward to your first day!\n\nHR Team, CognoSpace`,
-    `Dear Parent/Guardian,\n\nThis is a friendly reminder about the upcoming Parent-Teacher Meeting (PTM) for the academic year 2026-27.\n\nDATE AND TIME:\n📅 Saturday, May 24, 2026\n🕐 Slot 1: 9:00 AM – 11:00 AM (Classes 1–5)\n🕐 Slot 2: 11:30 AM – 1:30 PM (Classes 6–9)\n🕐 Slot 3: 2:00 PM – 4:00 PM (Class 10 and 12)\n\nVENUE:\nCity Public School, Main Building\nParent Waiting Area: Ground Floor Lobby\n\nWHAT WILL BE DISCUSSED:\n• Academic performance and grades (Term 1)\n• Attendance record and punctuality\n• Upcoming examinations schedule\n• Individual concerns (please note questions in advance)\n\nIMPORTANT:\nPlease carry your ward's latest report card to the meeting. If you are unable to attend, please inform the class teacher via the school app or call the front office at 040-xxxx-xxxx.\n\nWe look forward to meeting you!\n\nWarm regards,\nThe School Administration\nCity Public School`,
+    `Hi Team,
+
+Just a quick reminder about our team meeting this Friday, May 20, 2026 at 3:00 PM in Conference Room B (Building 2, Floor 3).
+
+AGENDA:
+1. Q2 project status updates (15 min)
+2. Resource planning for Q3 (20 min)
+3. New onboarding process review (15 min)
+4. Open discussion / Q&A (10 min)
+
+Please bring:
+• Your project progress report (even a brief verbal update is fine)
+• Any blockers you'd like the team to help resolve
+• Ideas for the Q3 roadmap
+
+If you cannot attend in person, the meeting will also be available on Teams. Link will be shared 30 minutes before the meeting.
+
+Please confirm your attendance by replying to this email.
+
+Looking forward to seeing everyone!
+
+Best,
+Alice Johnson
+Project Lead, CognoSpace Team`,
+    `Hi,
+
+Great news! Your order has been confirmed and is on its way to you.
+
+ORDER SUMMARY:
+Order #: CS-45231-MAY2026
+Items: (1) Wireless Study Headphones + (1) USB-C Hub
+
+SHIPPING DETAILS:
+• Carrier: BlueDart Express
+• Tracking Number: BDT89234567IN
+• Estimated Delivery: Thursday, May 21, 2026
+• Delivery Time Window: 10:00 AM – 6:00 PM
+
+You can track your order in real time at:
+https://www.bluedart.com/tracking (this is a real link)
+
+If you have any questions about your order, please reply to this email or call our customer service at 1800-xxx-xxxx (Mon–Sat, 9 AM – 6 PM).
+
+Thank you for shopping with us!
+
+Warm regards,
+The CognoSpace Store Team`,
+    `Hi Team,
+
+The Q2 Project Report is now ready for your review. I've attached the document to this email (it's also accessible on our shared Google Drive folder).
+
+KEY HIGHLIGHTS:
+
+✅ Project Alpha — Completed 3 days ahead of schedule
+   Outcome: Delivered 40% performance improvement
+
+⏳ Project Beta — 80% complete, on track for June 15 deadline
+   Note: Minor delay in UI testing phase; compensated by parallel backend work
+
+🔄 Project Gamma — Facing a 5-day delay
+   New deadline: June 20, 2026
+   Reason: Third-party API integration issues
+
+📊 Budget Status: 94% utilized (within approved limits)
+
+Please review the full document and share your feedback or questions by EOD Friday.
+
+The full report is in our shared folder at:
+→ drive.google.com/shared-project-reports (real link)
+
+Thank you,
+Bob Smith
+Project Manager`,
+    `Hey!
+
+Are you free for lunch tomorrow (Thursday)? A new place called "The Green Bowl" just opened near office — apparently they have amazing Korean-Indian fusion food 🌶️
+
+A few colleagues are going around 12:45 PM. The place is just a 5-minute walk from the office entrance.
+
+Let me know by this evening if you can join, so I can make a reservation for the right number of people. They get busy quickly at lunchtime!
+
+Also — if you have any dietary restrictions (vegetarian, gluten-free, etc.), let me know and I'll check the menu for options.
+
+Hope to see you there!
+
+Cheers,
+Sam`,
+    `Dear Team and Parents,
+
+We are pleased to share the May 2026 edition of our monthly newsletter from CognoSpace Learning!
+
+THIS MONTH'S HIGHLIGHTS:
+
+📌 New AI & Robotics curriculum launched for Grades 6–9 starting June 2026
+📌 STEAM activity kits now available — shipping from June 1
+📌 Student project showcase: 24 student projects featured this month
+📌 Upcoming webinar: "Introduction to Robotics" — May 25, 4:00 PM (Free for all students)
+
+STUDENT ACHIEVEMENTS:
+🏆 Anika Sharma (Grade 8): Won State-level Science Olympiad
+🏆 Rahul Mehta (Grade 9): Published first research paper on AI ethics
+🏆 Team BrainBots: Won Regional Robotics Competition
+
+UPCOMING EVENTS:
+• May 25 — Robotics Webinar (Online, Free)
+• June 1 — STEAM Kit distribution begins
+• June 10 — End-of-year project presentations
+
+Wishing everyone a great learning month ahead!
+
+The CognoSpace Team`,
+    `Dear Team,
+
+Please find below your invoice details for April 2026.
+
+Invoice #: CS-INV-4521
+Period: April 1–30, 2026
+Total Amount Due: ₹24,500
+
+BREAKDOWN:
+• Platform subscription (Monthly) — ₹15,000
+• Additional student licenses (x5) — ₹7,500
+• Technical support package — ₹2,000
+• Total — ₹24,500
+
+PAYMENT DETAILS:
+Due Date: May 20, 2026
+Bank: HDFC Bank
+Account Name: CognoSpace Pvt. Ltd.
+Account Number: 50200034567890
+IFSC Code: HDFC0001234
+Reference: INV-4521
+
+You can also pay via UPI: finance@cognospace.upi
+
+If you have already made payment, please share the transaction reference number. For any queries, please reply to this email.
+
+Thank you,
+Finance Department
+CognoSpace Pvt. Ltd.`,
+    `Hi,
+
+Welcome to the team! We are absolutely thrilled to have you join CognoSpace. 🎉
+
+Your official start date is Monday, May 25, 2026. Here's your onboarding schedule for the first week:
+
+📅 DAY 1 — Monday, May 25:
+9:00 AM — Meet HR at reception (Building 1, Ground Floor)
+10:00 AM — Office tour and team introductions
+11:30 AM — IT setup: laptop, email, and system access
+2:00 PM — Orientation with CEO (45 min)
+
+📅 DAY 2 — Tuesday, May 26:
+Tools training: Slack, Jira, Confluence, Google Workspace
+Security and data privacy briefing (mandatory)
+
+📅 DAY 3 — Wednesday, May 27:
+9:30 AM — Project briefing with your manager
+11:00 AM — Meet your buddy/mentor
+2:00 PM — First team standup meeting
+
+WHAT TO BRING ON DAY 1:
+• Original photo ID (Aadhaar/Passport)
+• 2 passport photographs
+• Educational certificates (originals)
+
+Any questions before Monday? Feel free to reply to this email.
+
+Looking forward to your first day!
+
+HR Team, CognoSpace`,
+    `Dear Parent/Guardian,
+
+This is a friendly reminder about the upcoming Parent-Teacher Meeting (PTM) for the academic year 2026-27.
+
+DATE AND TIME:
+📅 Saturday, May 24, 2026
+🕐 Slot 1: 9:00 AM – 11:00 AM (Classes 1–5)
+🕐 Slot 2: 11:30 AM – 1:30 PM (Classes 6–9)
+🕐 Slot 3: 2:00 PM – 4:00 PM (Class 10 and 12)
+
+VENUE:
+City Public School, Main Building
+Parent Waiting Area: Ground Floor Lobby
+
+WHAT WILL BE DISCUSSED:
+• Academic performance and grades (Term 1)
+• Attendance record and punctuality
+• Upcoming examinations schedule
+• Individual concerns (please note questions in advance)
+
+IMPORTANT:
+Please carry your ward's latest report card to the meeting. If you are unable to attend, please inform the class teacher via the school app or call the front office at 040-xxxx-xxxx.
+
+We look forward to meeting you!
+
+Warm regards,
+The School Administration
+City Public School`,
   ],
 };
 
@@ -1098,8 +2148,7 @@ function doSignup(){
   if(!name||!email||!pass){err.style.display='block';err.textContent='Please fill in all fields.';return;}
   if(pass.length<6){err.style.display='block';err.textContent='Password must be at least 6 characters.';return;}
   if(accounts[email]){err.style.display='block';err.textContent='This email is already registered.';return;}
-  accounts[email]={name,pass,email};
-  saveAccounts();
+  accounts[email]={name,pass};
   err.style.display='none';
   showToast('✅ Account created! Please sign in.');
   document.getElementById('liEmail').value=email;
@@ -1114,7 +2163,6 @@ function doLogin(){
   if(!accounts[email]||accounts[email].pass!==pass){err.style.display='block';err.textContent='Invalid email or password.';return;}
   err.style.display='none';
   currentUser=accounts[email];
-  saveSession();
   document.getElementById('userAvatar').textContent=currentUser.name[0].toUpperCase();
   document.getElementById('authWrap').style.display='none';
   document.getElementById('appWrap').style.display='flex';
@@ -1125,24 +2173,6 @@ function doLogin(){
 function initApp(){
   buildSidebar();
   switchMode('training');
-  setupLogout();
-}
-// LOGOUT FUNCTIONALITY
-function setupLogout() {
-  const btn = document.getElementById('logoutBtn');
-  if (btn) btn.style.display = 'inline-block';
-}
-
-function logout() {
-  currentUser = null;
-  saveSession();
-  const btn = document.getElementById('logoutBtn');
-  if (btn) btn.style.display = 'none';
-  document.getElementById('appWrap').style.display = 'none';
-  document.getElementById('authWrap').style.display = 'flex';
-  document.getElementById('liEmail').value = '';
-  document.getElementById('liPass').value = '';
-  showToast('Logged out successfully!');
 }
 
 function buildSidebar(){
@@ -1213,16 +2243,7 @@ function switchMode(mode){
   document.getElementById('liveWrap').style.display=mode==='live'?'flex':'none';
   document.getElementById('l2Wrap').style.display='none';
   document.getElementById('adminWrap').style.display=mode==='admin'?'flex':'none';
-  if(mode==='admin') {
-      renderAdminGrid();
-      // Populate admin legend key dynamically
-      document.getElementById('adminLegendKeys').innerHTML = SPAM_TYPES.map(t=>`
-        <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:#c4b5fd;">
-          <div style="width:12px; height:12px; border-radius:50%; background:${t.color};"></div>
-          <strong>${t.icon} ${t.name}</strong>
-        </div>
-      `).join('');
-  }
+  if(mode==='admin')renderAdminGrid();
 }
 
 // ══ ADMIN ══
@@ -1234,7 +2255,12 @@ function doAdminLogin(){
   const err=document.getElementById('adminLoginErr');
   if(u==='Admin'&&p==='Admin123'){
     closeAdminLogin();
-    switchMode('admin');
+    document.getElementById('trainingWrap').style.display='none';
+    document.getElementById('liveWrap').style.display='none';
+    document.getElementById('l2Wrap').style.display='none';
+    document.getElementById('adminWrap').style.display='flex';
+    currentMode='admin';
+    renderAdminGrid();
     showToast('🔐 Admin Mode activated!');
   } else {
     err.style.display='block';err.textContent='Invalid credentials. Try again.';
@@ -1245,6 +2271,7 @@ function renderAdminGrid(){
   const allMails=[...generatedMails,...liveMails];
   const bar=document.getElementById('adminFilterBar');
   const grid=document.getElementById('adminGrid');
+  let activeFilter='all';
   const types=[{id:'all',label:'All Mails',color:'#4a90e2'},...SPAM_TYPES];
   bar.innerHTML=types.map(t=>`<button class="admin-filter-btn${t.id==='all'?' active':''}" onclick="adminFilter('${t.id}',this)">${t.icon||'📬'} ${t.label||t.name}</button>`).join('');
   renderAdminMails('all',allMails,grid);
@@ -1260,56 +2287,24 @@ function adminFilter(typeId,btn){
 function renderAdminMails(typeId,allMails,grid){
   const filtered=typeId==='all'?allMails:allMails.filter(m=>m.catId===typeId);
   if(filtered.length===0){grid.innerHTML='<div style="color:#a78bfa;padding:32px;text-align:center;font-size:14px;grid-column:1/-1">No mails in this category yet. Generate mails in Training or Live Mode.</div>';return;}
-  
+  const t=SPAM_TYPES.find(x=>x.id===typeId);
   grid.innerHTML=filtered.map(m=>{
     const type=SPAM_TYPES.find(x=>x.id===m.catId)||{name:'Unknown',color:'#888',bg:'#eee',icon:'?'};
     const col=AV_COLORS[m.id%AV_COLORS.length];
     const init=m.sender.split('@')[0].slice(0,2).toUpperCase();
     const isSpam=SPAM_CATS_IDS.includes(m.catId);
-    
-    // Check student's answer verification logic
-    let studentStatus = "";
-    if (generatedMails.includes(m) && (trainingComplete || Object.keys(trainingResults).length > 0)) {
-        if (isSpam) {
-            const markedCorrectly = trainingResults[m.catId]?.spam?.find(x => x.id === m.id);
-            const markedIncorrectly = trainingResults[m.catId]?.notSpam?.find(x => x.id === m.id);
-            if(markedCorrectly) {
-                studentStatus = `<div style="margin-top:8px; padding:6px; background:rgba(6,78,59,0.5); color:#6ee7b7; border-radius:8px; font-size:11px; text-align:center;">✅ Student Caught This Spam</div>`;
-            } else if(markedIncorrectly) {
-                studentStatus = `<div style="margin-top:8px; padding:6px; background:rgba(127,29,29,0.5); color:#fca5a5; border-radius:8px; font-size:11px; text-align:center;">❌ Missed! Student marked Safe</div>`;
-            } else {
-                studentStatus = `<div style="margin-top:8px; padding:6px; background:rgba(55,65,81,0.5); color:#9ca3af; border-radius:8px; font-size:11px; text-align:center;">⏳ Not Tested Yet</div>`;
-            }
-        } else {
-            let markedSpamIn = [];
-            SPAM_TYPES.forEach(t => {
-                if(trainingResults[t.id]?.spam?.find(x=>x.id===m.id)) markedSpamIn.push(t.name);
-            });
-            if (markedSpamIn.length > 0) {
-                studentStatus = `<div style="margin-top:8px; padding:6px; background:rgba(127,29,29,0.5); color:#fca5a5; border-radius:8px; font-size:11px; text-align:center;">❌ False Positive in: ${markedSpamIn.join(', ')}</div>`;
-            } else if(trainingResults[SPAM_TYPES[0].id]) {
-                studentStatus = `<div style="margin-top:8px; padding:6px; background:rgba(6,78,59,0.5); color:#6ee7b7; border-radius:8px; font-size:11px; text-align:center;">✅ Correctly Kept in Inbox</div>`;
-            }
-        }
-    }
-
     return `
     <div class="admin-mail-card" onclick="openMailView(${JSON.stringify(m).replace(/"/g,'&quot;')},${liveMails.includes(m)})">
-      <div>
-          <div class="amc-head">
-            <div class="amc-avatar" style="background:${col}">${init}</div>
-            <div class="amc-sender">${escHtml(m.sender)}</div>
-            <div class="amc-type-badge" style="background:${type.bg};color:${type.color};border:1px solid ${type.color}33">${type.icon} ${type.name}</div>
-          </div>
-          <div class="amc-body">
-            <div class="amc-subject">${escHtml(m.subject)}</div>
-            <div class="amc-preview">${escHtml(m.body.slice(0,90))}…</div>
-          </div>
+      <div class="amc-head">
+        <div class="amc-avatar" style="background:${col}">${init}</div>
+        <div class="amc-sender">${escHtml(m.sender)}</div>
+        <div class="amc-type-badge" style="background:${type.bg};color:${type.color};border:1px solid ${type.color}33">${type.icon} ${type.name}</div>
       </div>
-      <div style="padding:0 14px 10px;">
-          <div class="amc-verdict ${isSpam?'spam':'inbox'}">${isSpam?'🚫 True Answer: SPAM':'✅ True Answer: INBOX'}</div>
-          ${studentStatus}
+      <div class="amc-body">
+        <div class="amc-subject">${escHtml(m.subject)}</div>
+        <div class="amc-preview">${escHtml(m.body.slice(0,90))}…</div>
       </div>
+      <div class="amc-verdict ${isSpam?'spam':'inbox'}">${isSpam?'🚫 SPAM — '+type.name:'✅ INBOX — Safe Mail'}</div>
     </div>`;
   }).join('');
 }
@@ -1454,9 +2449,12 @@ function renderCompareMails(){
       <div class="cmc-body">
         <div class="cmc-subject">${escHtml(m.subject)}</div>
         <div class="cmc-preview">${escHtml(preview.trim().slice(0,70))}</div>
-        ${!decided?`<div style="margin-top: 6px; font-size: 11px; font-weight: 700; color: var(--blue);">👉 Click to open and classify</div>`:''}
       </div>
-      ${decided?`<div style="padding:6px 14px 10px;font-size:12px;font-weight:700;color:${isSpam?'#c0474a':'#2d8a5e'}">${isSpam?'🚫 Marked as Spam':'✅ Not Spam'}</div>`:''}
+      ${!decided?`<div class="cmc-btns">
+        <button class="cmc-btn yes" onclick="event.stopPropagation();decideMail(${m.id},'yes')">✅ YES — Spam</button>
+        <button class="cmc-btn no" onclick="event.stopPropagation();decideMail(${m.id},'no')">✉️ NO — Not Spam</button>
+      </div>`:
+      `<div style="padding:6px 14px 10px;font-size:12px;font-weight:700;color:${isSpam?'#c0474a':'#2d8a5e'}">${isSpam?'🚫 Marked as Spam':'✅ Not Spam'}</div>`}
     </div>`;
   }).join('');
 }
@@ -1488,25 +2486,6 @@ function decideMail(mailId,decision){
   if(totalDecided===roundMails.length){
     showRoundPopup();
   }
-}
-
-function decideMailFromView(mailId, decision) {
-    decideMail(mailId, decision);
-    
-    // Automatically advance to the next undecided mail
-    const spamType = SPAM_TYPES[currentRoundIdx];
-    const nextUndecided = roundMails.find(m => {
-        const s = trainingResults[spamType.id].spam.find(x => x.id === m.id);
-        const ns = trainingResults[spamType.id].notSpam.find(x => x.id === m.id);
-        return !s && !ns;
-    });
-    
-    if (nextUndecided) {
-        openMailForCompare(nextUndecided.id);
-    } else {
-        closeMailView();
-        // The roundPopup will be triggered by decideMail automatically
-    }
 }
 
 function showRoundPopup(){
@@ -1696,31 +2675,6 @@ function openMailView(mailOrJson,isLive,isCompare){
   document.getElementById('mvDate').textContent=m.time||'Today';
 
   // Format body — suspicious links grey, valid links blue
-  // Build keyword highlight sets per spam type
-  const SPAM_KEYWORDS = {
-    phishing:   ['verify','verification','suspended','suspension','limited','terminate','click','login','password','account','urgent','immediately','24 hours','48 hours','restore','confirm','otp','billing','update','unusual','suspicious','identity','unrecognized'],
-    promo_spam: ['discount','sale','offer','cashback','free','deal','buy','shop','expire','limited','only','flash','exclusive','% off','coupon','prize','win','claim','special','today only','midnight'],
-    scam:       ['congratulations','winner','won','lottery','prize','claim','inheritance','million','transfer','reward','selected','lucky','ticket','award','money'],
-    malware:    ['download','attachment','click to download','open now','file','invoice','document','shared','signature','zip','exe','urgent','review','colleague'],
-    fakebiz:    ['restricted','temporarily','security','access','unauthorized','account','alert','notice','icloud','subscription','renew','expires','helpdesk','support'],
-    social:     ['followers','viral','trending','instagram','followers','views','mention','likes','post','free','10,000','reactions'],
-    newsletter: ['newsletter','digest','bulletin','curated','edition','subscription','weekly','monthly','updates','reads'],
-    safe:       [],
-  };
-
-  const spamType = isCompare ? SPAM_TYPES[currentRoundIdx] : (isLive && m.catId ? SPAM_TYPES.find(t=>t.id===m.catId) : null);
-  const keywords = spamType ? (SPAM_KEYWORDS[spamType.id] || []) : [];
-  const kwColor = spamType ? spamType.color : '#f4b942';
-  const kwBg = spamType ? spamType.bg : '#fef8e7';
-
-  function highlightKeywords(text) {
-    if (!keywords.length) return text;
-    // Escape regex special chars
-    const escaped = keywords.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-    const regex = new RegExp('(' + escaped.join('|') + ')', 'gi');
-    return text.replace(regex, `<mark style="background:${kwBg};color:${kwColor};border-radius:4px;padding:1px 4px;font-weight:700;border:1px solid ${kwColor}44">$1</mark>`);
-  }
-
   const formattedBody=m.body.split('\n').map(line=>{
     line=line.trim();
     if(!line)return'<br>';
@@ -1733,8 +2687,6 @@ function openMailView(mailOrJson,isLive,isCompare){
     });
     // Also style → links
     line=line.replace(/(→\s*)([^\n<]+)/g,'<a href="#" style="color:#999;font-weight:600;text-decoration:line-through">→ $2</a>');
-    // Highlight spam keywords (only on non-link text)
-    line = highlightKeywords(line);
     return`<p style="margin-bottom:6px">${line}</p>`;
   }).join('');
   document.getElementById('mvBody').innerHTML=formattedBody;
@@ -1749,10 +2701,6 @@ function openMailView(mailOrJson,isLive,isCompare){
       <div style="font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;color:#7c4000;display:flex;align-items:center;gap:8px"><span style="font-size:22px">${spamType.icon}</span>${spamType.name}</div>
       <div style="font-size:13px;color:#9a6020;margin-top:6px">Features to look for: ${spamType.features}</div>
       <div style="font-size:12px;color:#b06000;margin-top:8px;font-weight:600">🔍 Does this mail contain any of these features?</div>
-      <div style="margin-top:8px;font-size:12px;color:#7c4000;background:rgba(255,255,255,.6);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px">
-        <mark style="background:${spamType.bg};color:${spamType.color};border-radius:4px;padding:1px 6px;font-weight:700;border:1px solid ${spamType.color}44">highlighted words</mark>
-        = Key spam signals found in this mail — look for these!
-      </div>
     </div>`;
   } else if(isLive){
     if(m.isSpam||m.userReported){
@@ -1771,36 +2719,6 @@ function openMailView(mailOrJson,isLive,isCompare){
     edgeEl.innerHTML=`<div class="spam-edge-badge">${m.spamTypeName}</div>`;
   } else {
     edgeEl.innerHTML='';
-  }
-
-  // NEW: Inject compare Yes/No buttons
-  const compareBtnsEl = document.getElementById('mvCompareBtns');
-  if (isCompare) {
-      const spamType = SPAM_TYPES[currentRoundIdx];
-      const isSpam = trainingResults[spamType.id] && trainingResults[spamType.id].spam.find(x => x.id === m.id);
-      const isNotSpam = trainingResults[spamType.id] && trainingResults[spamType.id].notSpam.find(x => x.id === m.id);
-      const decided = isSpam || isNotSpam;
-
-      if (!decided) {
-          compareBtnsEl.innerHTML = `
-              <div style="margin: 0 24px 24px; padding: 24px; background: linear-gradient(135deg, #f8faff, #eef4ff); border: 2px dashed var(--blue); border-radius: 16px; text-align: center; box-shadow: var(--shadow2);">
-                  <div style="font-size: 16px; font-weight: 800; margin-bottom: 16px; font-family: 'Nunito', sans-serif; color: var(--text);">Does this email have "${spamType.name}" features?</div>
-                  <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                      <button class="cmc-btn yes" style="flex:1; min-width: 160px; max-width: 240px; padding: 14px; font-size: 15px;" onclick="decideMailFromView(${m.id}, 'yes')">✅ YES — Spam</button>
-                      <button class="cmc-btn no" style="flex:1; min-width: 160px; max-width: 240px; padding: 14px; font-size: 15px;" onclick="decideMailFromView(${m.id}, 'no')">✉️ NO — Not Spam</button>
-                  </div>
-              </div>
-          `;
-      } else {
-          compareBtnsEl.innerHTML = `
-              <div style="margin: 0 24px 24px; padding: 16px; background: ${isSpam ? '#fff0f0' : '#edfbf3'}; border: 1.5px solid ${isSpam ? '#f5c0c0' : '#b4e8cc'}; border-radius: 16px; text-align: center; font-weight: 700; color: ${isSpam ? '#c0474a' : '#2d8a5e'};">
-                  ${isSpam ? '🚫 You marked this as Spam' : '✅ You marked this as Not Spam'}
-              </div>
-          `;
-      }
-      compareBtnsEl.style.display = 'block';
-  } else {
-      compareBtnsEl.style.display = 'none';
   }
 
   // Report as spam button for inbox mails in live mode

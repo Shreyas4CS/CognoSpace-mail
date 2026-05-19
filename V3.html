@@ -66,8 +66,8 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 
 /* ── APP SHELL ── */
 #appWrap{display:none;height:100vh;flex-direction:column;animation:fadeInScale .35s ease both}
-.topbar{height:72px;display:flex;align-items:center;padding:0 16px;background:#fff;gap:8px;flex-shrink:0;border-bottom:1.5px solid var(--border);box-shadow:0 2px 8px rgba(74,144,226,.07)}
-.topbar-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.topbar{height:64px;display:flex;align-items:center;padding:0 16px;background:#fff;gap:8px;flex-shrink:0;border-bottom:1.5px solid var(--border);box-shadow:0 2px 8px rgba(74,144,226,.07)}
+.topbar-logo{display:flex;align-items:center;gap:10px;width:240px;flex-shrink:0}
 .topbar-logo .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#4a90e2,#52b788);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:800;font-family:'Nunito',sans-serif;box-shadow:0 2px 8px rgba(74,144,226,.25);transition:transform .2s}
 .topbar-logo .logo-icon:hover{transform:rotate(-8deg) scale(1.08)}
 .topbar-logo .cs-logo-img{width:30px;height:30px;border-radius:8px;object-fit:contain;box-shadow:0 2px 8px rgba(74,144,226,.25);transition:transform .2s;cursor:pointer}
@@ -75,7 +75,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .topbar-logo .logo-text{font-size:18px;font-family:'Nunito',sans-serif;font-weight:800;color:var(--text)}
 .topbar-logo .logo-text span{color:var(--blue)}
 .topbar-logo .by-sep{font-size:12px;color:var(--text3);margin:0 4px}
-.search-bar{flex:1;max-width:560px;background:#f0f4ff;border-radius:28px;display:flex;align-items:center;padding:0 18px;height:44px;transition:background .2s,box-shadow .2s;gap:10px;border:1.5px solid transparent;position:relative;margin:0 auto}
+.search-bar{flex:1;max-width:600px;background:#f0f4ff;border-radius:28px;display:flex;align-items:center;padding:0 18px;height:44px;transition:background .2s,box-shadow .2s;gap:10px;border:1.5px solid transparent;position:relative}
 .search-bar:focus-within{background:#fff;box-shadow:var(--shadow2);border-color:var(--blue)}
 .search-bar input{flex:1;border:none;background:transparent;font-size:15px;outline:none;color:var(--text);font-family:'Nunito Sans',sans-serif}
 .search-icon{color:var(--text2);font-size:18px}
@@ -87,7 +87,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .search-result-sender{font-weight:700;color:var(--text);font-family:'Nunito',sans-serif}
 .search-result-subject{color:var(--text2);font-size:13px}
 .search-no-results{padding:20px;text-align:center;color:var(--text3);font-size:14px}
-.topbar-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
 .topbar-cs-logo{display:flex;align-items:center;gap:8px;padding:6px 12px;background:#f0f4ff;border:1.5px solid var(--border);border-radius:12px;margin-left:4px;transition:box-shadow .2s,transform .2s;cursor:default}
 .topbar-cs-logo:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
 .topbar-cs-logo-img{width:36px;height:36px;border-radius:9px;object-fit:contain;display:block}
@@ -106,7 +106,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 
 /* ── MAIN LAYOUT ── */
 .main{display:flex;flex:1;overflow:hidden}
-.sidebar{width:300px;flex-shrink:0;padding:10px 0;overflow-y:auto;background:#fff;border-right:1.5px solid var(--border)}
+.sidebar{width:240px;flex-shrink:0;padding:10px 0;overflow-y:auto;background:#fff;border-right:1.5px solid var(--border)}
 .compose-btn{margin:10px 14px 16px;background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:12px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:var(--shadow);font-size:14px;font-family:'Nunito',sans-serif;font-weight:700;color:var(--text);transition:transform .2s,box-shadow .2s,background .2s;width:calc(100% - 28px)}
 .compose-btn:hover{box-shadow:var(--shadow2);background:var(--blue-light);transform:translateY(-2px)}
 .compose-btn .pencil{font-size:20px;transition:transform .3s}
@@ -141,7 +141,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .mv-back{font-size:20px;cursor:pointer;border:none;background:var(--hover);padding:9px 14px;border-radius:12px;transition:background .15s,transform .15s;color:var(--text2);font-weight:700}
 .mv-back:hover{background:var(--selected);transform:translateX(-3px);color:var(--blue)}
 .mv-subject{font-size:20px;font-weight:800;font-family:'Nunito',sans-serif;flex:1;color:var(--text);line-height:1.3}
-.mv-card{margin:20px 24px;background:#fff;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;max-height:calc(100vh - 160px);}
+.mv-card{margin:20px 24px;background:#fff;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
 .mv-card-head{padding:20px 28px 18px;background:linear-gradient(135deg,#f7faff 0%,#eef4ff 100%);border-bottom:1.5px solid var(--border);display:flex;align-items:flex-start;gap:16px}
 .mv-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:800;flex-shrink:0;font-family:'Nunito',sans-serif;box-shadow:0 3px 12px rgba(0,0,0,.18)}
 .mv-sender-info{flex:1}
@@ -149,10 +149,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .mv-email-addr{font-size:12px;color:var(--text3);margin-top:2px}
 .mv-to-line{font-size:13px;color:var(--text2);margin-top:4px}
 .mv-date{font-size:13px;color:var(--text2);white-space:nowrap;flex-shrink:0;margin-top:4px}
-.mv-body-wrap{padding:28px 32px 36px;font-size:15px;line-height:1.9;color:var(--text);font-family:'Nunito Sans',sans-serif;overflow-y:auto;flex:1;min-height:0;max-height:calc(60vh);}
-#mailView{overflow-y:auto}
-.mv-card{max-height:calc(100vh - 160px);display:flex;flex-direction:column}
-.mv-body-wrap{max-height:48vh;overflow-y:auto;flex:1;min-height:0}
+.mv-body-wrap{padding:28px 32px 36px;font-size:15px;line-height:1.9;color:var(--text);font-family:'Nunito Sans',sans-serif}
 .mv-spam-banner{margin:16px 24px 0;padding:14px 20px;background:#fff0f0;border-radius:14px;display:flex;align-items:center;gap:12px;font-size:14px;border:1.5px solid #f5c0c0;animation:fadeInUp .3s ease both}
 .mv-inbox-banner{margin:16px 24px 0;padding:14px 20px;background:#edfbf3;border-radius:14px;display:flex;align-items:center;gap:12px;font-size:14px;border:1.5px solid #b4e8cc;animation:fadeInUp .3s ease both}
 .mv-reason{margin:0 24px 24px;padding:18px 22px;background:#fefce8;border:1.5px solid #f0d878;border-radius:14px;font-size:14px;line-height:1.7;animation:fadeInUp .35s ease both}
@@ -466,17 +463,51 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
 /* Improved mode toggle animation */
 .mode-btn.active::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,.1),transparent);animation:shimmer 2s infinite;background-size:200% 100%}
 
-
+@media(max-width:768px){
+  body{overflow:auto}
+  #appWrap{height:auto;min-height:100vh}
+  .main{flex-direction:column}
+  .sidebar{width:100%;border-right:none;border-bottom:1.5px solid var(--border);padding:6px 0;display:flex;flex-wrap:wrap;align-items:center;gap:4px;overflow-x:auto}
+  .compose-btn{width:auto;margin:6px 8px;padding:8px 16px;font-size:13px;flex-shrink:0}
+  #sidebarNav{display:flex;flex-wrap:nowrap;gap:2px;padding:4px;overflow-x:auto}
+  .nav-item{height:auto;padding:5px 12px;margin-right:0;border-radius:20px;font-size:12px;white-space:nowrap;flex-shrink:0}
+  .nav-section{display:none}
+  .topbar-logo .logo-text{font-size:16px}
+  .search-bar{max-width:100%;font-size:13px;flex:1;min-width:80px}
+  .mode-btn{padding:6px 10px;font-size:12px}
+  .training-body{flex-direction:column}
+  .auth-card{padding:32px 24px 24px}
+  .mv-body-wrap{padding:20px 20px 28px}
+  .mv-card{margin:12px}
+  .mv-topbar{padding:10px 16px}
+  .analysis-grid{grid-template-columns:1fr}
+  .dt-container{border-radius:20px}
+  .dt-header{padding:20px 20px 16px}
+  .dt-body{padding:16px}
+  .dt-stats{grid-template-columns:repeat(2,1fr)}
+  .rounds-overview{width:100%;border-left:none;border-top:1.5px solid var(--border)}
+  .mail-compare-area{flex-direction:column}
+}
+@media(max-width:480px){
+  .topbar{padding:0 10px;gap:4px;height:56px}
+  .topbar-logo .logo-text{display:none}
+  .search-bar{padding:0 10px;height:36px;font-size:12px}
+  .avatar{width:32px;height:32px;font-size:13px}
+  .mode-btn{padding:5px 8px;font-size:11px}
+}
 </style>
 </head>
 <body>
 
 <div id="authWrap">
+  <div id="authCustomLogoBox" style="width: min(440px, 100%); height: 80px; margin-bottom: 20px; border: 2px dashed #4a90e2; border-radius: 16px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.5); font-weight: 700; color: #4a90e2; text-align: center;">
+    <img src="" id="authCustomLogoImg" style="display:none; max-width:100%; max-height:100%; object-fit:contain;" alt="Your Logo" onload="this.style.display='block'; this.parentNode.style.border='none'; this.parentNode.style.background='transparent'; document.getElementById('authCustomLogoText').style.display='none';">
+    <span id="authCustomLogoText">🖼️ Add Custom Logo Here<br><small style="font-size:11px;font-weight:400">(Set src of #authCustomLogoImg)</small></span>
+  </div>
 
-  <div class="auth-logo" style="flex-direction:column;align-items:center;text-align:center">
-    <a href="https://www.cognospace.in" target="_blank" rel="noopener" style="display:block;text-decoration:none;margin-bottom:12px">
-      <img src="cognospace_logo.png" alt="CognoSpace Logo" style="max-width:200px;height:auto;object-fit:contain;display:block;margin:0 auto" onerror="this.style.display='none'">
-    </a>
+  <div class="auth-logo">
+    <img src="cognospace_logo.png" alt="CognoSpace" class="cs-logo-img" onerror="this.style.display='none';document.getElementById('authFallbackIcon').style.display='flex'">
+    <div class="logo-icon" id="authFallbackIcon" style="display:flex">C</div>
     <div>
       <div class="logo-text"><span>Cogno</span>Space Mail</div>
       <div class="by-text">by CognoSpace</div>
@@ -506,15 +537,21 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
 <div id="appWrap">
   <div class="topbar">
     <div class="topbar-logo">
-      <a href="https://www.cognospace.in" target="_blank" rel="noopener" style="text-decoration:none" title="Visit CognoSpace">
+      <img src="cognospace_logo.png" alt="CognoSpace" class="cs-logo-img" onerror="this.style.display='none';document.getElementById('topbarFallbackIcon').style.display='flex'">
+      <div class="logo-icon" id="topbarFallbackIcon" style="display:flex">C</div>
+      <div>
         <div class="logo-text"><span>Cogno</span>Space Mail</div>
-      </a>
+      </div>
     </div>
-
     <div class="search-bar" id="searchBarWrap">
       <span class="search-icon">🔍</span>
       <input type="text" id="searchInput" placeholder="Search mail…" oninput="handleSearch(this.value)" onblur="setTimeout(()=>closeSearch(),200)">
       <div class="search-results-dropdown" id="searchDropdown"></div>
+    </div>
+
+    <div id="topbarCustomLogoBox" style="flex:1; max-width: 300px; height: 40px; margin: 0 16px; border: 2px dashed #4a90e2; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #f0f4ff; font-weight: 700; color: #4a90e2; font-size: 13px;">
+      <img src="" id="topbarCustomLogoImg" style="display:none; max-width:100%; max-height:100%; object-fit:contain;" alt="Your Logo" onload="this.style.display='block'; this.parentNode.style.border='none'; this.parentNode.style.background='transparent'; document.getElementById('topbarCustomLogoText').style.display='none';">
+      <span id="topbarCustomLogoText">🖼️ Topbar Custom Logo</span>
     </div>
 
     <div class="topbar-right">
@@ -524,7 +561,13 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
         <button class="mode-btn admin-btn" onclick="openAdminLogin()">🔐 Admin</button>
       </div>
       <div class="avatar" id="userAvatar" title="Account">A</div>
-      <button id="logoutBtn" onclick="logout()" style="display:none;padding:8px 16px;border-radius:10px;border:none;background:linear-gradient(135deg,#e07070,#f08060);color:#fff;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;font-size:13px;transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">Logout</button>
+      <div class="topbar-cs-logo">
+        <img src="cognospace_logo.png" alt="CognoSpace" class="topbar-cs-logo-img" onerror="this.style.display='none';document.getElementById('topbarCSFallback').style.display='flex'">
+        <div class="topbar-cs-logo-fallback" id="topbarCSFallback" style="display:none">
+          <div class="logo-icon" style="width:32px;height:32px;font-size:15px;border-radius:9px">C</div>
+          <span style="font-size:13px;font-family:'Nunito',sans-serif;font-weight:800;color:var(--text)"><span style="color:var(--blue)">Cogno</span>Space</span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -784,47 +827,10 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
 
 <script>
 // ══════════════════════════════════════════
-//  DATA & STATE (with localStorage persistence)
+//  DATA & STATE
 // ══════════════════════════════════════════
 let currentUser = null;
 let accounts = {};
-
-// Load accounts and session from localStorage
-function loadAccounts() {
-  try {
-    const acc = localStorage.getItem('cs_accounts');
-    if (acc) accounts = JSON.parse(acc);
-  } catch (e) { accounts = {}; }
-}
-function saveAccounts() {
-  localStorage.setItem('cs_accounts', JSON.stringify(accounts));
-}
-function saveSession() {
-  if (currentUser && currentUser.email) {
-    localStorage.setItem('cs_currentUser', currentUser.email);
-  } else {
-    localStorage.removeItem('cs_currentUser');
-  }
-}
-function loadSession() {
-  const email = localStorage.getItem('cs_currentUser');
-  if (email && accounts[email]) {
-    currentUser = accounts[email];
-    return true;
-  }
-  return false;
-}
-
-// On page load, load accounts and session
-loadAccounts();
-if (loadSession()) {
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('userAvatar').textContent = currentUser.name[0].toUpperCase();
-    document.getElementById('authWrap').style.display = 'none';
-    document.getElementById('appWrap').style.display = 'flex';
-    initApp();
-  });
-}
 let currentMode = 'training';
 let trainingComplete = false;
 let generatedMails = [];
@@ -1098,8 +1104,7 @@ function doSignup(){
   if(!name||!email||!pass){err.style.display='block';err.textContent='Please fill in all fields.';return;}
   if(pass.length<6){err.style.display='block';err.textContent='Password must be at least 6 characters.';return;}
   if(accounts[email]){err.style.display='block';err.textContent='This email is already registered.';return;}
-  accounts[email]={name,pass,email};
-  saveAccounts();
+  accounts[email]={name,pass};
   err.style.display='none';
   showToast('✅ Account created! Please sign in.');
   document.getElementById('liEmail').value=email;
@@ -1114,7 +1119,6 @@ function doLogin(){
   if(!accounts[email]||accounts[email].pass!==pass){err.style.display='block';err.textContent='Invalid email or password.';return;}
   err.style.display='none';
   currentUser=accounts[email];
-  saveSession();
   document.getElementById('userAvatar').textContent=currentUser.name[0].toUpperCase();
   document.getElementById('authWrap').style.display='none';
   document.getElementById('appWrap').style.display='flex';
@@ -1125,24 +1129,6 @@ function doLogin(){
 function initApp(){
   buildSidebar();
   switchMode('training');
-  setupLogout();
-}
-// LOGOUT FUNCTIONALITY
-function setupLogout() {
-  const btn = document.getElementById('logoutBtn');
-  if (btn) btn.style.display = 'inline-block';
-}
-
-function logout() {
-  currentUser = null;
-  saveSession();
-  const btn = document.getElementById('logoutBtn');
-  if (btn) btn.style.display = 'none';
-  document.getElementById('appWrap').style.display = 'none';
-  document.getElementById('authWrap').style.display = 'flex';
-  document.getElementById('liEmail').value = '';
-  document.getElementById('liPass').value = '';
-  showToast('Logged out successfully!');
 }
 
 function buildSidebar(){
@@ -1696,31 +1682,6 @@ function openMailView(mailOrJson,isLive,isCompare){
   document.getElementById('mvDate').textContent=m.time||'Today';
 
   // Format body — suspicious links grey, valid links blue
-  // Build keyword highlight sets per spam type
-  const SPAM_KEYWORDS = {
-    phishing:   ['verify','verification','suspended','suspension','limited','terminate','click','login','password','account','urgent','immediately','24 hours','48 hours','restore','confirm','otp','billing','update','unusual','suspicious','identity','unrecognized'],
-    promo_spam: ['discount','sale','offer','cashback','free','deal','buy','shop','expire','limited','only','flash','exclusive','% off','coupon','prize','win','claim','special','today only','midnight'],
-    scam:       ['congratulations','winner','won','lottery','prize','claim','inheritance','million','transfer','reward','selected','lucky','ticket','award','money'],
-    malware:    ['download','attachment','click to download','open now','file','invoice','document','shared','signature','zip','exe','urgent','review','colleague'],
-    fakebiz:    ['restricted','temporarily','security','access','unauthorized','account','alert','notice','icloud','subscription','renew','expires','helpdesk','support'],
-    social:     ['followers','viral','trending','instagram','followers','views','mention','likes','post','free','10,000','reactions'],
-    newsletter: ['newsletter','digest','bulletin','curated','edition','subscription','weekly','monthly','updates','reads'],
-    safe:       [],
-  };
-
-  const spamType = isCompare ? SPAM_TYPES[currentRoundIdx] : (isLive && m.catId ? SPAM_TYPES.find(t=>t.id===m.catId) : null);
-  const keywords = spamType ? (SPAM_KEYWORDS[spamType.id] || []) : [];
-  const kwColor = spamType ? spamType.color : '#f4b942';
-  const kwBg = spamType ? spamType.bg : '#fef8e7';
-
-  function highlightKeywords(text) {
-    if (!keywords.length) return text;
-    // Escape regex special chars
-    const escaped = keywords.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-    const regex = new RegExp('(' + escaped.join('|') + ')', 'gi');
-    return text.replace(regex, `<mark style="background:${kwBg};color:${kwColor};border-radius:4px;padding:1px 4px;font-weight:700;border:1px solid ${kwColor}44">$1</mark>`);
-  }
-
   const formattedBody=m.body.split('\n').map(line=>{
     line=line.trim();
     if(!line)return'<br>';
@@ -1733,8 +1694,6 @@ function openMailView(mailOrJson,isLive,isCompare){
     });
     // Also style → links
     line=line.replace(/(→\s*)([^\n<]+)/g,'<a href="#" style="color:#999;font-weight:600;text-decoration:line-through">→ $2</a>');
-    // Highlight spam keywords (only on non-link text)
-    line = highlightKeywords(line);
     return`<p style="margin-bottom:6px">${line}</p>`;
   }).join('');
   document.getElementById('mvBody').innerHTML=formattedBody;
@@ -1749,10 +1708,6 @@ function openMailView(mailOrJson,isLive,isCompare){
       <div style="font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;color:#7c4000;display:flex;align-items:center;gap:8px"><span style="font-size:22px">${spamType.icon}</span>${spamType.name}</div>
       <div style="font-size:13px;color:#9a6020;margin-top:6px">Features to look for: ${spamType.features}</div>
       <div style="font-size:12px;color:#b06000;margin-top:8px;font-weight:600">🔍 Does this mail contain any of these features?</div>
-      <div style="margin-top:8px;font-size:12px;color:#7c4000;background:rgba(255,255,255,.6);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px">
-        <mark style="background:${spamType.bg};color:${spamType.color};border-radius:4px;padding:1px 6px;font-weight:700;border:1px solid ${spamType.color}44">highlighted words</mark>
-        = Key spam signals found in this mail — look for these!
-      </div>
     </div>`;
   } else if(isLive){
     if(m.isSpam||m.userReported){
