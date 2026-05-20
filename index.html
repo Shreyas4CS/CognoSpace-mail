@@ -66,7 +66,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 
 /* ── APP SHELL ── */
 #appWrap{display:none;height:100vh;flex-direction:column;animation:fadeInScale .35s ease both}
-.topbar{height:72px;display:flex;align-items:center;padding:0 16px;background:#fff;gap:8px;flex-shrink:0;border-bottom:1.5px solid var(--border);box-shadow:0 2px 8px rgba(74,144,226,.07)}
+.topbar{height:72px;display:flex;align-items:center;padding:0 16px;background:#fff;gap:8px;flex-shrink:0;border-bottom:1.5px solid var(--border);box-shadow:0 2px 8px rgba(74,144,226,.07);position:sticky;top:0;z-index:50}
 .topbar-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
 .topbar-logo .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#4a90e2,#52b788);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:800;font-family:'Nunito',sans-serif;box-shadow:0 2px 8px rgba(74,144,226,.25);transition:transform .2s}
 .topbar-logo .logo-icon:hover{transform:rotate(-8deg) scale(1.08)}
@@ -717,6 +717,12 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
   .mv-reason{margin:6px 8px 10px;padding:10px 14px;font-size:12px}
   .report-spam-btn{margin:0 8px 10px;padding:9px 14px;font-size:13px}
   .spam-edge-badge{display:none}
+
+  /* Hide sidebar/rounds toggle tabs on mobile - not needed with bottom nav */
+  .sidebar-tab{display:none!important}
+  .rounds-tab{display:none!important}
+  /* Sidebar always visible as bottom nav on mobile - never collapsed */
+  .sidebar.collapsed{width:100%!important;height:54px!important;opacity:1!important;overflow:visible!important}
 
   /* Training header */
   .training-header{padding:8px 10px;gap:8px;flex-wrap:wrap}
@@ -2655,6 +2661,7 @@ function buildDecisionTree(){
 // ══ SIDEBAR TOGGLE ══
 let _sidebarOpen = true;
 function toggleSidebar(){
+  if(window.innerWidth<=600) return; // bottom nav on mobile — not collapsible
   const sidebar = document.getElementById('sidebar');
   const tab = document.getElementById('sidebarTab');
   const btn = document.getElementById('sidebarTabBtn');
