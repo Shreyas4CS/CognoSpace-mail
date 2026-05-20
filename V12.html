@@ -931,17 +931,17 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
           <div style="flex:1">
             <div class="training-title">🎓 Training Mode – Feature-by-Feature Comparison</div>
             <div class="training-desc">
-              <strong>50 mails</strong> are generated once and cascade through all 7 rounds — each spam type has a <em>different</em> number of spam mails hidden in the pool (3 to 9). The non-spam mails flow forward to the next round. Mails that aren't caught in any round become <strong style="color:#52b788">Safe Mail ✅</strong>.<br>
-              <span style="color:#e65100;font-weight:600">🌳 Decision Tree:</span> Catch more spam = better accuracy! Finish all 7 rounds to unlock Live Mode.
+              Each round shows <strong>20 fresh emails</strong> with <strong>varied spam ratios</strong> (40%, 50%, or 60% spam per category) → Check if each mail has that spam type's features. YES = spam, NO = not spam.<br>
+              <span style="color:#e65100;font-weight:600">🌳 Decision Tree:</span> More spam in training = better accuracy! When all 8 rounds are done, you unlock Live Mode and can view your Decision Tree.
             </div>
           </div>
-          <button class="gen-btn" id="genBtn" onclick="generateMails()">⚡ Generate 50 Mails</button>
+          <button class="gen-btn" id="genBtn" onclick="generateMails()">⚡ Generate 20 Mails</button>
         </div>
         <div class="training-body" id="trainingBody">
           <div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:15px;flex-direction:column;gap:14px;padding:40px 24px;text-align:center">
             <div style="font-size:72px;animation:bounce 2s ease infinite">📬</div>
             <div style="font-size:17px;font-weight:700;color:var(--text2)">Ready to train your AI?</div>
-            <div style="font-size:14px;max-width:480px;line-height:1.7;color:var(--text3)">Click <strong style="color:var(--blue)">"Generate 50 Mails"</strong> to start. All 50 mails are generated once — Round 1 checks all 50 for <strong>Phishing</strong>. Non-spam mails cascade to Round 2, and so on through all 7 spam types. Each category has a <em>different</em> number of spam mails (3–9). Mails that pass every round are classified as <strong style="color:#52b788">Safe ✅</strong>!</div>
+            <div style="font-size:14px;max-width:440px;line-height:1.7;color:var(--text3)">Click <strong style="color:var(--blue)">"Generate 20 Mails"</strong> to start. Each of the 8 rounds gives you <strong>20 emails</strong> with a unique spam mix (40%–60% spam) — this teaches the Decision Tree what each spam type looks like!</div>
           </div>
         </div>
       </div>
@@ -1151,8 +1151,7 @@ let mailViewContext = [];   // list of mails for navigation
 let mailViewIndex = 0;
 let currentRoundIdx = 0;    // which spam type round we're on
 let currentMailIdx = 0;     // which mail in the current round
-let roundMails = [];        // mails to review in current round (cascade subset)
-let trainingPool = [];      // master pool of 80 training mails (generated once)
+let roundMails = [];        // mails to review in current round (all 40, reshuffled)
 
 const SPAM_TYPES = [
   {id:'phishing',   name:'Phishing Spam',             icon:'🎣', color:'#9c27b0', bg:'#f3e5f5',
@@ -1177,27 +1176,21 @@ const SPAM_TYPES = [
 const SPAM_CATS_IDS = ['phishing','promo_spam','scam','malware','fakebiz','social','newsletter'];
 const SAFE_CAT_ID = 'safe';
 
-// ══ TRAINING MAIL POOL CONFIG ══
-// 50 mails generated once, cascading through 7 spam-type rounds.
-// Each spam type has a DIFFERENT count in the pool (no two the same).
-// 4+6+3+7+5+8+9 = 42 spam  +  8 safe  = 50 total
-const TOTAL_TRAINING_MAILS = 50;
-const SAFE_IN_POOL = 8;
-
-// Unique spam count per category — all different, sum = 42
-const SPAM_COUNT_BY_TYPE = {
-  phishing:   4,
-  promo_spam: 6,
-  scam:       3,
-  malware:    7,
-  fakebiz:    5,
-  social:     8,
-  newsletter: 9,
+// ══ PER-ROUND SPAM COUNTS (out of 20 emails per round) ══
+// Varied ratios: 40%=8, 50%=10, 60%=12 spam per round — intentionally different per category
+// phishing:12(60%), promo_spam:10(50%), scam:8(40%), malware:12(60%),
+// fakebiz:10(50%), social:8(40%), newsletter:10(50%), safe round: 9 spam (mixed) + 11 safe
+const ROUND_SPAM_COUNTS = {
+  phishing:   12,   // 60% spam
+  promo_spam: 10,   // 50% spam
+  scam:        8,   // 40% spam
+  malware:    12,   // 60% spam
+  fakebiz:    10,   // 50% spam
+  social:      8,   // 40% spam
+  newsletter: 10,   // 50% spam
+  safe:        9,   // 9 spam (mixed types) + 11 safe — student must identify genuine mail
 };
-
-// Legacy compat alias used by decision-tree rendering
-const ROUND_SPAM_COUNTS = SPAM_COUNT_BY_TYPE;
-const ROUND_TOTAL = 50;
+const ROUND_TOTAL = 20; // total emails shown per round
 
 const AV_COLORS=['#4285f4','#ea4335','#fbbc04','#34a853','#8430ce','#007b83','#e67c00','#0097a7','#c2185b','#388e3c'];
 
@@ -1207,236 +1200,183 @@ const AV_COLORS=['#4285f4','#ea4335','#fbbc04','#34a853','#8430ce','#007b83','#e
 // The UI and logic will automatically include them!
 // ==========================================
 
-// ══ MAIL DATA (TRAINING - PDF-aligned) ══
+// ══ MAIL DATA (TRAINING - 160 unique mails) ══
 const SENDERS_BY_TYPE = {
-  phishing:   ['security@bankverify-alert.biz','noreply@account-suspended-now.xyz',
-                'alert@otp-verify-secure.net','verify@login-confirm-id.biz',
-                'support@account-blocked-check.org','noreply@suspend-alert-secure.com',
-                'alert@click-verify-now.biz','security@urgent-account-action.net'],
-  promo_spam: ['deals@megasale-hub.com','offers@shopadeal.com','promo@flashdeals.shop',
-                'marketing@bigstore.com','sale@coupondeals.net','offers@discounthub.io',
-                'promo@cashbackzone.com','deals@limitedoffer.shop'],
-  scam:       ['winner@lottery-reward.com','prize@claim-reward-now.net',
-                'invest@earnfast-global.biz','reward@prize-money-fund.org',
-                'agent@investment-opportunity.net'],
-  malware:    ['docs@invoice-attachment.biz','files@download-docs-now.net',
-                'attachment@zip-file-share.com','noreply@enable-macros-doc.biz',
-                'files@open-document-urgent.net'],
-  fakebiz:    ['support@techsupport-helpdesk.biz','refund@customer-care-center.net',
-                'ticket@support-ticket-now.com','billing@subscription-renewal-alert.biz',
-                'care@refund-approved-center.net'],
-  social:     ['notify@newfollower-alert.com','badge@verified-account-now.net',
-                'alerts@trending-post-update.biz','notify@likes-increased-now.com',
-                'message@click-to-view-msg.net'],
-  newsletter: ['weekly@company-newsletter.com','updates@weekly-digest-hub.org',
-                'news@monthly-digest-mail.net','bulletin@latest-news-update.com',
-                'announce@company-announcement.io'],
-  safe:       ['shreyas@cognospace.in','alice.johnson@company.org','teacher@school.edu',
-                'manager@workplace.com','hr@techcorp.com','team@projecthub.io',
-                'principal@cityschool.edu','bob.smith@office.org'],
+  phishing:   ['security@secure-login-verify.com','noreply@bankaccount-alert.biz','admin@paypal-verify-id.net',
+                'help@account-suspended.xyz','update@amazon-security-check.org','verify@appleid-locked.info',
+                'support@google-security-team.biz','alert@microsoft-accountverify.com'],
+  promo_spam: ['deals@megasale-hub.com','offers@shopadeal.com','promo@flashdeals.shop','marketing@bigstore.com',
+                'newsletter@fashion-week.net','deals@techbazaar.io','hello@brandclub.shop','noreply@weeklysale.net'],
+  scam:       ['winner@lottery-global.com','prizes@cashwinners.net','agent@inheritance-transfer.org',
+                'help@lotto-award-center.biz','transfer@millionaireclub.net'],
+  malware:    ['file-share@cloudstorage99.biz','attachment@secure-docs.net','download@fileshare-urgent.com',
+                'noreply@docusign-verify.xyz','files@quickdrop-share.io'],
+  fakebiz:    ['support@paypal-helpdesk-x.com','noreply@amazon-account-verify.net','help@apple-support-center.biz',
+                'service@microsoft-help-desk.org','billing@bank-of-india-secure.xyz'],
+  social:     ['notifications@sociaflow.com','noreply@friendsapp.net','updates@photoshare.io',
+                'alerts@trendfeed.social','team@viralpost-updates.com'],
+  newsletter: ['newsletter@newsdaily.com','updates@weeklydigest.org','bulletin@informer-hub.net',
+                'subscription@magazineplus.io','news@topicflow.com'],
+  safe:       ['alice.johnson@gmail.com','bob.smith@company.org','teacher@school.edu','manager@workplace.com',
+                'friend@outlook.com','hr@techcorp.com','team@projecthub.io','principal@cityschool.edu'],
 };
 
 const SUBJECTS_BY_TYPE = {
   phishing:[
-    'URGENT: Your Bank Account Will Be Blocked — Verify Now',
-    'Action Required: Verify your account to avoid suspension',
-    'Your account has been suspended — Click here immediately',
-    'OTP Verification Required: Confirm your identity now',
-    'URGENT: Unusual login detected — Click here to secure account',
-    'Your account access is restricted — Verify immediately',
-    'Security Alert: Account will be blocked in 24 hours',
+    'URGENT: Verify your bank account immediately to avoid suspension',
+    'Your PayPal account has been limited — action required NOW',
+    'Apple ID: Suspicious sign-in from unknown device detected',
+    'Amazon: Your order is on hold — verify your payment details',
+    'Google Security Alert: Sign-in attempt from new location',
+    'Microsoft: Your account will be deleted in 24 hours — act now',
+    'Bank of India: Unusual transaction detected — click to confirm',
   ],
   promo_spam:[
-    '🛍️ Flat 70% OFF on Electronics — Limited Time Sale!',
-    'Mega Summer Sale — Use coupon SAVE70 for huge discounts',
-    '🎁 Exclusive Cashback Offer — Claim before it expires!',
-    'Limited Time: Flat 50% OFF + Extra Coupon inside',
-    '🔥 Big Sale Today Only — Discount on all gadgets!',
-    'Your special cashback of ₹500 is waiting — Redeem now',
+    '🛍️ FLASH SALE: 70% OFF Everything — Today Only!',
+    'Exclusive deal just for you — Open before midnight!',
+    'Your personal discount code expires in 3 HOURS',
+    '🎁 Weekend Special: Buy 2 Get 3 Free — All categories',
+    'Big Sale Alert: Up to 80% off — Shop now!',
+    'Your cashback of ₹500 is waiting — Claim before it expires',
   ],
   scam:[
-    '🎉 You Won ₹25 Lakhs Lottery — Claim Your Reward Now!',
-    'Congratulations! Claim your prize money of $50,000',
-    'Earn Money Fast — Investment Opportunity with 300% returns',
-    'Your lottery ticket has won — Send details to claim reward',
-    'Special Prize Money: ₹80,00,000 earmarked for you',
+    '🎉 CONGRATULATIONS! You have been selected as our LUCKY WINNER!',
+    '🏆 You\'ve won $50,000 — Claim your prize within 48 hours',
+    'Unclaimed Inheritance: $2.5 Million waiting for you — READ NOW',
+    'Your lottery ticket #9987 has won — Send details to claim',
+    'Special Award: Money transfer of ₹80,00,000 to your account',
   ],
   malware:[
-    'Payment Invoice Attached — Please download and confirm',
-    'Invoice #INV-2026-4421 — Open document and enable macros',
-    'Important: ZIP file from Finance — Download attachment now',
-    'Your salary document is ready — Open attached file',
-    'Urgent: Enable macros to view full invoice document',
+    'Your document is ready — Click to download immediately',
+    'Invoice #INV-2026-4421 — Download and review urgently',
+    'Shared file: "Salary_Revision_2026.exe" — Open now',
+    'File from colleague: "Project_Report_Final.zip" — Download',
+    'Your e-signature is required — Open attached document',
   ],
   fakebiz:[
-    'Your Refund of ₹8,999 Is Approved — Contact Support Now',
-    'Tech Support: Your subscription renewal is pending today',
-    'Support Ticket #4821 — Customer care response required',
-    'Refund Approved: Contact our support executive immediately',
-    'Your subscription renews today — Action required now',
+    'PayPal: Your account access has been temporarily restricted',
+    'Amazon: Important notice about your account security',
+    'Apple Support: Your iCloud storage is full — Act now',
+    'Microsoft: Your subscription expires today — Renew immediately',
+    'Bank Alert: Unauthorized access attempt on your account',
   ],
   social:[
-    'You have 47 new followers — Click to view messages',
-    'Your account is eligible for Verified Badge — Complete now',
-    '🔥 Your post is Trending — Likes increased by 3,400!',
-    'New follower alert — Someone special is following you',
-    'Click to view message from your new follower now!',
+    'You have 47 new followers waiting to connect with you!',
+    'VIRAL: This video of you is getting thousands of views 😲',
+    '🔥 TRENDING: Your post is going viral — See reactions now!',
+    'Get 10,000 real Instagram followers for FREE — Limited offer',
+    'You\'ve been mentioned in a viral thread — Check it out!',
   ],
   newsletter:[
-    'Weekly Tech Newsletter — Latest AI & Robotics updates',
-    'Your Monthly Digest is here — Top stories this week',
-    'Company Announcement: Important updates for May 2026',
-    'This week\'s newsletter — Latest news curated for you',
-    'Monthly Digest: Weekly update from our team',
+    'May 2026 Newsletter — Top stories this week',
+    'Your weekly digest is here — 15 articles you\'ll love',
+    'Monthly bulletin: Updates from our team',
+    'This week\'s top reads — curated just for you',
+    'Subscription confirmed: Your first edition is ready',
   ],
   safe:[
-    'Meeting Reminder for Tomorrow — Robotics Project at 10 AM',
-    'Re: Project Update — Q2 report ready for review',
+    'Team meeting on Friday at 3 PM — Please confirm attendance',
     'Your order #45231 has shipped — Tracking details inside',
-    'Thank you for your submission — Official communication',
-    'Regards: Team meeting scheduled for Friday at 3 PM',
-    'Project update: Q3 roadmap — Please review and confirm',
-    'Welcome to the team — Onboarding schedule attached',
-    'Parent-Teacher Meeting: Schedule for this Saturday',
+    'Re: Project update — Q2 report ready for review',
+    'Lunch tomorrow? New restaurant near office!',
+    'Monthly newsletter — May 2026 highlights',
+    'Your invoice #4521 is ready',
+    'Welcome to the team — Onboarding schedule',
+    'Parent-Teacher Meeting: Schedule for May 2026',
   ],
 };
 
 const BODIES_BY_TYPE = {
   phishing:[
-    `Dear Customer,\n\nYour bank account verification is pending. Please click the link below and login immediately to avoid account suspension.\n\n⚠️ Urgent action required — Your account will be blocked in 24 hours if you do not verify now.\n\nWhat you need to do:\n1. Click the secure link below\n2. Enter your account details\n3. Provide your OTP for final confirmation\n\n👉 Verify My Account Now → www.account-suspended-now.xyz/verify\n\nThis link expires in 24 hours. Do not share this email.\n\nRegards,\nAccount Security Team`,
-
-    `Hello,\n\nWe detected a suspicious login to your account from an unrecognized device.\n\nUrgent action required: Click here immediately to secure your account before it is permanently blocked.\n\nSteps to verify:\nStep 1: Click the link below\nStep 2: Login with your credentials\nStep 3: Complete OTP verification\n\n👉 Click Here to Verify → http://otp-verify-secure.net/confirm-now\n\n⚠️ Your account will be suspended if you do not act within 12 hours.\n\nAccount Security Team`,
-
-    `URGENT NOTICE\n\nDear Account Holder,\n\nYour account has been suspended due to multiple failed login attempts from an unknown location.\n\nTo restore access, you must verify your account immediately.\n\n👉 Verify Your Account → http://login-confirm-id.biz/restore\n\nOTP has been sent to your registered mobile number. Enter the OTP on the link above to confirm your identity.\n\n⚠️ Failure to verify within 6 hours will result in permanent account termination.\n\nSecurity Team`,
-
-    `Dear Valued Customer,\n\nA suspicious sign-in attempt was made on your account. For your protection, your account access has been temporarily blocked.\n\nClick here immediately to verify your identity and restore access:\n\n👉 Restore My Account → http://account-blocked-check.org/verify-otp\n\nYou will be asked to:\n• Enter your registered mobile number\n• Provide OTP sent to your phone\n• Confirm your account details\n\nUrgent action required — Link expires in 2 hours.\n\nCustomer Support Team`,
-
-    `ACCOUNT SUSPENSION NOTICE\n\nDear User,\n\nWe have detected unusual activity on your account. Your account will be blocked unless you verify your identity right now.\n\nRequired: OTP Verification\n\n👉 Verify Account Now → http://suspend-alert-secure.com/otp-check\n\n⚠️ This is an urgent action required. If you do not complete verification today, all your account data will be permanently deleted.\n\nDo not ignore this email.\n\nBank Security Team`,
-
-    `Security Alert — Urgent Action Required\n\nHello,\n\nWe noticed someone tried to login to your account from a new device. If this was not you, your account is at risk.\n\nClick here immediately:\n👉 Secure My Account → http://click-verify-now.biz/secure\n\nYou must:\n1. Verify your identity\n2. Complete OTP verification\n3. Update your password\n\nYour account will be suspended if no action is taken within 24 hours.\n\nSecurity Operations Team`,
-
-    `FINAL WARNING — Account Will Be Blocked\n\nDear Customer,\n\nThis is your final notice. Your bank account will be permanently blocked in 12 hours due to incomplete verification.\n\nUrgent action required — Verify your account immediately.\n\n👉 Verify Now → http://urgent-account-action.net/verify-id\n\nIf you fail to verify, you will lose access to:\n❌ Your account balance\n❌ All pending transactions\n❌ Online banking access\n\nOTP has been sent. Complete verification now.\n\nBank Security Department`,
+    `Dear Valued Customer,\n\nWe have detected suspicious activity on your account from an unrecognized device located in Delhi, India at 11:47 PM. For your protection, we have temporarily suspended your access.\n\nTo restore your account access, you must complete identity verification within the next 24 hours. Failure to do so will result in permanent account termination and all associated data will be erased.\n\n⚠️ What you need to do:\n1. Click the secure verification link below\n2. Enter your full name, date of birth, and account number\n3. Provide your OTP for final confirmation\n\n👉 Verify My Account Now → www.secure-login-verify.com/acct-restore-2026\n\nThis link expires in 24 hours. Please do not share this email with anyone.\n\nIf you did not receive this alert, your account may already be compromised. Contact our security team immediately at support@secure-login-verify.com.\n\nRegards,\nAccount Security Team\nGlobal Banking Services`,
+    `Hello,\n\nYour PayPal account has been permanently limited due to unusual activity we detected on May 14, 2026.\n\nWe noticed:\n• 3 failed login attempts from unknown IP addresses\n• Transaction of ₹49,999 flagged for review\n• Account information mismatch detected\n\nTo remove these limitations and restore full access, you must verify your identity immediately.\n\n📋 Steps to verify:\nStep 1: Click the link below\nStep 2: Log in with your email and password\nStep 3: Update your billing information\n\n👉 Restore PayPal Access → http://paypal-verify-id.net/restore\n\n⏰ WARNING: If you do not complete verification within 48 hours, your account will be permanently closed and all pending transactions will be cancelled.\n\nPayPal Customer Protection Team`,
+    `IMPORTANT SECURITY NOTICE\n\nWe detected a sign-in to your Apple ID from a new device:\n\nDevice: iPhone 14 Pro\nLocation: Mumbai, Maharashtra\nDate & Time: May 15, 2026 — 2:33 AM IST\nIP Address: 192.168.44.21\n\nIf this was you, you can ignore this message.\n\nIf this was NOT you — your Apple ID is at serious risk. Your photos, contacts, and payment information may have been accessed.\n\n🔐 Secure your account NOW:\n→ Change your password immediately\n→ Verify your trusted phone numbers\n→ Review recent purchases\n\n👉 Click here to secure your Apple ID → https://appleid-locked.info/verify-now\n\nThis link expires in 6 hours. Do not share it with anyone.\n\nApple Security Team`,
+    `Dear Amazon Customer,\n\nYour recent order (#112-7843902-2847261) has been placed on hold due to a billing issue. We were unable to process your payment with the card on file.\n\nORDER DETAILS:\n• iPhone 15 Pro Max (256GB) — ₹1,34,900\n• Apple AirPods Pro — ₹26,900\n• Total: ₹1,61,800\n\nTo release your order and prevent cancellation, please update your payment details within the next 12 hours.\n\n👉 Update Payment Details → http://amazon-security-check.org/billing-update\n\nIf you do not update by 11:59 PM tonight, your order will be automatically cancelled and your account may be suspended.\n\nNote: Do not reply to this email. Use the link above for all account actions.\n\nAmazon Customer Service Team`,
+    `Dear Google Account Holder,\n\nWe detected an unauthorized sign-in attempt to your Google Account (you@gmail.com) from:\n\nLocation: Lagos, Nigeria\nDevice: Unknown Android Device\nTime: May 16, 2026 at 4:12 AM\n\nThis sign-in was blocked for your safety. However, if the attacker continues, your Gmail, Google Drive, YouTube, and Google Pay data may be compromised.\n\n✅ Immediate Actions Required:\n1. Verify it was not you using the button below\n2. Update your account recovery options\n3. Enable 2-factor authentication\n\n👉 Review Sign-in Activity → https://google-security-team.biz/verify-device\n\nYour prompt action will keep your account safe.\n\nGoogle Security Team\ngoogle-security-team.biz`,
+    `FINAL WARNING — Microsoft Account\n\nYour Microsoft account is scheduled for deletion in 24 hours due to:\n\n• Violation of Microsoft Terms of Service (Section 4.2)\n• Suspicious usage patterns detected\n• Unverified account information\n\nThis will affect:\n❌ All your emails and Outlook data\n❌ OneDrive files and documents\n❌ Xbox Game Pass and subscriptions\n❌ Office 365 access\n\nTo prevent deletion, you MUST verify your account now.\n\n👉 VERIFY MY ACCOUNT → https://microsoft-accountverify.com/save-account\n\nWarning: This verification link expires in 24 hours. Once expired, account deletion CANNOT be stopped.\n\nMicrosoft Trust & Safety Team`,
+    `URGENT: Bank of India Security Alert\n\nDear Customer,\n\nA transaction of ₹95,000 was initiated from your account ending in **4421 at 1:23 AM from an unrecognized device.\n\nTransaction Reference: TXN-BOI-2026-98234\n\nIf you DID NOT authorize this transaction, your funds are at risk. You must:\n\n1. Click the secure link below immediately\n2. Verify your NetBanking credentials\n3. Cancel the unauthorized transaction\n\n👉 Secure My Account → https://bank-of-india-secure.xyz/verify-txn\n\n⚠️ If you fail to act within 2 hours, the transaction will be processed and funds cannot be recovered.\n\nBank of India Digital Security Team\nToll-free: 1800-XXX-XXXX (Fake Number)`,
   ],
-
   promo_spam:[
-    `Hurry up! 🔥\n\nMega summer sale starts today! Use coupon SAVE70 and get huge discounts on all gadgets.\n\nFlat 70% OFF on Electronics — Limited time offer!\n\n🏷️ Today's Best Deals:\n• SmartPhone X — ₹49,999 → ₹14,999 (70% OFF)\n• TabPro Lite — ₹39,999 → ₹11,999 (70% OFF)\n• BassMax Headphones — ₹4,999 → ₹1,499 (70% OFF)\n\n🎁 Extra cashback of ₹500 on orders above ₹2,999!\n\nUse coupon: SAVE70 at checkout\n\n⏰ Limited time — Sale ends tonight at 11:59 PM!\n\n👉 SHOP NOW → ShopaDeal.com\n\nHappy Shopping!\nShopaDeal Team`,
-
-    `Exclusive Cashback Offer — Just For You! 🎁\n\nHi Valued Member,\n\nYou have a special cashback of ₹500 waiting in your account — Claim before it expires!\n\nThis is a limited time offer available only for our premium members.\n\n✅ 50% OFF on all products — No minimum order\n✅ Extra cashback of ₹200 on first purchase today\n✅ Use coupon CASH50 for additional discount\n\nBest deals this week:\n• EarPods Ultra — ₹1,999 (was ₹3,999)\n• FitBand Pro — ₹2,499 (was ₹4,999)\n• RunMax Shoes — ₹1,499 (was ₹2,999)\n\n⚠️ Limited time — Coupon expires at midnight tonight!\n\n👉 CLAIM CASHBACK NOW → www.cashbackzone.com\n\nThe CashBack Team`,
-
-    `🚨 BIG SALE ALERT — Flat 50% OFF Starts NOW!\n\nHi,\n\nOur biggest sale of the year is LIVE! Limited time offer — don't miss out!\n\n🛒 WHAT YOU GET:\n• Flat 50% discount on all gadgets\n• Extra coupon BIGSALE50 for additional 10% off\n• Free delivery on orders above ₹999\n• Cashback of ₹300 via UPI payment\n\nHot deals:\n🔥 VisionMax TV 43" — ₹22,999 (was ₹45,999)\n🔥 SnapPro DSLR — ₹29,999 (was ₹59,999)\n🔥 CleanBot Vacuum — ₹9,999 (was ₹19,999)\n\n⏰ Sale valid today only — Limited time!\n\n👉 SHOP NOW → www.megasale-hub.com/bigsale\n\nMegaSale Team`,
-
-    `Weekend Special — Buy 2 Get 3 FREE! 🎉\n\nHi,\n\nCelebrate the weekend with our biggest discount offer ever!\n\n🛒 Buy 2 Get 3 FREE — All Categories\n💰 Extra 20% cashback on every order\n🎁 FREE gift on orders above ₹1,999\n🚀 Same-day delivery available\n\nSpotlight deals:\n★ GameSound Pro Headset — ₹3,999 (Reg: ₹9,999)\n★ SlimFit Shirts (Pack of 3) — ₹1,299 (Reg: ₹3,999)\n★ AquaVault Water Bottle — ₹299 (Reg: ₹999)\n\nUse coupon WEEKEND30 for extra 30% off!\n\n🕐 Limited time — This weekend only!\n\n👉 START SHOPPING → www.bigstore.com/weekend\n\nBigStore Team`,
-
-    `⚡ Lightning Sale — Next 2 Hours Only!\n\nHi,\n\nFlash sale is LIVE right now! These huge discounts disappear in 2 hours!\n\n⚡ DEAL 1: AirPure 3000 — 63% OFF — Limited time!\n⚡ DEAL 2: VisionMax Smart TV — 58% OFF — Limited time!\n⚡ DEAL 3: BrushSonic Electric — 73% OFF — Limited time!\n\nUse coupon FLASH60 for an extra discount!\n\nCashback of ₹500 available on all orders today.\n\n⏰ Limited time offer — Deals expire at 3:00 PM!\n\n👉 GRAB DEALS NOW → www.flashdeals.shop/lightning\n\nFlashDeals Team`,
-
-    `New Arrivals — Exclusive Offer Inside! 🆕\n\nHello,\n\nBig sale on new arrivals — special discount just for you!\n\nThis week's top picks:\n💻 SmartDesk Lamp — ₹1,499 (40% OFF)\n📱 PowerPad Charger — ₹999 (50% OFF)\n🎧 AirBuds Wireless — ₹2,499 (45% OFF)\n👟 TrailRun Shoes — ₹3,299 (35% OFF)\n\nUse coupon NEW40 for 40% off any new arrival!\n\nCashback offer: Get ₹200 extra cashback via coupon NEW40CASH.\n\nFree delivery + 15-day easy returns!\n\n👉 SEE YOUR DEALS → www.discounthub.io/new\n\nDiscountHub Team`,
+    `Hey there! 👋\n\n🔥 FLASH SALE — 70% OFF everything!\n\nThis is your LAST CHANCE to grab the biggest deals of the year. Our annual Mega Sale is LIVE for the next 3 hours only. After that, prices go back to normal forever.\n\n🏷️ Today's Hottest Deals:\n• Apple iPhone 15 — ₹49,999 (was ₹1,34,900) — 63% OFF\n• Samsung Galaxy S24 — ₹39,999 (was ₹79,999) — 50% OFF\n• Sony Headphones — ₹4,999 (was ₹19,999) — 75% OFF\n• Nike Air Max Shoes — ₹2,499 (was ₹9,999) — 75% OFF\n• Laptop Backpack — ₹999 (was ₹3,499) — 71% OFF\n\n🎁 FREE GIFT on orders above ₹2,999!\n\nUse code: MEGASALE70 at checkout to apply your additional discount.\n\n⏰ Sale ends at 11:59 PM tonight. Don't miss out!\n\n👉 SHOP NOW → ShopaDeal.com\n\nHappy Shopping!\nThe ShopaDeal Team`,
+    `Exclusive Deal Just For You! 🎁\n\nHi Valued Member,\n\nAs one of our premium customers, you've been personally selected for a SPECIAL OFFER that isn't available to the general public.\n\n🌟 YOUR EXCLUSIVE BENEFITS:\n✅ 40% OFF on all products — No minimum order\n✅ FREE next-day delivery on every purchase\n✅ Extra 500 loyalty points on your first order this week\n✅ Priority customer service access\n\nYour personal discount code: LOYAL40VIP\n⏰ Valid until: Sunday, May 19, 2026, 11:59 PM\n\nBest sellers this week:\n• Wireless Earbuds — ₹1,999 (was ₹3,499) — Use code\n• Smart Watch — ₹4,499 (was ₹8,999) — Use code\n• Running Shoes — ₹2,199 (was ₹4,499) — Use code\n\n⚠️ This exclusive code is single-use and cannot be shared. Act fast — only limited stock available!\n\n👉 SHOP NOW → www.flashdeals.shop\n\nThe FlashDeals VIP Team`,
+    `🚨 YOUR CASHBACK IS EXPIRING! 🚨\n\nDear Customer,\n\nYou have an unclaimed cashback of ₹500 in your account that will expire in 24 hours if not redeemed!\n\nThis cashback was credited to you from your last 3 purchases. Don't let it go to waste!\n\nHOW TO CLAIM YOUR ₹500 CASHBACK:\nStep 1: Click the button below\nStep 2: Add any item to your cart\nStep 3: Your cashback will be auto-applied at checkout\n\nBONUS: If you shop today, you'll earn an EXTRA ₹200 cashback on top!\n\nProducts trending near you:\n🔥 Protein Powder — ₹1,299 → Pay only ₹799 after cashback\n🔥 Yoga Mat — ₹699 → Pay only ₹199 after cashback\n🔥 Study Desk Lamp — ₹999 → Pay only ₹499 after cashback\n\n👉 CLAIM CASHBACK NOW → www.weeklysale.net/cashback\n\n⏰ Expires: Tonight at 11:59 PM\nDon't miss out — this is a one-time offer!\n\nTeam WeeklySale`,
+    `WEEKEND SPECIAL — This Sunday Only! 🎉\n\nHi,\n\nCelebrate the weekend with our biggest deals ever:\n\n🛒 BUY 2 GET 3 FREE — All Categories\n🎁 FREE gift wrapping on all orders\n🚀 Same-day delivery in select cities\n💰 Extra 20% cashback via UPI payment\n\nThis weekend's SPOTLIGHT DEALS:\n★ Gaming Headset — ₹3,999 (Reg: ₹9,999)\n★ Bluetooth Speaker — ₹1,499 (Reg: ₹4,999)\n★ Formal Shirts (Pack of 3) — ₹1,299 (Reg: ₹3,999)\n★ Stainless Water Bottle — ₹299 (Reg: ₹999)\n★ Engineering Drawing Kit — ₹599 (Reg: ₹1,499)\n\nDon't forget: Use code WEEKEND20 for additional 20% off any order!\n\n🕐 Offer valid: Saturday & Sunday ONLY\n\n👉 START SHOPPING → www.bigstore.com/weekend\n\nSee you this weekend!\nBigStore Team`,
+    `New Arrivals Alert! 🆕 Just For You\n\nHello,\n\nBased on your browsing history, we've handpicked items we think you'll absolutely love:\n\nPERSONAL PICKS FOR YOU:\n💻 Smart Desk Lamp with USB charging — ₹1,499\n📱 Wireless Phone Charger (15W) — ₹999\n🎧 True Wireless Earbuds — ₹2,499\n👟 Running Shoes (Latest Collection) — ₹3,299\n🎒 Anti-theft Laptop Backpack — ₹2,199\n📚 Bestseller Book Bundle (5 books) — ₹999\n\nEXTRA SAVINGS:\n→ Use code NEW20 for 20% off any new arrival\n→ Free shipping on orders above ₹999\n→ 15-day easy returns on all items\n\nPlus: Check out our new collections in Electronics, Fashion, Books, and Sports!\n\n👉 SEE YOUR PICKS → www.techbazaar.io/new-arrivals\n\nHappy browsing!\nTechBazaar Team`,
+    `⚡ LIGHTNING DEALS — Next 2 Hours Only!\n\nHi,\n\nLightning deals are LIVE right now. These prices disappear after 2 hours — don't miss them!\n\n⚡ DEAL 1: Smart TV 43" — ₹22,999 (MRP ₹54,990) — 58% OFF — 67% CLAIMED\n⚡ DEAL 2: Air Purifier — ₹7,499 (MRP ₹19,999) — 63% OFF — 45% CLAIMED\n⚡ DEAL 3: Robot Vacuum — ₹12,999 (MRP ₹34,990) — 63% OFF — 82% CLAIMED\n⚡ DEAL 4: DSLR Camera — ₹34,999 (MRP ₹89,990) — 61% OFF — 23% CLAIMED\n⚡ DEAL 5: Electric Toothbrush — ₹1,499 (MRP ₹5,490) — 73% OFF — 91% CLAIMED\n\n⏰ Deals expire at: 3:00 PM today\n\nNote: Items with 80%+ claimed may sell out before the deal ends!\n\n👉 GRAB DEALS NOW → www.brandclub.shop/lightning\n\nAct fast!\nBrandClub Deals Team`,
   ],
-
   scam:[
-    `Dear Friend,\n\nCONGRATULATIONS! 🎉\n\nYour email has been selected for an international lottery reward!\n\nPRIZE DETAILS:\n💰 Prize Money: ₹25,00,000 (Twenty-Five Lakhs)\n🎫 Lottery Reference: WIN-2026-GL-48291\n🏆 Claim Reward: International Lottery Board — May 2026\n\nTo claim your reward, send your bank details to receive the amount:\n1. Your full name\n2. Bank account number\n3. A processing fee of ₹2,500 (fully refundable)\n\n⚠️ Claim your prize within 48 hours or it will be forfeited.\n\nContact our Claims Agent:\nEmail: winner@lottery-reward.com\n\nWarmly,\nLottery Prize Committee`,
-
-    `🏆 FINAL NOTICE — YOU HAVE WON $50,000!\n\nDear Lucky Winner,\n\nCongratulations! Your email was randomly selected to claim reward of $50,000 USD from our international lottery.\n\nThis is your final notice to claim your prize money before it is reallocated.\n\nTo claim reward:\n→ Send your bank details for wire transfer\n→ Pay processing fee of $50 (fully refundable)\n→ Respond within 72 hours\n\nContact: prizes@claim-reward-now.net\n\nDO NOT share this email with anyone.\n\nInternational Lottery Board`,
-
-    `INVESTMENT OPPORTUNITY — Earn Money Fast!\n\nDear Friend,\n\nAre you looking for a way to earn money fast? We have an exclusive investment opportunity just for you!\n\n💰 Invest ₹10,000 — Get ₹30,000 in 7 days (300% returns!)\n💰 Invest ₹50,000 — Get ₹1,50,000 in 30 days\n\nThis is a limited time investment opportunity with guaranteed returns.\n\nHow it works:\n1. Send your investment amount\n2. Register with your bank details\n3. Receive your prize money directly to your account\n\n⚠️ Only 20 slots remaining — Claim reward now!\n\nContact: invest@earnfast-global.biz\n\nGlobal Investment Board`,
-
-    `YOUR LOTTERY TICKET HAS WON — CLAIM NOW!\n\nDear Ticket Holder,\n\nCongratulations! Your lottery ticket number LT-2026-9987 has won.\n\nPRIZE AMOUNT: ₹80,00,000 (Eighty Lakhs)\n\nTo claim your prize money, contact us immediately:\n\nClaims Officer: Mrs. Priya Sharma\nPhone: +91-98765-43210\nEmail: prize@claim-reward-now.net\n\nYou will need:\n✓ Your ID proof\n✓ Bank details for the money transfer\n✓ Processing fee: ₹3,500 (fully refundable)\n\n⚠️ Do NOT tell anyone about this prize until funds are transferred.\n\nLottery Award Centre`,
-
-    `STRICTLY CONFIDENTIAL — Special Prize Money Notice\n\nDear Friend,\n\nA special prize money of USD 2,000,000 has been earmarked for transfer to you as part of our global humanitarian initiative.\n\nThis is a genuine investment opportunity — no catch, no lottery.\n\nTo claim reward and receive the amount:\nPhase 1: Send your bank details\nPhase 2: Pay processing fee ($200 — fully refundable)\nPhase 3: Earn money fast — transfer within 5 banking days\n\nPlease treat this with absolute confidentiality.\n\nContact: agent@investment-opportunity.net\n\nAwaiting your response,\nRichard Moore\nGlobal Funds Board`,
+    `Dear Friend,\n\nCONGRATULATIONS! 🎉🎊\n\nYour email address has been randomly selected as the GRAND PRIZE WINNER of our International Email Lottery Draw for May 2026!\n\nPRIZE DETAILS:\n💰 Cash Prize: USD $10,000 (approx. ₹8,30,000)\n🎫 Reference Number: WIN-2026-GL-48291\n🏆 Lottery Name: Global Email Lottery — May 2026 Draw\n\nTo claim your prize, you must respond within 48 HOURS with the following:\n1. Your full legal name\n2. Your residential address\n3. Your phone number\n4. A processing fee of $50 (fully refundable upon prize disbursement)\n5. Bank account details for wire transfer\n\n⚠️ IMPORTANT: This prize will be forfeited if not claimed within 48 hours.\n\nContact our Claims Agent:\nName: Mr. James Collins\nEmail: james.collins@lottery-global.com\nWhatsApp: +1 (555) 0123-4567\n\nWarmly,\nGlobal Email Lottery Prize Committee\nRef: WIN-2026-GL-48291`,
+    `🏆 FINAL NOTICE — YOU HAVE WON $50,000 USD\n\nThis is your FINAL NOTICE before your prize is reallocated.\n\nDear Winner,\n\nYour email address was the winning entry in our international prize draw sponsored by a consortium of charitable organizations. Your prize amount is:\n\n💵 FIFTY THOUSAND US DOLLARS ($50,000 USD)\n\nThis is equivalent to approximately ₹41,50,000 at current exchange rates.\n\nWHY YOU WON:\nYour email was randomly selected from a global database of 14 million entries during our quarterly draw on May 1, 2026.\n\nTO CLAIM YOUR PRIZE:\n⏰ You have exactly 72 hours from receipt of this email.\n\nRequired information:\n→ Scan of government ID (Aadhaar/Passport)\n→ Bank account number and IFSC code\n→ A small transfer fee of ₹2,500 (for processing — fully refunded)\n\nReply to: claims@cashwinners.net\nOr WhatsApp: +44 7700 123456\n\nDO NOT SHARE THIS EMAIL with anyone until your prize is secured.\n\nThe Prize Disbursement Team\nInternational Charitable Lottery Organization`,
+    `URGENT: Unclaimed Inheritance — ₹8,00,00,000 (Eight Crore Rupees)\n\nDear Friend,\n\nMy name is Barrister Samuel Okonkwo, a senior legal practitioner in Lagos, Nigeria. I am reaching out to you on a matter of utmost confidentiality and urgency.\n\nMy client, the late Dr. Rajiv Kapoor (a non-resident Indian businessman), passed away intestate (without a will) in 2019, leaving behind an estate valued at ₹8 crore in a European bank. Due to the absence of a next-of-kin, this money faces government confiscation within 60 days.\n\nSince you share the same surname as my late client, I propose that you stand in as the legal beneficiary. We will split the funds 60-40 in your favour.\n\nAll I need from you:\n• Full name and address\n• A copy of your ID proof\n• An advance fee of ₹15,000 for legal documentation\n\nThis arrangement is 100% legal and risk-free. Your identity will be fully protected.\n\nPlease respond URGENTLY as time is running out.\n\nWith trust,\nBarrister Samuel Okonkwo\nLagos, Nigeria\nokonkwo.legal@inheritance-transfer.org`,
+    `🎰 YOUR LOTTERY TICKET HAS WON — CLAIM NOW!\n\nDear Ticket Holder,\n\nThis is an official notice from the National Lottery Award Centre.\n\nYour lottery ticket number: LT-2026-9987-INDIA\n\nHas been matched in our system and you have WON:\n\nPRIZE AMOUNT: ₹80,00,000 (Eighty Lakhs)\n\nThis prize has been waiting unclaimed since March 2026. We have traced this ticket to your email address through our national database.\n\nURGENT: To prevent forfeiture of your prize, contact us immediately:\n\nClaims Officer: Mrs. Priya Sharma\nPhone: +91-98765-43210\nEmail: priya.sharma@lotto-award-center.biz\nWhatsApp: +91-98765-43210\n\nYou will need:\n✓ National ID or Aadhaar Card\n✓ Tax clearance certificate (we can arrange — fee: ₹3,500)\n✓ Bank details for transfer\n\n⚠️ Do NOT tell anyone about this prize until funds are transferred.\n\nNational Lottery Award Centre\nOfficial Reg. No.: NLAC-2026-007 (FAKE)`,
+    `STRICTLY CONFIDENTIAL — Special Award Notice\n\nDear Friend,\n\nOn behalf of the Board of Directors of the Millionaire Club International, I write to inform you of a special monetary award in your name.\n\nThe sum of USD 2,000,000 (Two Million US Dollars) has been earmarked for transfer to a deserving individual from your region as part of our annual global humanitarian initiative.\n\nYour email was shortlisted from a global pool of 50 million emails. You were selected based on your email domain's history of responsible communication.\n\nTRANSFER PROCESS:\nPhase 1: Documentation ($200 processing fee — fully deductible from your award)\nPhase 2: Identity verification (ID + Bank details)\nPhase 3: Wire transfer within 5 banking days\n\nThis is not a lottery. This is a GIFT. No catch.\n\nPlease treat this with absolute confidentiality.\n\nContact: Richard.Moore@millionaireclub.net\n\nAwaiting your response,\nRichard Moore\nExecutive Director, Millionaire Club International`,
   ],
-
   malware:[
-    `Hi,\n\nPlease check the attached invoice document and confirm payment today.\n\nInvoice Details:\n• Invoice #: INV-2026-4421\n• Amount: ₹2,45,000\n• Client: TechSolutions Pvt. Ltd.\n• Due Date: May 20, 2026\n\nEnable editing and enable macros to view the full invoice content.\n\n👉 Download Attachment → http://invoice-attachment.biz/inv-4421\n\nIf payment has already been made, please confirm with your transaction reference.\n\nAccounts Team`,
-
-    `Hello,\n\nA ZIP file containing your updated salary document is ready for download.\n\nFile Details:\n• Name: Salary_Revision_2026.zip\n• Size: 18.4 MB\n• Sent by: HR Department\n\nSteps to open:\n1. Download attachment below\n2. Extract the ZIP file\n3. Enable macros to view full document\n4. Enter password: SAL@2026\n\n👉 Download Attachment → http://zip-file-share.com/sal-rev-2026\n\n⚠️ File expires in 48 hours. Please download attachment immediately.\n\nHR Department`,
-
-    `URGENT: Please Open Document for Review\n\nDear Team Member,\n\nThe Finance Department has sent you an important document for review.\n\nFile: Invoice_Final_2026.exe\nUploaded by: Finance Department\nDeadline: Today, 5:00 PM\n\nTo open document:\n1. Click the download link\n2. Enable macros when prompted\n3. Enable editing to see full content\n\n👉 Open Document → http://download-docs-now.net/invoice-final\n\n⚠️ Failure to open document by EOD will delay payment by 30 days.\n\nDo not forward this link to others.\n\nFinance & Compliance Team`,
-
-    `FILE SHARING NOTIFICATION\n\nDear Employee,\n\nYour project lead has shared important files — download attachment immediately.\n\n📎 File 1: Employee_Handbook_2026.exe (12.1 MB)\n📎 File 2: Q2_Performance_Data.zip (8.7 MB)\n\nInstructions:\n1. Download attachment via the link below\n2. Enable macros to view full content\n3. Password: QD@2026\n\n👉 Download Attachment → http://enable-macros-doc.biz/pkg-2026\n\n⚠️ Files expire in 24 hours. Open document immediately.\n\nShared File System`,
-
-    `Please Review — Invoice Attached\n\nHi,\n\nPlease find the payment invoice attached below. Confirm payment today.\n\nFile: Payment_Invoice_Attached_2026.zip\nSize: 6.2 MB\nNote: Contains Q2 payment records\n\nTo view the full invoice:\n1. Download attachment\n2. Enable macros when prompted\n3. Enable editing to view all content\n\n👉 Download Now → http://open-document-urgent.net/payment-invoice\n\nIMPORTANT: Enable macros and enable editing to see all invoice details.\n\nFile expires in 48 hours.\n\nAccounts Team`,
+    `Hello,\n\nPlease find attached the document you requested. It contains the complete project report along with the financial breakdown for Q1 and Q2 2026.\n\n📎 Attached: Project_Report_Q2_2026.exe\n\nIMPORTANT INSTRUCTIONS:\n1. Download the file to your desktop\n2. Right-click and select "Run as Administrator"\n3. If Windows Defender blocks it, click "More info" → "Run anyway"\n4. The document will open automatically after a brief installation\n\nThe file is password protected for security. Password: doc2026open\n\nIf you face any issues opening the file, reply to this email or call us at the number below.\n\nPlease review urgently as the deadline is tomorrow.\n\nRegards,\nTeam FilShare`,
+    `Hi,\n\nYour invoice is attached for immediate review and payment.\n\nInvoice #: INV-2026-4421-FINAL\nAmount Due: ₹47,500\nDue Date: May 20, 2026\n\n📎 DOWNLOAD INVOICE: Invoice_Final_4421.zip\n\nNote: The ZIP file contains the invoice PDF along with payment instructions. Please extract and open "Invoice_Open_Me.exe" inside to view.\n\nPayment can be made via NEFT/RTGS to our account:\nBank: Fake National Bank\nAccount: 9988776655\nIFSC: FNB0000123\n\nIf you have already made payment, please disregard. Otherwise, late payment fees of 2% per week apply.\n\nFor queries: billing@cloudstorage99.biz\n\nThank You,\nFinance Department`,
+    `Hi,\n\nYour colleague has shared an important file with you via CloudDrop.\n\nSender: Rahul Verma (rahul.verma@workplace.com)\nFile Name: Salary_Revision_2026.exe\nFile Size: 24.3 MB\nShared on: May 16, 2026\n\nThis file has been flagged as CONFIDENTIAL by the sender.\n\n👉 Download File → http://fileshare-urgent.com/get/SalaryRev2026\n\n⚠️ This link expires in 4 hours.\n\nNote: Since this is an executable, your browser may warn you. To open:\n1. Click "Keep" when Chrome warns you\n2. Right-click → Run as Administrator\n3. Enter company password: WrkPlc2026 when prompted\n\nRegards,\nCloudDrop Secure File Sharing`,
+    `Dear User,\n\nYou have received a document that requires your electronic signature.\n\nDocument: Employment_Contract_Amendment.zip\nSent by: HR Department, TechCorp Pvt. Ltd.\nCreated: May 15, 2026\nExpires: May 18, 2026\n\nThis document is legally binding once signed. Please review and sign at your earliest convenience.\n\n📎 Download Document Package → http://docusign-verify.xyz/doc-package\n\nInstructions:\n1. Download and extract the ZIP file\n2. Open "Sign_Here_Employment.exe"\n3. Follow on-screen instructions to sign digitally\n4. Your signed copy will be emailed automatically\n\nIf you did not request this document, please contact HR immediately.\n\nDocuSign Verification Services (FAKE)`,
+    `URGENT: Files Shared With You — Action Required\n\nHi,\n\n3 confidential files have been shared with you by your team manager. These files contain sensitive data and must be reviewed before the project deadline tomorrow.\n\nFiles:\n📄 Annual_Report_2026_FINAL.exe (12.4 MB)\n📊 Client_Database_Export.zip (8.7 MB)\n📋 Salary_Sheet_May2026.rar (5.2 MB)\n\n👉 Access Files → http://quickdrop-share.io/files/urgent-2026\n\nAccess Code: QD-4421-URGENT\n\nInstructions for opening:\n• Disable antivirus temporarily (these are safe company files)\n• Right-click each file → Run as Administrator\n• Enter access code when prompted\n\nDeadline: Tonight by 10 PM\n\nPlease don't delay — the manager has asked for confirmation by EOD.\n\nQuick Drop File Services`,
   ],
-
   fakebiz:[
-    `Dear User,\n\nYour refund of ₹8,999 is approved. Contact our support executive immediately to receive the refund.\n\nRefund Details:\n• Amount: ₹8,999\n• Refund Status: Approved\n• Reference: REFUND-2026-4821\n\nTo claim your refund, you must contact customer care today:\n📞 Call our tech support: 1800-000-9999\nOr click below to speak with a support executive.\n\n👉 Contact Support Now → http://customer-care-center.net/refund-claim\n\nYour refund will expire if not claimed within 24 hours.\n\nCustomer Care Team`,
-
-    `TECH SUPPORT ALERT\n\nDear Customer,\n\nWe have detected a virus on your device. Our tech support team has identified the threat.\n\nYour subscription renewal for our protection plan expires today. Renew immediately to keep your device safe.\n\n👉 Contact Tech Support → http://techsupport-helpdesk.biz/renew-now\n\nSubscription renewal fee: ₹999/year\n\nIf you do not renew today, your device protection will be removed and your data may be at risk.\n\nContact our customer care executive immediately.\n\nTech Support Team`,
-
-    `Support Ticket #4821 — Response Required\n\nDear Customer,\n\nWe have raised a support ticket on your behalf regarding your account.\n\nSupport Ticket Details:\n• Ticket #: 4821\n• Issue: Unauthorized subscription renewal\n• Status: Awaiting your response\n• Refund Approved: ₹4,999\n\nContact our customer care team to process your refund:\n👉 Respond to Ticket → http://support-ticket-now.com/ticket-4821\n\nA support executive will assist you. Please contact customer care within 24 hours or your refund approved amount will expire.\n\nCustomer Support Team`,
-
-    `Your Subscription Renewal Is Pending\n\nDear User,\n\nThis is a final reminder — your subscription renews today at 11:59 PM.\n\nIf you do not cancel or renew, you will be automatically charged ₹5,999.\n\nTo cancel or manage your subscription:\n👉 Contact Support → http://subscription-renewal-alert.biz/manage\n\nOr call our customer care: 1800-RENEW-NOW\n\nRefund Approved for cancellations made before tonight:\n• Full refund of ₹5,999 available if you contact us now.\n\nSpeak to a support executive today.\n\nBilling & Subscription Team`,
-
-    `REFUND NOTIFICATION — ₹12,500 Approved\n\nDear Valued Customer,\n\nYour refund has been approved by our customer care team.\n\nRefund Details:\n• Amount: ₹12,500 (Refund Approved)\n• Status: Ready for processing\n• Reference: REF-2026-9921\n\nTo receive your refund, contact our support executive immediately and provide your bank details.\n\nThis refund will expire in 48 hours if not claimed.\n\n👉 Claim Refund → http://refund-approved-center.net/claim\n\nFor tech support or queries, call customer care: 1800-REFUND-NOW\n\nCustomer Support Team`,
+    `Dear PayPal Customer,\n\nWe have identified unusual activity on your PayPal account (ending in **4221). To protect your financial information, we have temporarily restricted your account.\n\nYour account has been limited because:\n• We detected a login from an unrecognized device in Singapore\n• A payment of $289.00 USD was declined due to security concerns\n• Your security questions were answered incorrectly 3 times\n\nTO RESTORE YOUR ACCOUNT:\nPlease verify your identity by clicking the button below and completing our secure verification process.\n\n👉 Verify My PayPal Account → http://paypal-helpdesk-x.com/verify-2026\n\nYou will need:\n• Your email address and password\n• Linked bank account or card details\n• Government-issued ID for verification\n\n⚠️ If you do not verify within 48 hours, your account will be permanently closed and any pending payments will be reversed.\n\nPayPal Customer Protection\npaypal-helpdesk-x.com`,
+    `Important Notice from Amazon\n\nDear Customer,\n\nWe regret to inform you that your Amazon account has been flagged for suspicious activity. Multiple purchase attempts were made from your account using an unrecognized payment method.\n\nFor your security, we have placed a temporary hold on your account. You will not be able to:\n• Make new purchases\n• Access your order history\n• Use Amazon Prime benefits\n\nTO RESTORE ACCESS:\nComplete the account verification process below within 24 hours.\n\n👉 Verify Amazon Account → http://amazon-account-verify.net/restore\n\nVerification steps:\n1. Confirm your name and email\n2. Re-enter your credit/debit card details\n3. Upload a photo ID (Aadhaar/Passport)\n\nYour orders (including any active Prime Video subscriptions) will resume once verification is complete.\n\nAmazon Account Services\namazon-account-verify.net`,
+    `Apple Support — iCloud Storage Full\n\nDear Apple User,\n\nYour iCloud storage (youremail@gmail.com) is 100% full.\n\nCurrent Storage: 5 GB used of 5 GB\nStatus: FULL ⛔\n\nDue to full storage, the following services have been paused:\n• iCloud Backup\n• Photos & Videos Sync\n• iMessage and FaceTime data\n\n⚠️ Your data is at risk of being deleted if storage is not increased within 72 hours.\n\nUPGRADE YOUR STORAGE PLAN:\n→ 50 GB — ₹75/month (RECOMMENDED)\n→ 200 GB — ₹219/month\n→ 2 TB — ₹749/month\n\n👉 Upgrade Now → http://apple-support-center.biz/icloud-upgrade\n\nIMPORTANT: Use the link above to upgrade. Do NOT upgrade through the Settings app, as there is a known bug that may cause data loss.\n\nApple Support Team\napple-support-center.biz`,
+    `Microsoft Subscription Alert\n\nDear Microsoft Customer,\n\nYour Microsoft 365 subscription is due to expire TODAY at 11:59 PM.\n\nSubscription Details:\n• Plan: Microsoft 365 Family\n• Expiry: May 18, 2026\n• Renewal Amount: ₹4,899/year\n\nIf your subscription expires, you will IMMEDIATELY lose access to:\n❌ Word, Excel, PowerPoint (all devices)\n❌ Outlook email and calendar\n❌ OneDrive (1 TB cloud storage)\n❌ Teams for personal use\n\nRENEW NOW — SPECIAL OFFER:\nGet 3 months FREE if you renew before midnight tonight!\n\n👉 Renew Microsoft 365 → http://microsoft-help-desk.org/renew-365\n\nUse your existing Microsoft credentials to log in and complete renewal.\n\n⚠️ If payment fails, your account data may be permanently deleted after 30 days.\n\nMicrosoft Subscription Services\nmicrosoft-help-desk.org`,
+    `SECURITY ALERT — Bank Account Notification\n\nDear Account Holder,\n\nWe have detected an unauthorized access attempt on your bank account linked to this email address.\n\nINCIDENT DETAILS:\n• Date: May 16, 2026, 3:14 AM\n• Location: Attempted from IP: 102.89.34.1 (Lagos, Nigeria)\n• Action: Attempt to modify linked mobile number\n• Status: BLOCKED — Action Required\n\nAlthough we blocked this attempt, your account remains at risk. The attacker may try again.\n\nIMMEDIATE STEPS REQUIRED:\n1. Click the link below within 2 hours\n2. Verify your identity with Aadhaar OTP\n3. Change your NetBanking password\n4. Review all recent transactions\n\n👉 Secure My Account → https://bank-of-india-secure.xyz/account-protect\n\nIf you do not act within 2 hours, we will be forced to freeze your account as a precautionary measure.\n\nDigital Banking Security Team\nNational Bank Security Division`,
   ],
-
   social:[
-    `Hi there! 🎉\n\nYou have 47 new followers waiting to connect with you on SocialFlow!\n\nThese are real people who want to follow your posts. Don't keep them waiting!\n\nAlso — your post from yesterday is going viral right now:\n• 💬 412 comments\n• ❤️ 2,341 likes increased since yesterday\n• 🔁 876 shares\n\nClick to view messages from your new followers:\n\n👉 View New Followers → http://newfollower-alert.com/followers-pending\n\nSocialFlow Notifications Team`,
-
-    `🎉 VERIFIED BADGE OFFER\n\nYour account is eligible for a verified badge!\n\nCongratulations! You have been selected for a blue tick verified badge on your account.\n\nLogin now and complete verification to receive your badge:\n\n👉 Get Verified Badge → http://verified-account-now.net/apply\n\nVerification steps:\n1. Click the link above\n2. Login with your credentials\n3. Complete the verification process\n\nYour verified badge will be active within 24 hours.\n\n⚠️ This offer expires tonight — click to view and apply now.\n\nSocialFlow Verification Team`,
-
-    `🔥 YOUR POST IS TRENDING!\n\nYour post is going viral right now — likes increased by 3,400 in the last hour!\n\n📊 Current stats:\n🔥 Trending Rank: #3 in your region\n❤️ Likes: 22,876 (likes increased rapidly)\n💬 Comments: 1,934\n🔁 Shares: 4,012\n\nSee all reactions now before the trending window closes:\n\n👉 See Reactions → http://trending-post-update.biz/your-post\n\nPhotoShare Alerts Team`,
-
-    `New Follower Alert! 👤\n\nSomeone special has started following your account on SocialFlow!\n\nYour new follower:\n• Profile: Verified Account\n• Followers: 45,000\n• They liked your last 3 posts!\n\nClick to view message they sent you:\n\n👉 Click to View Message → http://click-to-view-msg.net/message-you\n\nAlso — your follower count has increased by 347 today!\n\nDon't miss out — click to view message now.\n\nSocialFlow Notifications`,
-
-    `YOU'VE BEEN MENTIONED IN A TRENDING POST!\n\nHi,\n\nSomeone mentioned you in a trending post that has over 50,000 interactions.\n\nThe post is going viral — your likes increased by 8,400 in just 2 hours.\n\n📊 Post stats:\n❤️ Likes: 50,000+\n💬 Comments: 12,000\n\nClick to view message and the trending post before it gets removed:\n\n👉 View Trending Post → http://likes-increased-now.com/trending-you\n\nViralPost Update Service`,
+    `Hi! 👋\n\nYou have 47 new follower requests waiting!\n\nHere's what's happening on your SociaFlow profile this week:\n\n📊 YOUR WEEKLY STATS:\n• 47 new followers requested to follow you\n• 312 people viewed your profile\n• Your last post got 156 likes!\n• 23 direct messages waiting in your inbox\n\n🔥 TRENDING IN YOUR NETWORK:\n"Top 10 Study Hacks for Exams" — 4,821 views\n"Viral Dance Challenge #SchoolLife" — 12,390 views\n\n💬 New messages from:\n• Sarah: "Hey! Saw your post — loved it!"\n• Rajan: "Can we collaborate on a project?"\n• TrendFeed Team: "Your content is going viral!"\n\n👉 View All Notifications → notifications@sociaflow.com\n\nKeep sharing — your content is getting popular! 🌟\n\nThe SociaFlow Team`,
+    `VIRAL ALERT 🚨 Someone posted a video of you!\n\nHi,\n\nWe detected a video on TrendFeed that appears to feature you or someone who looks like you. This video has already been viewed 14,200 times in the last 3 hours!\n\nVIDEO DETAILS:\n📹 Title: "Caught on Camera — School Prank Gone Wrong"\n👁️ Views: 14,200 and CLIMBING\n❤️ Likes: 2,847\n💬 Comments: 389 (many tagging you!)\n\nYou have the right to request removal of this video if it features you without consent.\n\n👉 VIEW THE VIDEO & TAKE ACTION → http://trendfeed.social/viral-you-2026\n\nOptions available to you:\n• Watch and confirm it's you\n• Request takedown (free)\n• Report to platform moderators\n\nAct quickly — viral content spreads fast. The sooner you act, the less reach it gets.\n\nTrendFeed Content Monitoring Team`,
+    `🎯 LIMITED TIME: Get 10,000 Real Instagram Followers FREE!\n\nHi there!\n\nWe are offering a SPECIAL PROMOTION for a limited time only:\n\nGET 10,000 REAL, ACTIVE INSTAGRAM FOLLOWERS — 100% FREE!\n\nNo bots. No fake accounts. Real people who will engage with your posts.\n\nThis is how it works:\nStep 1: Click the link below\nStep 2: Enter your Instagram username (NO password needed)\nStep 3: Choose your follower package (10K, 50K, or 100K)\nStep 4: Followers start arriving within 6 hours!\n\n👉 CLAIM FREE FOLLOWERS → http://viralpost-updates.com/free-followers\n\n⚠️ This offer is available to only 500 users per day. Once slots are filled, the offer closes.\n\nBONUS: Get 5,000 FREE likes on your last 3 posts when you sign up today!\n\nAlready 3,847 people claimed today. Only 1,153 slots left!\n\nSocialGrow Team`,
+    `You've Been Mentioned in a Viral Thread! 🔥\n\nHi,\n\nYour name and profile were mentioned in a thread that's currently trending on FriendsApp with over 8,000 interactions!\n\nTHREAD DETAILS:\n💬 "Who is the smartest person in your school?" — 8,241 replies\n📍 Location: Your school/college community group\n🔗 Your mention: Post #47 — 312 people tagged you!\n\nPeople are saying great things about you. Don't miss the conversation!\n\n👉 See Your Mentions → http://friendsapp.net/mentions-viral\n\nAlso: You have 12 unread DMs and 5 pending friend requests.\n\nRecent activity in your network:\n• Anjali liked your profile picture\n• Arjun sent you a friend request\n• Your city's local group added you\n\nFriendsApp — Stay Connected\nnotifications@friendsapp.net`,
+    `📱 Your Social Media Report — This Week\n\nHi!\n\nHere's your weekly activity summary across all connected platforms:\n\nINSTAGRAM:\n• Followers gained: +28 (Total: 1,247)\n• Post likes: 234 | Stories views: 891\n• Profile visits: 312\n\nFACEBOOK:\n• New friend requests: 7\n• Post reach: 1,834 people\n• Events nearby: 3 events this weekend\n\nTWITTER/X:\n• Impressions: 4,211 | Mentions: 14\n• New followers: 12\n\n📈 YOUR PROFILE IS GROWING! Want more?\n\n🚀 BOOST YOUR FOLLOWERS TODAY:\n→ Get 50,000 followers for just ₹499 (one-time fee)\n→ Boost any post for ₹99 and reach 10,000 people\n→ Verified badge service — ₹1,499/month\n\n👉 GROW NOW → http://photoshare.io/boost-profile\n\nSocial Media Analytics Team`,
   ],
-
   newsletter:[
-    `Welcome to this week's newsletter! 📰\n\nDear Subscriber,\n\nHere are the latest AI and robotics updates from around the world — your weekly digest is here!\n\nTOP STORIES THIS WEEK:\n1. Latest news: AI robot completes complex surgery for first time\n2. Weekly update: Top 10 robotics companies in India 2026\n3. Company announcement: CognoSpace launches new AI curriculum\n4. Monthly digest: Global tech investment reaches record high\n5. Latest news: India's space programme achieves new milestone\n\n👉 READ FULL NEWSLETTER → www.newsdaily.com/weekly\n\nUnsubscribe | Manage Preferences\n\nNewsDaily Newsletter Team`,
-
-    `Your Weekly Digest Is Here! 📖\n\nHi Reader,\n\nWelcome to your weekly digest — 15 handpicked articles from around the world!\n\nFEATURED READS:\n1. "Weekly update: How AI is changing education in India"\n2. "Latest news: India's GDP growth projected at 7.2%"\n3. "Monthly digest: Top 5 career skills for 2026"\n4. "Company announcement: New government policy on EVs"\n5. "Latest AI tools every student should know"\n\n...and 10 more articles inside!\n\n👉 READ ALL ARTICLES → www.weeklydigest.org/may-2026\n\nUnsubscribe | Manage Preferences\n\nWeeklyDigest — Knowledge, Delivered Weekly`,
-
-    `Monthly Digest — May 2026\n\nDear Subscriber,\n\nHere is your monthly digest and latest news from the Informer Hub community.\n\nCOMPANY ANNOUNCEMENT:\n📌 Tech Talk: "Intro to Machine Learning" — May 20, 4 PM\n📌 Career Fair 2026 — May 23-24 at City Convention Center\n\nWEEKLY UPDATE:\n• New discussion forum launched — 2,400 members joined\n• Mobile app updated with new features\n• Monthly digest section redesigned\n\nFREE RESOURCES:\n→ Machine Learning Basics PDF Guide\n→ Career Planning Template\n→ 20 Free Online Courses — May Special\n\n👉 ACCESS YOUR ACCOUNT → www.informer-hub.net\n\nUnsubscribe\n\nThe Informer Hub Newsletter Team`,
-
-    `This Week's Top Reads 📚\n\nHi there,\n\nYour weekly digest of top reads — curated latest news just for you!\n\nWEEKLY UPDATE — FEATURED:\n⭐ "Why Critical Thinking Is the Skill of the Decade" — 9 min read\n⭐ "Monthly digest: 5 Ways AI Is Changing Healthcare"\n⭐ "Company announcement: India's Rising Role in Global Tech"\n⭐ "Latest news: New Rules of Online Learning"\n⭐ "Weekly update: Study Tips from Top University Students"\n\nPLUS — Company Announcement:\nTopicFlow Podcast is now live! Latest news and expert discussions.\n\n👉 READ NOW → www.topicflow.com/weekly\n\nUnsubscribe | Manage Preferences\n\nTopicFlow Newsletter Team`,
-
-    `Subscription Confirmed — Welcome to MagazinePlus! ✅\n\nHi,\n\nThank you for subscribing to MagazinePlus — your all-in-one newsletter and monthly digest!\n\nYOUR SUBSCRIPTION:\n• Plan: Monthly Standard\n• Start Date: May 18, 2026\n• Monthly Fee: ₹99\n\nWHAT YOU GET:\n✅ Access to 500+ magazines\n✅ Daily newsletter (7 AM delivery)\n✅ Weekly digest of curated articles\n✅ Monthly digest bundles\n✅ Latest news — Ad-free reading\n\nThis is an official company announcement — your first edition is ready!\n\n👉 Read First Edition → www.magazineplus.io/setup\n\nUnsubscribe anytime.\n\nWelcome aboard!\nMagazinePlus Newsletter Team`,
+    `Hello Subscriber,\n\nWelcome to the May 2026 Edition of NewsDailyDigest — your weekly roundup of the most important stories, curated from 500+ sources!\n\n📰 THIS WEEK'S TOP STORIES:\n\n🌍 WORLD NEWS:\n• G7 Summit concludes with new climate agreements\n• Global inflation rates show first signs of cooling\n• UN Peace talks resume in Middle East\n\n💻 TECHNOLOGY:\n• AI models surpass human performance on new benchmarks\n• India's space mission to Mars enters final phase\n• Electric vehicle sales hit record high globally\n\n📚 EDUCATION & SCIENCE:\n• New study: Daily reading improves memory by 34%\n• CBSE announces new AI literacy curriculum for 2026-27\n• Scientists discover potential treatment for common cold\n\n🏏 SPORTS:\n• IPL 2026: Final standings and MVP announced\n• India wins gold at Asian Athletics Championship\n• FIFA World Cup 2026 qualifier results\n\n👉 Read Full Articles → www.newsdaily.com/may-2026\n\nTo unsubscribe from this newsletter, click here.\n\nNewsDailyDigest Team`,
+    `Your Weekly Digest Is Here! 📖\n\nHi Reader,\n\nThis week we've curated 15 handpicked articles from across the web — ranging from science to lifestyle to career tips. Here's your summary:\n\nFEATURED READS:\n\n1. "How to Study Smarter, Not Harder" — 12 min read\n   Backed by neuroscience research from Oxford University.\n\n2. "The Future of AI in Education" — 8 min read\n   How schools worldwide are integrating AI tools.\n\n3. "10 Financial Habits of Successful People" — 6 min read\n   Simple habits that make a big difference.\n\n4. "Climate Solutions That Actually Work" — 10 min read\n   Real-world examples from 5 countries.\n\n5. "Why Sleep Matters More Than You Think" — 7 min read\n   The science of sleep and peak performance.\n\n...and 10 more articles inside!\n\n👉 READ ALL 15 ARTICLES → www.weeklydigest.org/may-2026\n\n⚙️ Manage Preferences | Unsubscribe\n\nWeeklyDigest — Knowledge, Delivered Weekly`,
+    `Monthly Bulletin — May 2026\n\nDear Subscriber,\n\nHere is your monthly update from the Informer Hub community.\n\nCOMMUNITY HIGHLIGHTS:\n\n📌 Events This Month:\n• Tech Talk: "Intro to Machine Learning" — May 20, 4 PM (Free)\n• Career Fair 2026 — May 23-24 at City Convention Center\n• Book Club: "The Innovator's Dilemma" — May 25, 6 PM\n\n📊 Platform Updates:\n• New discussion forum launched — 2,400 members joined!\n• Monthly challenges section redesigned\n• Mobile app updated with new features\n\n🏆 Community Shoutouts:\n• Most Helpful Member: @Priya_R (342 helpful answers!)\n• Best Discussion Thread: "Future of Renewable Energy"\n• Top Contributor: @DevKumar_AI\n\n📚 Free Resources This Month:\n→ Machine Learning Basics PDF Guide\n→ Career Planning Template (Excel)\n→ 20 Free Online Courses — May Special\n\n👉 ACCESS YOUR ACCOUNT → www.informer-hub.net\n\nWarm regards,\nThe Informer Hub Team`,
+    `This Week's Top Reads — Curated For You 📚\n\nHi there,\n\nBased on your reading history, here are this week's must-read articles:\n\n⭐ EDITOR'S PICK:\n"Why Critical Thinking Is the Skill of the Decade"\nA fascinating look at how the most successful people approach problem-solving.\n→ Estimated read time: 9 minutes\n\nFOR YOU BASED ON YOUR INTERESTS:\n\nIf you liked technology articles:\n→ "5 Ways AI Is Changing Healthcare in 2026"\n→ "India's Rising Role in Global Tech Innovation"\n\nIf you liked education content:\n→ "The New Rules of Online Learning"\n→ "Study Tips from Top University Students"\n\nIf you liked science news:\n→ "Webb Telescope Discovers New Exoplanet Class"\n→ "Breakthrough in Quantum Computing Explained Simply"\n\n📧 NEW THIS WEEK:\nTopicFlow Podcast is now live! Listen to expert discussions on your commute.\n\n👉 READ NOW → www.topicflow.com/weekly-picks\n\nUnsubscribe | Manage Preferences\n\nTopicFlow Editorial Team`,
+    `Welcome! Your Subscription Is Confirmed ✅\n\nHi,\n\nThank you for subscribing to MagazinePlus — your all-in-one knowledge subscription!\n\nYOUR SUBSCRIPTION DETAILS:\n• Plan: Monthly Standard\n• Start Date: May 18, 2026\n• Next Renewal: June 18, 2026\n• Monthly Fee: ₹99\n\nWHAT YOU GET:\n✅ Access to 500+ magazines and journals\n✅ Daily news briefing (7 AM delivery)\n✅ Weekly curated article bundles\n✅ Offline reading on mobile app\n✅ Ad-free reading experience\n✅ Cancel anytime — no questions asked\n\nTO GET STARTED:\n👉 Set Up Your Reading Profile → www.magazineplus.io/setup\n\nRecommended first reads for new subscribers:\n• "Best of Science 2026" — National Science Journal\n• "India Rising" — Business & Economy Weekly\n• "Tech Trends" — Digital Future Magazine\n\nIf you have any questions, reply to this email or visit our Help Centre.\n\nWelcome aboard!\nMagazinePlus Team`,
   ],
-
   safe:[
-    `Hi Shreyas,\n\nThis is a reminder for tomorrow's robotics project meeting at 10:00 AM in Conference Room B.\n\nAGENDA:\n1. Project update — Q2 robotics progress (15 min)\n2. Resource planning for Q3 (20 min)\n3. New onboarding process review (10 min)\n4. Open discussion (10 min)\n\nPlease bring your project update report.\n\nMeeting link will be shared 30 minutes before.\n\nRegards,\nCognoSpace Team`,
-
-    `Hi Team,\n\nThe Q2 Project Update is now ready for your review.\n\nKEY HIGHLIGHTS:\n✅ Project Alpha — Completed ahead of schedule\n⏳ Project Beta — 80% complete, on track for June deadline\n🔄 Project Gamma — Minor delay, new deadline June 20, 2026\n\nPlease review and share your feedback by EOD Friday.\n\nThe report is in our shared folder at:\n→ drive.google.com/shared-project-reports\n\nThank you for your submission.\n\nRegards,\nBob Smith\nProject Manager`,
-
-    `Hi,\n\nGreat news! Your order has been confirmed and is on its way.\n\nORDER SUMMARY:\nOrder #: CS-45231-MAY2026\nItems: (1) Wireless Study Headphones + (1) USB-C Hub\n\nSHIPPING DETAILS:\n• Carrier: BlueDart Express\n• Tracking Number: BDT89234567IN\n• Estimated Delivery: Thursday, May 21, 2026\n\nYou can track your order at:\nhttps://www.bluedart.com/tracking\n\nThank you for shopping with us!\n\nWarm regards,\nThe Store Team`,
-
-    `Dear Team,\n\nThis is an official communication regarding your invoice for April 2026.\n\nInvoice #: CS-INV-4521\nTotal Amount Due: ₹24,500\nDue Date: May 20, 2026\nBank: City Bank — CognoSpace Pvt. Ltd.\n\nYou can also pay via UPI: finance@cognospace.upi\n\nThank you for your payment. For any queries, please reply to this email.\n\nRegards,\nFinance Department\nCognoSpace Pvt. Ltd.`,
-
-    `Hi,\n\nWelcome to the team! We are thrilled to have you join CognoSpace. 🎉\n\nYour official start date is Monday, May 25, 2026.\n\nDAY 1 SCHEDULE:\n9:00 AM — Meet HR at reception\n10:00 AM — Office tour and team introductions\n11:30 AM — IT setup and system access\n2:00 PM — Orientation with your manager\n\nPlease bring your official communication documents (ID proof, certificates).\n\nFeel free to reply to this email for any questions.\n\nLooking forward to your first day!\n\nRegards,\nHR Team, CognoSpace`,
-
-    `Hi Team,\n\nJust a project update — The Q3 roadmap is ready. Please review and confirm your availability.\n\nKEY DECISIONS NEEDED:\n• Confirm team allocation for Project Delta\n• Review budget for Q3 deliverables\n• Approve new onboarding process for new hires\n\nPlease share your feedback by EOD Friday.\n\nThis is an official communication — all inputs are confidential.\n\nThank you for your submission and timely response.\n\nRegards,\nProject Lead\nCognoSpace`,
-
-    `Dear Employee,\n\nYour salary for May 2026 has been credited to your registered account.\n\nDetails:\n• Employee ID: EMP-20260525\n• Net Salary: ₹45,000\n• Credit Date: May 25, 2026\n• Bank: City Bank ****4521\n\nYour payslip is available on the HR portal.\n\nFor any discrepancies, please reply to this email or contact the payroll team.\n\nThank you for your submission of attendance records.\n\nRegards,\nHR & Payroll Team\nCognoSpace Pvt. Ltd.`,
-
-    `Dear Parent/Guardian,\n\nThis is a friendly reminder about the upcoming Parent-Teacher Meeting for academic year 2026-27.\n\nDATE AND TIME:\n📅 Saturday, May 24, 2026\n🕐 Slot 1: 9:00 AM – 11:00 AM (Classes 1–5)\n🕐 Slot 2: 11:30 AM – 1:30 PM (Classes 6–9)\n\nVENUE: City Public School, Main Building\n\nWHAT WILL BE DISCUSSED:\n• Academic performance and project update\n• Upcoming examinations schedule\n• Individual concerns\n\nPlease carry your ward's latest report card.\n\nWarm regards,\nThe School Administration\nCity Public School`,
+    `Hi Team,\n\nJust a quick reminder about our team meeting this Friday, May 20, 2026 at 3:00 PM in Conference Room B (Building 2, Floor 3).\n\nAGENDA:\n1. Q2 project status updates (15 min)\n2. Resource planning for Q3 (20 min)\n3. New onboarding process review (15 min)\n4. Open discussion / Q&A (10 min)\n\nPlease bring:\n• Your project progress report (even a brief verbal update is fine)\n• Any blockers you'd like the team to help resolve\n• Ideas for the Q3 roadmap\n\nIf you cannot attend in person, the meeting will also be available on Teams. Link will be shared 30 minutes before the meeting.\n\nPlease confirm your attendance by replying to this email.\n\nLooking forward to seeing everyone!\n\nBest,\nAlice Johnson\nProject Lead, CognoSpace Team`,
+    `Hi,\n\nGreat news! Your order has been confirmed and is on its way to you.\n\nORDER SUMMARY:\nOrder #: CS-45231-MAY2026\nItems: (1) Wireless Study Headphones + (1) USB-C Hub\n\nSHIPPING DETAILS:\n• Carrier: BlueDart Express\n• Tracking Number: BDT89234567IN\n• Estimated Delivery: Thursday, May 21, 2026\n• Delivery Time Window: 10:00 AM – 6:00 PM\n\nYou can track your order in real time at:\nhttps://www.bluedart.com/tracking (this is a real link)\n\nIf you have any questions about your order, please reply to this email or call our customer service at 1800-xxx-xxxx (Mon–Sat, 9 AM – 6 PM).\n\nThank you for shopping with us!\n\nWarm regards,\nThe CognoSpace Store Team`,
+    `Hi Team,\n\nThe Q2 Project Report is now ready for your review. I've attached the document to this email (it's also accessible on our shared Google Drive folder).\n\nKEY HIGHLIGHTS:\n\n✅ Project Alpha — Completed 3 days ahead of schedule\n   Outcome: Delivered 40% performance improvement\n\n⏳ Project Beta — 80% complete, on track for June 15 deadline\n   Note: Minor delay in UI testing phase; compensated by parallel backend work\n\n🔄 Project Gamma — Facing a 5-day delay\n   New deadline: June 20, 2026\n   Reason: Third-party API integration issues\n\n📊 Budget Status: 94% utilized (within approved limits)\n\nPlease review the full document and share your feedback or questions by EOD Friday.\n\nThe full report is in our shared folder at:\n→ drive.google.com/shared-project-reports (real link)\n\nThank you,\nBob Smith\nProject Manager`,
+    `Hey!\n\nAre you free for lunch tomorrow (Thursday)? A new place called "The Green Bowl" just opened near office — apparently they have amazing Korean-Indian fusion food 🌶️\n\nA few colleagues are going around 12:45 PM. The place is just a 5-minute walk from the office entrance.\n\nLet me know by this evening if you can join, so I can make a reservation for the right number of people. They get busy quickly at lunchtime!\n\nAlso — if you have any dietary restrictions (vegetarian, gluten-free, etc.), let me know and I'll check the menu for options.\n\nHope to see you there!\n\nCheers,\nSam`,
+    `Dear Team and Parents,\n\nWe are pleased to share the May 2026 edition of our monthly newsletter from CognoSpace Learning!\n\nTHIS MONTH'S HIGHLIGHTS:\n\n📌 New AI & Robotics curriculum launched for Grades 6–9 starting June 2026\n📌 STEAM activity kits now available — shipping from June 1\n📌 Student project showcase: 24 student projects featured this month\n📌 Upcoming webinar: "Introduction to Robotics" — May 25, 4:00 PM (Free for all students)\n\nSTUDENT ACHIEVEMENTS:\n🏆 Anika Sharma (Grade 8): Won State-level Science Olympiad\n🏆 Rahul Mehta (Grade 9): Published first research paper on AI ethics\n🏆 Team BrainBots: Won Regional Robotics Competition\n\nUPCOMING EVENTS:\n• May 25 — Robotics Webinar (Online, Free)\n• June 1 — STEAM Kit distribution begins\n• June 10 — End-of-year project presentations\n\nWishing everyone a great learning month ahead!\n\nThe CognoSpace Team`,
+    `Dear Team,\n\nPlease find below your invoice details for April 2026.\n\nInvoice #: CS-INV-4521\nPeriod: April 1–30, 2026\nTotal Amount Due: ₹24,500\n\nBREAKDOWN:\n• Platform subscription (Monthly) — ₹15,000\n• Additional student licenses (x5) — ₹7,500\n• Technical support package — ₹2,000\n• Total — ₹24,500\n\nPAYMENT DETAILS:\nDue Date: May 20, 2026\nBank: HDFC Bank\nAccount Name: CognoSpace Pvt. Ltd.\nAccount Number: 50200034567890\nIFSC Code: HDFC0001234\nReference: INV-4521\n\nYou can also pay via UPI: finance@cognospace.upi\n\nIf you have already made payment, please share the transaction reference number. For any queries, please reply to this email.\n\nThank you,\nFinance Department\nCognoSpace Pvt. Ltd.`,
+    `Hi,\n\nWelcome to the team! We are absolutely thrilled to have you join CognoSpace. 🎉\n\nYour official start date is Monday, May 25, 2026. Here's your onboarding schedule for the first week:\n\n📅 DAY 1 — Monday, May 25:\n9:00 AM — Meet HR at reception (Building 1, Ground Floor)\n10:00 AM — Office tour and team introductions\n11:30 AM — IT setup: laptop, email, and system access\n2:00 PM — Orientation with CEO (45 min)\n\n📅 DAY 2 — Tuesday, May 26:\nTools training: Slack, Jira, Confluence, Google Workspace\nSecurity and data privacy briefing (mandatory)\n\n📅 DAY 3 — Wednesday, May 27:\n9:30 AM — Project briefing with your manager\n11:00 AM — Meet your buddy/mentor\n2:00 PM — First team standup meeting\n\nWHAT TO BRING ON DAY 1:\n• Original photo ID (Aadhaar/Passport)\n• 2 passport photographs\n• Educational certificates (originals)\n\nAny questions before Monday? Feel free to reply to this email.\n\nLooking forward to your first day!\n\nHR Team, CognoSpace`,
+    `Dear Parent/Guardian,\n\nThis is a friendly reminder about the upcoming Parent-Teacher Meeting (PTM) for the academic year 2026-27.\n\nDATE AND TIME:\n📅 Saturday, May 24, 2026\n🕐 Slot 1: 9:00 AM – 11:00 AM (Classes 1–5)\n🕐 Slot 2: 11:30 AM – 1:30 PM (Classes 6–9)\n🕐 Slot 3: 2:00 PM – 4:00 PM (Class 10 and 12)\n\nVENUE:\nCity Public School, Main Building\nParent Waiting Area: Ground Floor Lobby\n\nWHAT WILL BE DISCUSSED:\n• Academic performance and grades (Term 1)\n• Attendance record and punctuality\n• Upcoming examinations schedule\n• Individual concerns (please note questions in advance)\n\nIMPORTANT:\nPlease carry your ward's latest report card to the meeting. If you are unable to attend, please inform the class teacher via the school app or call the front office at 040-xxxx-xxxx.\n\nWe look forward to meeting you!\n\nWarm regards,\nThe School Administration\nCity Public School`,
   ],
 };
 
 // ══ LIVE MODE MAIL DATA (completely new, different from training) ══
 const LIVE_SENDERS = {
-  phishing:   ['alert@netpay-account-verify.biz','security@nbk-netbanking-secure.xyz','noreply@shopsite-billing-alert.info','support@webmail-sign-in-check.net'],
+  phishing:   ['alert@paypal-account-verify.biz','security@netbanking-secure.xyz','noreply@amazon-billing-alert.info','support@google-sign-in-check.net'],
   promo_spam: ['sale@supremesale-outlet.com','deals@bigbillions-day.shop','promo@instantdeal-hub.net','offers@weekendmegasale.io'],
   scam:       ['agent@prize-center-global.org','claim@lotto-winner-2026.biz','winner@cash-award-intl.net'],
-  malware:    ['files@cloudvault-secure-share.biz','attachment@company-docs-urgent.net','download@clouddrive-verify.xyz'],
-  fakebiz:    ['service@nbk-netbanking-verify.biz','support@ubir-account-alert.net','noreply@quickpay-kyc-update.xyz'],
-  social:     ['alert@insta-followers-boost.com','notifications@tweetflow-growth.net','updates@photoshare-viral.biz'],
+  malware:    ['files@dropbox-secure-share.biz','attachment@company-docs-urgent.net','download@clouddrive-verify.xyz'],
+  fakebiz:    ['service@sbi-netbanking-verify.biz','support@uber-account-alert.net','noreply@paytm-kyc-update.xyz'],
+  social:     ['alert@insta-followers-boost.com','notifications@twittergrowth.net','updates@facebook-viral.biz'],
   newsletter: ['daily@techbuzz-newsletter.com','weekly@healthtips-digest.net','bulletin@financeweekly.org'],
-  safe:       ['dr.patel@citymedical.org','admissions@national-counselling.edu','payroll@acmecorp.in','notify@citybank-online.in'],
+  safe:       ['dr.patel@citymedical.org','admissions@iit-counselling.edu','payroll@acmecorp.in','notify@hdfc-bank.com'],
 };
 const LIVE_SUBJECTS = {
-  phishing:   ['Your NetPay account will be suspended in 2 hours','NBK Bank: Suspicious transaction detected — verify now','Your WebMail account was accessed from a new location','ShopSite: Update your payment method urgently'],
+  phishing:   ['Your PayPal account will be suspended in 2 hours','SBI: Suspicious transaction detected — verify now','Your Google account was accessed from a new location','Amazon: Update your payment method urgently'],
   promo_spam: ['Supreme Sale: 85% OFF — 2 Hours Left!','Billion Dollar Sale — Today ONLY!','Instant Deal Alert: Grab before it\'s gone!','Weekend Mega Sale — Free delivery on everything'],
   scam:       ['YOU ARE A WINNER — Claim ₹25,00,000 Now!','International Lottery Result — Prize Awaits You','Cash Award: $75,000 Earmarked In Your Name'],
-  malware:    ['Your CloudVault file is ready — Download immediately','URGENT: Company document needs your review','Your cloud drive storage report — Open attachment'],
-  fakebiz:    ['NBK Bank NetBanking: KYC update required by May 20','UBIR: Your account has been flagged — verify now','QuickPay KYC: Complete verification or account blocked'],
-  social:     ['FREE: 50,000 SocialFlow followers in 24 hours!','Your FriendApp account is going viral — See now!','PhotoShare: You\'ve been tagged in a viral post!'],
+  malware:    ['Your Dropbox file is ready — Download immediately','URGENT: Company document needs your review','Your cloud drive storage report — Open attachment'],
+  fakebiz:    ['SBI NetBanking: KYC update required by May 20','Uber: Your account has been flagged — verify now','Paytm KYC: Complete verification or account blocked'],
+  social:     ['FREE: 50,000 Instagram followers in 24 hours!','Your Twitter account is going viral — See now!','Facebook: You\'ve been tagged in a viral post!'],
   newsletter: ['TechBuzz Daily: Top 10 AI stories this week','HealthTips: 7 habits that transform your wellbeing','Finance Weekly: Markets, trends & analysis — May 2026'],
-  safe:       ['Appointment confirmed: Dr. Patel — May 22, 2:30 PM','National Counselling — Your slot is confirmed','May 2026 Salary Credited — Payslip attached','City Bank: Transaction successful — ₹5,000 to Rahul'],
+  safe:       ['Appointment confirmed: Dr. Patel — May 22, 2:30 PM','IIT JEE Counselling — Your slot is confirmed','May 2026 Salary Credited — Payslip attached','HDFC Bank: Transaction successful — ₹5,000 to Rahul'],
 };
 const LIVE_BODIES = {
   phishing: [
-    `Dear Customer,\n\nYour NetPay account (user@email.com) has been flagged for unusual activity. We detected:\n\n• Login from IP: 45.33.22.1 (Unknown Location)\n• Attempt to change linked bank account\n• 3 failed password attempts\n\nTo avoid account suspension, click below within 2 hours:\n👉 Verify Account → http://netpay-account-verify.biz/urgent\n\nNetPay Security`,
-    `Dear NBK Bank Customer,\n\nA suspicious transaction of ₹1,19,500 was attempted on your account at 3:44 AM from a new device.\n\nIf not authorized, your account will be frozen in 1 hour unless you verify:\n👉 http://nbk-netbanking-secure.xyz/verify-txn\n\nNBK Bank Digital Security`,
-    `Dear User,\n\nSomeone just signed in to your WebMail account from:\nLocation: Unknown Location\nDevice: Unknown Browser\n\nIf this wasn't you, click immediately:\n👉 https://webmail-sign-in-check.net/secure-now\n\nWebMail Security Team`,
+    `Dear Customer,\n\nYour PayPal account (user@email.com) has been flagged for unusual activity. We detected:\n\n• Login from IP: 45.33.22.1 (Unknown Location)\n• Attempt to change linked bank account\n• 3 failed password attempts\n\nTo avoid account suspension, click below within 2 hours:\n👉 Verify Account → http://paypal-account-verify.biz/urgent\n\nPayPal Security`,
+    `Dear SBI Customer,\n\nA suspicious transaction of ₹1,19,500 was attempted on your account at 3:44 AM from a new device.\n\nIf not authorized, your account will be frozen in 1 hour unless you verify:\n👉 http://netbanking-secure.xyz/verify-txn\n\nSBI Digital Security`,
+    `Dear User,\n\nSomeone just signed in to your Google account from:\nLocation: Lagos, Nigeria\nDevice: Unknown Chrome Browser\n\nIf this wasn't you, click immediately:\n👉 https://google-sign-in-check.net/secure-now\n\nGoogle Security Team`,
   ],
   promo_spam: [
     `SUPREME SALE IS LIVE! 🔥\n\nOnly 2 hours left to grab 85% OFF on:\n• iPhones from ₹12,999\n• Laptops from ₹18,999\n• Watches from ₹1,999\n\nUse code: SUPREME85\n👉 Shop Now → www.supremesale-outlet.com`,
@@ -1447,16 +1387,16 @@ const LIVE_BODIES = {
     `INTERNATIONAL CASH AWARD NOTICE\n\nDear Friend,\n\nAn award of $75,000 USD has been allocated to you from our annual global humanitarian fund.\n\nYou were selected based on your email domain.\n\nContact our agent to claim:\nEmail: winner@cash-award-intl.net\nRequired: ID proof + processing fee $100\n\nCash Award International`,
   ],
   malware: [
-    `Hi,\n\nYour colleague shared a file with you:\n\nFile: Q2_Accounts_Final.exe (18.2 MB)\nShared via: CloudVault Secure\n\n👉 Download → http://cloudvault-secure-share.biz/file-Q2\n\nNote: Disable antivirus before opening (company files are safe)\n\nCloudVault File Sharing`,
+    `Hi,\n\nYour colleague shared a file with you:\n\nFile: Q2_Accounts_Final.exe (18.2 MB)\nShared via: Dropbox Secure\n\n👉 Download → http://dropbox-secure-share.biz/file-Q2\n\nNote: Disable antivirus before opening (company files are safe)\n\nDropbox File Sharing`,
     `URGENT DOCUMENT REVIEW NEEDED\n\nPlease review the attached documents before EOD:\n\n📎 Contract_Amendment_2026.zip\n📎 Employee_Details_Update.exe\n\n👉 Download Package → http://company-docs-urgent.net/pkg\n\nPassword: DocReview2026\n\nHR Department`,
   ],
   fakebiz: [
-    `Dear NBK Bank Customer,\n\nYour KYC is pending. Account services will be suspended in 48 hours.\n\nComplete your KYC now:\n👉 http://nbk-netbanking-verify.biz/kyc-update\n\nYou will need:\n• Aadhaar Card scan\n• PAN Card scan\n• Selfie with ID\n\nNBK Bank Customer Service`,
-    `UBIR SAFETY ALERT\n\nYour UBIR account has been flagged due to unusual activity.\n\nRecent trips from your account have been disputed by multiple users.\n\nVerify your account immediately:\n👉 http://ubir-account-alert.net/verify\n\nYour account may be suspended if not verified within 24 hours.\n\nUBIR Trust & Safety`,
+    `Dear SBI Customer,\n\nYour KYC is pending. Account services will be suspended in 48 hours.\n\nComplete your KYC now:\n👉 http://sbi-netbanking-verify.biz/kyc-update\n\nYou will need:\n• Aadhaar Card scan\n• PAN Card scan\n• Selfie with ID\n\nSBI Customer Service`,
+    `UBER SAFETY ALERT\n\nYour Uber account has been flagged due to unusual activity.\n\nRecent trips from your account have been disputed by multiple users.\n\nVerify your account immediately:\n👉 http://uber-account-alert.net/verify\n\nYour account may be suspended if not verified within 24 hours.\n\nUber Trust & Safety`,
   ],
   social: [
-    `Hi! 🎉\n\nGET 50,000 REAL SocialFlow Followers — COMPLETELY FREE!\n\nStep 1: Click link below\nStep 2: Enter your username (no password needed)\nStep 3: Followers arrive in 24 hours!\n\n👉 GET FREE FOLLOWERS → http://socialflow-followers-boost.com\n\nOnly 500 slots remaining today!\n\nSocialGrow Team`,
-    `GOING VIRAL! 🔥\n\nA post mentioning you on FriendApp is getting thousands of shares!\n\n📊 Current stats:\n• Reposts: 8,234\n• Likes: 14,891\n• Mentions of you: 347\n\n👉 SEE THE POST → http://tweetflow-growth.net/viral-you\n\nTweetFlow Analytics`,
+    `Hi! 🎉\n\nGET 50,000 REAL Instagram Followers — COMPLETELY FREE!\n\nStep 1: Click link below\nStep 2: Enter your username (no password needed)\nStep 3: Followers arrive in 24 hours!\n\n👉 GET FREE FOLLOWERS → http://insta-followers-boost.com\n\nOnly 500 slots remaining today!\n\nSocialGrow Team`,
+    `GOING VIRAL! 🔥\n\nA post mentioning you on Twitter is getting thousands of retweets!\n\n📊 Current stats:\n• Retweets: 8,234\n• Likes: 14,891\n• Mentions of you: 347\n\n👉 SEE THE POST → http://twittergrowth.net/viral-you\n\nTwitter Analytics`,
   ],
   newsletter: [
     `TECHBUZZ DAILY — May 18, 2026\n\nTop 10 AI Stories This Week:\n\n1. OpenAI releases new reasoning model — benchmark scores explained\n2. India's AI policy: What the new framework means for startups\n3. Google DeepMind's latest breakthrough in protein folding\n4. Meta launches Llama 4 — open source AI landscape shifts\n5. AI in Indian classrooms: 500 schools pilot new curriculum\n...and 5 more inside!\n\n👉 Read All Stories → www.techbuzz-newsletter.com\n\nUnsubscribe | Preferences\n\nTechBuzz Daily Team`,
@@ -1464,9 +1404,9 @@ const LIVE_BODIES = {
   ],
   safe: [
     `Dear Patient,\n\nThis is a confirmation of your upcoming appointment:\n\nDoctor: Dr. Anita Patel (General Physician)\nDate: Thursday, May 22, 2026\nTime: 2:30 PM\nLocation: City Medical Centre, Room 204\n\nPlease arrive 10 minutes early and bring:\n• Previous prescriptions/reports\n• Health insurance card (if applicable)\n\nTo reschedule, call: 040-4567-8901\n\nCity Medical Centre`,
-    `Dear Student,\n\nYour National Engineering Counselling 2026 slot has been confirmed:\n\nSlot: May 25, 2026 — 11:00 AM to 1:00 PM\nMode: Online (link sent separately)\n\nDocuments required:\n• Entrance Exam Scorecard\n• Class 10 & 12 Marksheets\n• Category Certificate (if applicable)\n• ID Proof\n\nFor queries: admissions@national-counselling.edu\n\nNational Counselling Office`,
+    `Dear Student,\n\nYour IIT JEE Advanced 2026 counselling slot has been confirmed:\n\nSlot: May 25, 2026 — 11:00 AM to 1:00 PM\nMode: Online (link sent separately)\n\nDocuments required:\n• JEE Result Scorecard\n• Class 10 & 12 Marksheets\n• Category Certificate (if applicable)\n• ID Proof\n\nFor queries: admissions@iit-counselling.edu\n\nIIT Admissions Office`,
     `Dear Employee,\n\nYour salary for May 2026 has been credited to your registered bank account.\n\nDetails:\n• Employee ID: ACM-1042\n• Pay Period: May 1–31, 2026\n• Net Salary Credited: ₹62,400\n• Credit Date: May 18, 2026\n• Bank: ICICI Bank ****4321\n\nYour payslip is available on the HR portal:\n→ https://hr.acmecorp.in/payslip (real portal)\n\nFor discrepancies, contact payroll@acmecorp.in\n\nHR & Payroll Department\nAcme Corporation`,
-    `Dear Customer,\n\nTransaction Alert — City Bank\n\nYour transaction details:\n• Amount: ₹5,000\n• Credited To: Rahul Sharma\n• UPI ID: rahul.sharma@upi\n• Transaction ID: TXN202605181425\n• Date: May 18, 2026, 2:25 PM\n• Balance: ₹28,450 (Available)\n\nIf you did not authorize this transaction, call 1800-CITY-NOW immediately.\n\nCity Bank — Your trusted banking partner`,
+    `Dear Customer,\n\nTransaction Alert — HDFC Bank\n\nYour transaction details:\n• Amount: ₹5,000\n• Credited To: Rahul Sharma\n• UPI ID: rahul.sharma@upi\n• Transaction ID: TXN202605181425\n• Date: May 18, 2026, 2:25 PM\n• Balance: ₹28,450 (Available)\n\nIf you did not authorize this transaction, call 1800-HDFC-NOW immediately.\n\nHDFC Bank — Your trusted banking partner`,
   ],
 };
 
@@ -1733,7 +1673,7 @@ const _LIVE_SCENARIOS = {
   // ─── PHISHING: fake bank/account security alerts ───
   phishing: () => {
     const banks=['hdfc','sbi','icici','axis','kotak','yesbank','pnb','boi','idfc','indusind','canara','unionbank'];
-    const bankNames={hdfc:'NatBank',sbi:'CityBank',icici:'MetroBank',axis:'AxisNet',kotak:'KotaBank',yesbank:'YesNet',pnb:'PrimBank',boi:'BankOne',idfc:'IDFNet',indusind:'IndusNet',canara:'CanBank',unionbank:'UnionNet'};
+    const bankNames={hdfc:'HDFC',sbi:'SBI',icici:'ICICI',axis:'Axis',kotak:'Kotak',yesbank:'Yes Bank',pnb:'PNB',boi:'Bank of India',idfc:'IDFC',indusind:'IndusInd',canara:'Canara',unionbank:'Union Bank'};
     const bankSlug=_randVar(banks);
     const bankName=bankNames[bankSlug];
     const ref=_randRef();
@@ -1834,13 +1774,13 @@ const _LIVE_SCENARIOS = {
   // ─── FAKE BUSINESS: impersonating brands with fake account alerts ───
   fakebiz: () => {
     const companies=[
-      {name:'ShopZone',slug:'shopzone'},{name:'BuyNow India',slug:'buynow-india'},
-      {name:'QuickPay',slug:'quickpay'},{name:'PhoneWallet',slug:'phonewallet'},
-      {name:'FoodDash',slug:'fooddash'},{name:'MealRun',slug:'mealrun'},
-      {name:'StyleShop',slug:'styleshop'},{name:'GroceryHub',slug:'groceryhub'},
-      {name:'RideEasy',slug:'rideeasy'},{name:'QuickCab',slug:'quickcab'},
-      {name:'StreamNow India',slug:'streamnow-india'},{name:'ViewStar',slug:'viewstar'},
-      {name:'TuneIn India',slug:'tunein-india'}
+      {name:'Flipkart',slug:'flipkart'},{name:'Amazon India',slug:'amazon-india'},
+      {name:'Paytm',slug:'paytm'},{name:'PhonePe',slug:'phonepe'},
+      {name:'Zomato',slug:'zomato'},{name:'Swiggy',slug:'swiggy'},
+      {name:'Myntra',slug:'myntra'},{name:'BigBasket',slug:'bigbasket'},
+      {name:'Ola',slug:'ola'},{name:'Uber',slug:'uber'},
+      {name:'Netflix India',slug:'netflix-india'},{name:'Hotstar',slug:'hotstar'},
+      {name:'Spotify India',slug:'spotify-india'}
     ];
     const co=_randVar(companies);
     const senderPrefixes=['service','support','noreply','help','team','billing','account-alert','kyc-update'];
@@ -1862,9 +1802,9 @@ const _LIVE_SCENARIOS = {
   // ─── SOCIAL: follower-boost / viral-content scams ───
   social: () => {
     const platforms=[
-      {name:'SocialFlow',slug:'socialflow'},{name:'FriendApp',slug:'friendapp'},
-      {name:'PhotoShare',slug:'photoshare'},{name:'ShortClip',slug:'shortclip'},
-      {name:'WorkConnect',slug:'workconnect'},{name:'MomentShare',slug:'momentshare'}
+      {name:'Instagram',slug:'insta'},{name:'Twitter',slug:'twitter'},
+      {name:'Facebook',slug:'facebook'},{name:'TikTok',slug:'tiktok'},
+      {name:'LinkedIn',slug:'linkedin'},{name:'Snapchat',slug:'snapchat'}
     ];
     const p=_randVar(platforms);
     const senderPrefixes=['alert','notifications','updates','team','support','promo','growth'];
@@ -1921,7 +1861,7 @@ const _LIVE_SCENARIOS = {
       },
       // E-commerce order scenario
       ()=>{
-        const shops=[{n:'BuyNow',d:'buynow.in'},{n:'ShopZone',d:'shopzone.in'},{n:'StyleShop',d:'styleshop.in'},{n:'GroceryHub',d:'groceryhub.in'},{n:'MealRun',d:'mealrun.in'}];
+        const shops=[{n:'Amazon',d:'amazon.in'},{n:'Flipkart',d:'flipkart.in'},{n:'Myntra',d:'myntra.in'},{n:'BigBasket',d:'bigbasket.in'},{n:'Swiggy',d:'swiggy-orders.in'}];
         const shop=_randVar(shops);
         const sender=`${_randVar(['orders','noreply','customercare','support','team'])}@${shop.d}`;
         const item=_randVar(['Wireless Earbuds','Cotton T-shirt','Running Shoes','Yoga Mat','Water Bottle','Backpack','Notebook Set','Desk Lamp']);
@@ -1944,7 +1884,7 @@ const _LIVE_SCENARIOS = {
       },
       // Bank transaction scenario
       ()=>{
-        const banks=[{n:'City Bank',d:'citybank-online.in'},{n:'Metro Bank',d:'metrobank.in'},{n:'Apex Bank',d:'apexbank.in'},{n:'Prime Bank',d:'primebank.in'},{n:'Unity Bank',d:'unitybank.in'}];
+        const banks=[{n:'HDFC',d:'hdfc-bank.com'},{n:'ICICI',d:'icici-bank.com'},{n:'SBI',d:'sbi-online.in'},{n:'Axis',d:'axisbank.com'},{n:'Kotak',d:'kotak.com'}];
         const bank=_randVar(banks);
         const sender=`notify@${bank.d}`;
         const amount='₹'+_randAmount();
@@ -1970,12 +1910,12 @@ const _LIVE_SCENARIOS = {
         const month=_randVar(['April','May','June']);
         const salary='₹'+(Math.floor(20+Math.random()*80)*1000).toLocaleString('en-IN');
         const subject=`${month} 2026 Salary credited — ${salary}`;
-        const body=`Dear Employee,\n\nYour salary for ${month} 2026 has been credited to your registered account.\n\nDetails:\n• Employee ID: EMP-${_randRef()}\n• Net Salary: ${salary}\n• Credit Date: ${_randVar(_VAR_DATES_2026)}, 2026\n• Bank: ${_randVar(['City','Metro','Apex','Prime'])} Bank ****${1000+Math.floor(Math.random()*8999)}\n\nYour payslip is available on the HR portal.\n\nFor any discrepancies, please contact the payroll team during working hours.\n\nHR & Payroll Team\n${company.charAt(0).toUpperCase()+company.slice(1)} Corporation`;
+        const body=`Dear Employee,\n\nYour salary for ${month} 2026 has been credited to your registered account.\n\nDetails:\n• Employee ID: EMP-${_randRef()}\n• Net Salary: ${salary}\n• Credit Date: ${_randVar(_VAR_DATES_2026)}, 2026\n• Bank: ${_randVar(['HDFC','ICICI','SBI','Axis'])} Bank ****${1000+Math.floor(Math.random()*8999)}\n\nYour payslip is available on the HR portal.\n\nFor any discrepancies, please contact the payroll team during working hours.\n\nHR & Payroll Team\n${company.charAt(0).toUpperCase()+company.slice(1)} Corporation`;
         return {sender, subject, body};
       },
       // Admissions/education scenario
       ()=>{
-        const inst=_randVar([{n:'NTE',d:'nte-counselling.edu'},{n:'CBIT',d:'cbit-college.edu'},{n:'NCM',d:'ncm-admissions.edu'},{n:'NTI',d:'nti-counselling.edu'}]);
+        const inst=_randVar([{n:'IIT',d:'iit-counselling.edu'},{n:'BITS',d:'bits-pilani.edu'},{n:'IIM',d:'iim-admissions.edu'},{n:'NIT',d:'nit-counselling.edu'}]);
         const sender=`admissions@${inst.d}`;
         const subject=`${inst.n} Admissions: Counselling slot confirmed`;
         const body=`Dear Student,\n\nYour ${inst.n} 2026 counselling slot has been confirmed:\n\nSlot: ${_randVar(_VAR_DATES_2026)}, 2026 — ${_randVar(['10:00 AM – 12:00 PM','11:00 AM – 1:00 PM','2:00 PM – 4:00 PM'])}\nMode: Online (link sent separately)\n\nDocuments required:\n• Result Scorecard\n• Class 10 & 12 Marksheets\n• Category Certificate (if applicable)\n• ID Proof\n\nFor queries: admissions@${inst.d}\n\n${inst.n} Admissions Office`;
@@ -2017,14 +1957,15 @@ const _LIVE_SCENARIOS = {
 function _makeUniqueLiveContent(typeId){
   const scenarioFn = _LIVE_SCENARIOS[typeId];
   if(!scenarioFn){
+    // Fallback if somehow an unknown type is passed
     return {sender:'noreply@example.com', subject:'(no subject)', body:'(no content)'};
   }
-  // Try up to 80 times — must be unique vs ALL training mails AND all previously generated live mails
-  for(let t=0;t<80;t++){
+  // Try up to 60 times to get a unique scenario
+  for(let t=0;t<60;t++){
     const {sender, subject, body} = scenarioFn();
     const key = _makeUniqueKey(sender, subject, body);
-    if(!_trainingUsed.has(key) && !_liveUsed.has(key)){
-      _liveUsed.add(key);
+    if(!_usedMailKeys.has(key)){
+      _usedMailKeys.add(key);
       return {sender, subject, body};
     }
   }
@@ -2032,7 +1973,7 @@ function _makeUniqueLiveContent(typeId){
   const fallback = scenarioFn();
   fallback.subject = fallback.subject + ' #' + (++_variationCounter);
   const key = _makeUniqueKey(fallback.sender, fallback.subject, fallback.body);
-  _liveUsed.add(key);
+  _usedMailKeys.add(key);
   return fallback;
 }
 
@@ -2073,48 +2014,18 @@ function _pickUniqueWithVariation(senders, subjects, bodies, usedKeys){
   return {sender,subject,body};
 }
 
-// Separate tracking for training mails so live mails are guaranteed different
-const _trainingUsed = new Set();
-
 function makeMail(typeId, usedKeys){
-  // Guarantee unique sender+subject+body for every training mail by embedding a
-  // per-pool index counter. This prevents any collision even when the scenario
-  // generator produces similar output for the same spam type back-to-back.
-  const scenarioFn = _LIVE_SCENARIOS[typeId];
-  const times=['9:42 AM','11:15 AM','2:03 PM','4:28 PM','Yesterday','Mon','Sun','8:05 AM','3:17 PM','Fri'];
-  const poolIdx = ++_variationCounter; // unique across entire training pool build
-
-  if(scenarioFn){
-    // Try up to 20 attempts for a naturally unique scenario
-    for(let t=0;t<20;t++){
-      const {sender, subject, body} = scenarioFn();
-      const key = _makeUniqueKey(sender, subject, body);
-      if(!_trainingUsed.has(key) && !_liveUsed.has(key)){
-        _trainingUsed.add(key);
-        if(usedKeys) usedKeys.add(key);
-        return {id:++mailIdCounter, catId:typeId, sender, subject, body,
-          time:times[Math.floor(Math.random()*times.length)],
-          read:false, starred:false, isSpam:SPAM_CATS_IDS.includes(typeId)};
-      }
-    }
-    // Guaranteed fallback: inject pool index into body so key is always unique
-    const {sender, subject, body} = scenarioFn();
-    const uniqueBody = body + `\n\n[Ref: TRN-${poolIdx}]`;
-    const key = _makeUniqueKey(sender, subject, uniqueBody);
-    _trainingUsed.add(key);
-    if(usedKeys) usedKeys.add(key);
-    return {id:++mailIdCounter, catId:typeId, sender, subject, body:uniqueBody,
-      time:times[Math.floor(Math.random()*times.length)],
-      read:false, starred:false, isSpam:SPAM_CATS_IDS.includes(typeId)};
-  }
-  // Fallback to old SENDERS/SUBJECTS/BODIES approach for any type not in _LIVE_SCENARIOS
-  const senders=SENDERS_BY_TYPE[typeId]||[];
-  const subjects=SUBJECTS_BY_TYPE[typeId]||[];
-  const bodies=BODIES_BY_TYPE[typeId]||[];
+  const senders=SENDERS_BY_TYPE[typeId];
+  const subjects=SUBJECTS_BY_TYPE[typeId];
+  const bodies=BODIES_BY_TYPE[typeId];
   const {sender,subject,body}=_pickUniqueWithVariation(senders,subjects,bodies,usedKeys||new Set());
-  return {id:++mailIdCounter, catId:typeId, sender, subject, body,
+  const times=['9:42 AM','11:15 AM','2:03 PM','4:28 PM','Yesterday','Mon','Sun','8:05 AM','3:17 PM','Fri'];
+  return {
+    id:++mailIdCounter,catId:typeId,sender,subject,body,
     time:times[Math.floor(Math.random()*times.length)],
-    read:false, starred:false, isSpam:SPAM_CATS_IDS.includes(typeId)};
+    read:false,starred:false,
+    isSpam:SPAM_CATS_IDS.includes(typeId)
+  };
 }
 
 function makeLiveMail(typeId, usedKeys){
@@ -2137,70 +2048,57 @@ function makeLiveMail(typeId, usedKeys){
 
 function generateMails(){
   document.getElementById('genBtn').disabled=true;
-  document.getElementById('genBtn').textContent='✓ Generated';
+  document.getElementById('genBtn').textContent='✓ Mails Generated';
+  generatedMails=[];   // not used for per-round pools anymore but kept for admin view
   trainingResults={};
   submittedCats={};
   liveMails=[];
   liveMailCount=0;
+  // Clear uniqueness tracking
   _usedMailKeys.clear();
   _liveUsed.clear();
-  _trainingUsed.clear();
   SPAM_TYPES.forEach(t=>{trainingResults[t.id]={spam:[],notSpam:[]};});
-
-  // ── Build the master pool of 50 mails (once, no repeats) ──
-  // Each spam type gets its own unique count (SPAM_COUNT_BY_TYPE), + 8 safe mails = 50
-  const _poolUsed = new Set();
-  trainingPool = [];
-  SPAM_CATS_IDS.forEach(catId=>{
-    const count = SPAM_COUNT_BY_TYPE[catId] || 4;
-    for(let i=0;i<count;i++){
-      trainingPool.push(makeMail(catId, _poolUsed));
-    }
-  });
-  for(let i=0;i<SAFE_IN_POOL;i++){
-    trainingPool.push(makeMail('safe', _poolUsed));
-  }
-  // Shuffle the master pool
-  for(let i=trainingPool.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [trainingPool[i],trainingPool[j]]=[trainingPool[j],trainingPool[i]];
-  }
-  generatedMails = [...trainingPool]; // keep for admin/search
-
   currentRoundIdx=0;
   startRound(0);
 }
 
 // ══ TRAINING COMPARE ROUNDS ══
-// Cascade flow: Round 1 sees all 80 mails. Mails marked YES (spam) for round 1's
-// spam type are removed from the pool. Round 2 sees only the surviving mails. And so
-// on — mails that survive all 7 spam-type rounds become the "Safe" final round.
+// Each round independently generates 20 emails:
+//   - ROUND_SPAM_COUNTS[catId] emails of the target spam type (true spam)
+//   - rest filled with safe emails (true not-spam)
+// This gives each round its own unique pool with the correct spam ratio.
 function buildRoundMails(catId){
+  const _roundUsed = new Set();
+  const spamCount = ROUND_SPAM_COUNTS[catId] || 0;
+  const safeCount = ROUND_TOTAL - spamCount;
+  const mails = [];
+
   if(catId === 'safe'){
-    // Final round: the surviving mails (those NOT caught in any previous round)
-    const allCaughtIds = new Set();
-    SPAM_CATS_IDS.forEach(c=>{
-      (trainingResults[c]&&trainingResults[c].spam||[]).forEach(m=>allCaughtIds.add(m.id));
-    });
-    const survivors = trainingPool.filter(m=>!allCaughtIds.has(m.id));
-    // Shuffle survivors
-    const s=[...survivors];
-    for(let i=s.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[s[i],s[j]]=[s[j],s[i]];}
-    return s;
+    // Safe round: fill spam slots with random mixed spam types (not 'safe')
+    // Distribute evenly across spam categories so student sees variety
+    const spamCats = [...SPAM_CATS_IDS]; // 7 spam types
+    for(let i=0; i<spamCount; i++){
+      const randomSpamType = spamCats[i % spamCats.length];
+      mails.push(makeMail(randomSpamType, _roundUsed));
+    }
+  } else {
+    // Normal round: spam slots = this category's spam
+    for(let i=0; i<spamCount; i++){
+      mails.push(makeMail(catId, _roundUsed));
+    }
   }
 
-  // For spam-type rounds: start with the pool minus mails already caught in prior rounds
-  const allCaughtIds = new Set();
-  const roundIdx = SPAM_CATS_IDS.indexOf(catId);
-  // Only exclude mails caught in rounds BEFORE this one
-  SPAM_CATS_IDS.slice(0, roundIdx).forEach(c=>{
-    (trainingResults[c]&&trainingResults[c].spam||[]).forEach(m=>allCaughtIds.add(m.id));
-  });
-  const available = trainingPool.filter(m=>!allCaughtIds.has(m.id));
+  // Fill rest with safe emails
+  for(let i=0; i<safeCount; i++){
+    mails.push(makeMail('safe', _roundUsed));
+  }
+
   // Shuffle
-  const a=[...available];
-  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
-  return a;
+  for(let i=mails.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [mails[i],mails[j]]=[mails[j],mails[i]];
+  }
+  return mails;
 }
 
 function startRound(idx){
@@ -2208,20 +2106,14 @@ function startRound(idx){
   currentMailIdx=0;
   const catId = SPAM_TYPES[idx].id;
   roundMails = buildRoundMails(catId);
-  // Initialize trainingResults for this round if needed (no auto-classification)
-  if(!trainingResults[catId]) trainingResults[catId]={spam:[],notSpam:[]};
   renderCompareUI();
 }
 
 function renderCompareUI(){
   const body=document.getElementById('trainingBody');
   const spamType=SPAM_TYPES[currentRoundIdx];
+  const roundsDone=currentRoundIdx;
   const totalRounds=SPAM_TYPES.length;
-  // Count how many were caught in prior rounds
-  const caughtBefore = SPAM_CATS_IDS.slice(0, currentRoundIdx).reduce((acc,c)=>acc+(trainingResults[c]&&trainingResults[c].spam?trainingResults[c].spam.length:0),0);
-  const cascadeNote = currentRoundIdx===0
-    ? `All 50 mails — Round 1 of ${SPAM_TYPES.length}`
-    : `${roundMails.length} mails remaining (${caughtBefore} caught so far)`;
 
   body.innerHTML=`
     <div class="compare-wrap">
@@ -2234,14 +2126,14 @@ function renderCompareUI(){
         <div class="compare-progress">
           <div style="font-size:12px;font-weight:700;color:var(--text2);text-align:center">
             Round ${currentRoundIdx+1} / ${totalRounds}<br>
-            <span style="font-size:11px;font-weight:500">${cascadeNote}</span>
+            <span style="font-size:11px;font-weight:500">Mail ${currentMailIdx+1} of ${roundMails.length}</span>
           </div>
           <div class="compare-progress-bar"><div class="compare-progress-fill" style="width:${(currentMailIdx/roundMails.length)*100}%"></div></div>
         </div>
       </div>
       <div class="mail-compare-area">
         <div class="mail-list-panel" id="compareMailPanel">
-          <div class="panel-title">📬 ${roundMails.length} Mails — ${spamType.id === 'safe' ? '✅ These survived all rounds — are they all safe?' : `Does this mail have "${spamType.name}" features?`}</div>
+          <div class="panel-title">📬 ${roundMails.length} Mails — ${spamType.id === 'safe' ? 'Is this a Safe / Genuine mail?' : `Does this mail have "${spamType.name}" features?`}</div>
           ${renderCompareMails()}
         </div>
         <div style="position:relative;display:flex;align-items:stretch">
@@ -2251,13 +2143,12 @@ function renderCompareUI(){
           <div class="rounds-overview" id="roundsOverview">
             <div class="ro-title">📊 Training Rounds</div>
             ${SPAM_TYPES.map((t,i)=>{
-              const spamCaught = trainingResults[t.id]?trainingResults[t.id].spam.length:0;
               return `
               <div class="ro-round-item ${i<currentRoundIdx?'done':i===currentRoundIdx?'active':'pending'}">
                 <div class="ro-icon">${t.icon}</div>
                 <div style="flex:1;min-width:0">
                   <div class="ro-name">${t.name}</div>
-                  <div class="ro-stats">${i<currentRoundIdx?(`${spamCaught} spam caught`+(t.id!=='safe'?` → ${(trainingResults[t.id].notSpam.length)} passed on`:'')):(i===currentRoundIdx?'In progress':'Pending')}</div>
+                  <div class="ro-stats">${i<currentRoundIdx?(trainingResults[t.id].spam.length+' spam / '+(trainingResults[t.id].notSpam.length)+' not spam'):(i===currentRoundIdx?'In progress':'Pending')}</div>
                 </div>
                 <div class="ro-check">${i<currentRoundIdx?'✅':i===currentRoundIdx?'▶️':'⏳'}</div>
               </div>`;}).join('')}
@@ -2268,46 +2159,30 @@ function renderCompareUI(){
 }
 
 function renderCompareMails(){
-  const spamType=SPAM_TYPES[currentRoundIdx];
   return roundMails.map((m,i)=>{
     const col=AV_COLORS[m.id%AV_COLORS.length];
     const init=m.sender.split('@')[0].slice(0,2).toUpperCase();
     const lines=m.body.split('\n').filter(l=>l.trim());
     const preview=lines.length>1?lines[1]:m.body.slice(0,60);
     const isCurrent=i===currentMailIdx;
-
-    const isSpamResult   = trainingResults[spamType.id]&&trainingResults[spamType.id].spam.find(x=>x.id===m.id);
-    const isNotSpamResult= trainingResults[spamType.id]&&trainingResults[spamType.id].notSpam.find(x=>x.id===m.id);
-    const decided = isSpamResult || isNotSpamResult;
-
-    // Was this auto-classified (different spam type, not manually decidable)?
-    const isAutoClassified = decided && !isSpamResult && m.catId !== spamType.id && m.catId !== 'safe' && spamType.id !== 'safe';
-    // Needs manual decision: this round's spam type OR safe mails
-    const needsDecision = !decided;
-
-    const statusLabel = isSpamResult
-      ? `<div style="padding:5px 14px 9px;font-size:12px;font-weight:700;color:#c0474a">🚫 Marked as ${spamType.name}</div>`
-      : isAutoClassified
-        ? `<div style="padding:5px 14px 9px;font-size:11px;font-weight:600;color:#9199b5">↪ Auto: Not ${spamType.name} (is ${SPAM_TYPES.find(t=>t.id===m.catId)?.name||'other'})</div>`
-        : decided
-          ? `<div style="padding:5px 14px 9px;font-size:12px;font-weight:700;color:#2d8a5e">✅ ${spamType.id==='safe'?'Safe Mail':'Not '+spamType.name}</div>`
-          : `<div style="padding:5px 14px 9px;font-size:11px;font-weight:700;color:var(--blue)">👉 Click to classify</div>`;
-
+    const spamType=SPAM_TYPES[currentRoundIdx];
+    // Check if already decided
+    const isSpam=trainingResults[spamType.id]&&trainingResults[spamType.id].spam.find(x=>x.id===m.id);
+    const isNotSpam=trainingResults[spamType.id]&&trainingResults[spamType.id].notSpam.find(x=>x.id===m.id);
+    const decided=isSpam||isNotSpam;
     return `
-    <div class="compare-mail-card${isCurrent?' current-mail-open':''}${isAutoClassified?' auto-classified':''}"
-         id="cmc_${m.id}"
-         onclick="openMailForCompare(${m.id})"
-         style="${isAutoClassified?'opacity:0.45;':''}">
+    <div class="compare-mail-card${isCurrent?' current-mail-open':''}" id="cmc_${m.id}" onclick="openMailForCompare(${m.id})">
       <div class="cmc-head">
-        <div class="cmc-avatar" style="background:${isAutoClassified?'#b0b8cc':col}">${init}</div>
+        <div class="cmc-avatar" style="background:${col}">${init}</div>
         <div class="cmc-sender">${escHtml(m.sender)}</div>
         <div class="cmc-time">${m.time}</div>
       </div>
       <div class="cmc-body">
         <div class="cmc-subject">${escHtml(m.subject)}</div>
         <div class="cmc-preview">${escHtml(preview.trim().slice(0,70))}</div>
+        ${!decided?`<div style="margin-top: 6px; font-size: 11px; font-weight: 700; color: var(--blue);">👉 Click to open and classify</div>`:''}
       </div>
-      ${statusLabel}
+      ${decided?`<div style="padding:6px 14px 10px;font-size:12px;font-weight:700;color:${isSpam?(spamType.id==='safe'?'#c0474a':'#c0474a'):'#2d8a5e'}">${isSpam?(spamType.id==='safe'?'🚫 Not Safe — Spam':'🚫 Marked as Spam'):'✅ '+(spamType.id==='safe'?'Safe Mail':'Not Spam')}</div>`:''}
     </div>`;
   }).join('');
 }
@@ -2326,37 +2201,37 @@ function decideMail(mailId,decision){
   if(!m)return;
   const spamType=SPAM_TYPES[currentRoundIdx];
   if(!trainingResults[spamType.id]){trainingResults[spamType.id]={spam:[],notSpam:[]};}
-  // Remove from both first (allow changing mind)
+  // Remove from both first
   trainingResults[spamType.id].spam=trainingResults[spamType.id].spam.filter(x=>x.id!==mailId);
   trainingResults[spamType.id].notSpam=trainingResults[spamType.id].notSpam.filter(x=>x.id!==mailId);
   if(decision==='yes'){trainingResults[spamType.id].spam.push(m);}
   else{trainingResults[spamType.id].notSpam.push(m);}
   // Update panel
   const panel=document.getElementById('compareMailPanel');
-  if(panel)panel.innerHTML='<div class="panel-title">📬 '+roundMails.length+' Mails — '+(spamType.id==='safe'?'✅ These survived all rounds — are they all safe?':'Does this mail have "'+spamType.name+'" features?')+'</div>'+renderCompareMails();
-  // Check completion: only count decisions for mails in THIS round's pool
-  const roundMailIds = new Set(roundMails.map(x=>x.id));
-  const decidedInRound =
-    trainingResults[spamType.id].spam.filter(x=>roundMailIds.has(x.id)).length +
-    trainingResults[spamType.id].notSpam.filter(x=>roundMailIds.has(x.id)).length;
-  if(decidedInRound === roundMails.length){
+  if(panel)panel.innerHTML='<div class="panel-title">📬 All '+roundMails.length+' Mails — '+(spamType.id==='safe'?'Is this a Safe / Genuine mail?':'Does this mail have "'+spamType.name+'" features?')+'</div>'+renderCompareMails();
+  // Check if all decided
+  const totalDecided=trainingResults[spamType.id].spam.length+trainingResults[spamType.id].notSpam.length;
+  if(totalDecided===roundMails.length){
     showRoundPopup();
   }
 }
 
 function decideMailFromView(mailId, decision) {
     decideMail(mailId, decision);
+    
+    // Automatically advance to the next undecided mail
     const spamType = SPAM_TYPES[currentRoundIdx];
-    // Find next mail in this round that hasn't been decided yet
     const nextUndecided = roundMails.find(m => {
-        const s  = trainingResults[spamType.id].spam.find(x => x.id === m.id);
+        const s = trainingResults[spamType.id].spam.find(x => x.id === m.id);
         const ns = trainingResults[spamType.id].notSpam.find(x => x.id === m.id);
-        return !s && !ns; // not yet decided
+        return !s && !ns;
     });
+    
     if (nextUndecided) {
         openMailForCompare(nextUndecided.id);
     } else {
         closeMailView();
+        // The roundPopup will be triggered by decideMail automatically
     }
 }
 
@@ -2369,11 +2244,8 @@ function showRoundPopup(){
   document.getElementById('rpTitle').textContent=`Round ${currentRoundIdx+1} Complete — ${spamType.name}`;
   document.getElementById('rpSpam').textContent=spamCount;
   document.getElementById('rpInbox').textContent=notSpamCount;
-  // Show cascade info: how many pass on to the next round
-  const nextInfo = isLast
-    ? 'All rounds complete! Click to see your analysis.'
-    : `${notSpamCount} mails cascade ➡ Round ${currentRoundIdx+2}: "${SPAM_TYPES[currentRoundIdx+1].name}"`;
-  document.getElementById('rpNextInfo').textContent=nextInfo;
+  document.getElementById('rpNextInfo').textContent=isLast?'All rounds complete! Click to see your analysis.':
+    `Next: Check for "${SPAM_TYPES[currentRoundIdx+1].name}" features`;
   document.getElementById('rpNextBtn').textContent=isLast?'🎉 See Training Analysis →':'Next Round →';
   document.getElementById('roundPopup').classList.add('show');
 }
@@ -2567,170 +2439,100 @@ function openMailView(mailOrJson,isLive,isCompare){
   // Format body — suspicious links grey, valid links blue
   // Keywords are STRICTLY per category based on the official Spam Types & Features table.
   // No word appears in more than one category to prevent wrong highlights.
-  // Keywords matched EXACTLY to the PDF guide and actual mail bodies.
   const SPAM_KEYWORDS = {
-
-    // ── PHISHING: Urgent action, Verify account, Suspended, Click here, OTP ──
+    // Phishing: Fake links, Urgent language, Unknown sender, Fake bank/company names
     phishing: [
-      // PDF keywords
-      'urgent action required', 'verify your account', 'account will be blocked',
-      'click here immediately', 'otp verification', 'account has been suspended',
-      'account access is restricted', 'verify immediately',
-      // Body-specific phrases
-      'your bank account will be blocked', 'login immediately',
-      'avoid account suspension', 'complete otp verification',
-      'account will be suspended', 'permanently blocked',
-      'account will be permanently blocked', 'permanent account termination',
-      'verify your identity', 'restore access', 'click the link below',
-      'link expires in', 'do not share this email',
-      'account data will be permanently deleted',
-      // Fake domains
-      'account-suspended-now.xyz', 'otp-verify-secure.net',
-      'login-confirm-id.biz', 'account-blocked-check.org',
-      'suspend-alert-secure.com', 'click-verify-now.biz',
-      'urgent-account-action.net',
+      'verify your', 'verify now', 'verification required', 'identity verification',
+      'suspended', 'suspension', 'your account has been', 'account will be deleted',
+      'unrecognized device', 'unknown device', 'sign-in attempt', 'login attempt',
+      'act now', 'action required', 'immediately', 'within 24 hours', 'within 48 hours',
+      'restore access', 'restore your account', 'account terminated',
+      'enter your otp', 'confirm your identity', 'update your billing',
+      'paypal-verify', 'secure-login', 'bankaccount-alert', 'apple-support-center',
+      'microsoft-accountverify', 'paypal-helpdesk', 'amazon-account-verify',
+      'bank-of-india-secure', 'google-security-team'
     ],
 
-    // ── PROMO SPAM: Sale, Offer, Limited time, Discount, Coupon, Cashback ──
+    // Promotion Spam: Prize words, Discounts, Cashback, Sale offers
     promo_spam: [
-      // PDF keywords
-      'sale', 'offer', 'limited time', 'discount', 'coupon', 'cashback',
-      // Body-specific phrases
-      'mega summer sale', 'flat 70% off', 'flat 50% off', 'hurry up',
-      'use coupon', 'save70', 'bigsale50', 'flash60', 'new40', 'weekend30',
-      'cash50', 'huge discounts', 'limited time offer',
-      'today only', 'expires tonight', 'tonight at 11:59 pm',
-      'claim cashback now', 'cashback of ₹500', 'big sale alert',
-      'flash sale', 'lightning sale', 'buy 2 get 3 free',
-      'free delivery', 'free gift', 'shop now', 'grab deals now',
-      '% off', 'prices disappear in', 'act fast',
+      'flash sale', '% off', 'discount', 'cashback', 'sale offer', 'sale alert',
+      'buy 2 get', 'shop now', 'personal discount code', 'discount code expires',
+      'weekend special', 'today only', 'before midnight', 'claim before it expires',
+      'exclusive deal', 'big sale', 'up to 80%', 'up to 70%', '₹500 is waiting',
+      'coupon', 'promo code', 'vip deal', 'limited offer'
     ],
 
-    // ── SCAM: Lottery, Claim reward, Earn money fast, Prize money, Investment ──
+    // Scam / Fraud: "You won lottery", Asking money transfer, Fake rewards, Emotional stories
     scam: [
-      // PDF keywords
-      'lottery', 'claim reward', 'earn money fast', 'prize money',
-      'investment opportunity',
-      // Body-specific phrases
-      'congratulations', 'you have won', 'lucky winner', 'grand prize winner',
-      'claim your prize', 'international lottery', 'prize money of',
-      'send your bank details', 'bank details for wire transfer',
-      'bank account number', 'processing fee', 'fully refundable',
-      'wire transfer', 'money transfer', 'claim reward now',
-      'forfeited', 'do not share this email', 'do not tell anyone',
-      'prize committee', 'lottery award', 'lottery reference',
-      'earmarked for transfer', 'humanitarian initiative',
-      'strictly confidential', 'awaiting your response',
-      'investment opportunity', '300% returns', 'guaranteed returns',
-      // Timing pressure
-      'within 48 hours', 'within 72 hours', 'before it is reallocated',
-      // Fake domains
-      'lottery-reward.com', 'claim-reward-now.net',
-      'earnfast-global.biz', 'prize-money-fund.org',
-      'investment-opportunity.net',
+      'you have won', 'you\'ve won', 'you have been selected', 'lucky winner',
+      'congratulations', 'lottery', 'unclaimed inheritance', 'wire transfer',
+      'money transfer', 'million waiting', 'claim your prize', 'claim within',
+      'prize within', 'no catch', 'this is a gift', 'millionaire club',
+      'no lottery', 'special award', 'emotional', 'confidentiality',
+      'awaiting your response', 'transfer of', '₹80,00,000', '$50,000', '$2.5 million'
     ],
 
-    // ── MALWARE: Download attachment, Invoice attached, ZIP file, Enable macros ──
+    // Malware Spam: Suspicious attachments, Download links, Unknown files, Executable files
     malware: [
-      // PDF keywords
-      'download attachment', 'invoice attached', 'zip file',
-      'enable macros', 'open document',
-      // Body-specific phrases
-      'check the attached invoice', 'confirm payment today',
-      'enable editing', 'enable macros to view', 'enable macros when prompted',
-      'download attachment below', 'click to download',
-      'download now', 'open document immediately', 'open attached',
-      'file expires in', 'password: sal@2026', 'password: qd@2026',
-      'file expires in 48 hours', 'file expires in 24 hours',
-      '.exe', '.zip', '.bat',
-      'extract the zip file', 'salary_revision_2026.zip',
-      'invoice_final_2026.exe', 'employee_handbook_2026.exe',
-      'q2_performance_data.zip', 'payment_invoice_attached_2026.zip',
-      // Fake domains
-      'invoice-attachment.biz', 'zip-file-share.com',
-      'download-docs-now.net', 'enable-macros-doc.biz',
-      'open-document-urgent.net',
+      'click to download', 'download immediately', 'download and review',
+      'open attached', 'open the attached', 'attached document', 'shared file',
+      '.exe', '.zip', '.rar', 'invoice #', 'salary_revision', 'project_report',
+      'e-signature is required', 'file from colleague', 'secure-docs',
+      'fileshare-urgent', 'cloudstorage99', 'docusign-verify', 'quickdrop-share'
     ],
 
-    // ── FAKE BIZ: Tech support, Refund approved, Customer care, Support ticket ──
+    // Fake Business/Support Spam: Professional-looking mail, Fake company logo, Account warnings, Unknown domain
     fakebiz: [
-      // PDF keywords
-      'tech support', 'refund approved', 'customer care',
-      'support ticket', 'subscription renewal',
-      // Body-specific phrases
-      'refund of ₹8,999 is approved', 'contact our support executive',
-      'contact customer care', 'support executive immediately',
-      'support ticket #', 'subscription renews today',
-      'renew immediately', 'subscription renewal is pending',
-      'virus on your device', 'device protection will be removed',
-      'refund will expire', 'customer care team',
-      'call our tech support', 'speak to a support executive',
-      'claim your refund', 'refund has been approved',
-      'customer support team', 'billing & subscription',
-      // Fake domains
-      'techsupport-helpdesk.biz', 'customer-care-center.net',
-      'support-ticket-now.com', 'subscription-renewal-alert.biz',
-      'refund-approved-center.net',
+      'temporarily restricted', 'access has been', 'account security',
+      'icloud storage is full', 'subscription expires', 'renew immediately',
+      'unauthorized access attempt', 'important notice about your account',
+      'helpdesk', 'paypal-helpdesk-x', 'amazon-account-verify.net',
+      'apple-support-center.biz', 'microsoft-help-desk', 'bank-of-india-secure.xyz',
+      'your account access', 'act now'
     ],
 
-    // ── SOCIAL: New follower, Verified badge, Trending post, Likes increased ──
+    // Social Media Spam: Fake followers, Viral content, Clickbait, Trending topics
     social: [
-      // PDF keywords
-      'new follower', 'verified badge', 'trending post',
-      'likes increased', 'click to view message',
-      // Body-specific phrases
-      'new followers waiting', 'new follower alert',
-      'you have 47 new followers', 'followers waiting to connect',
-      'eligible for a verified badge', 'blue tick', 'get verified badge',
-      'going viral', 'your post is trending', 'trending rank',
-      'likes increased by', 'likes increased rapidly',
-      'see reactions now', 'click to view message',
-      'view new followers', 'new followers', 'follower count',
-      'mentioned in a trending post', 'trending post',
-      'before it gets removed', 'spreading fast',
-      // Fake domains
-      'newfollower-alert.com', 'verified-account-now.net',
-      'trending-post-update.biz', 'likes-increased-now.com',
-      'click-to-view-msg.net',
+      'new followers', 'followers waiting', 'get 10,000', 'real instagram followers',
+      'going viral', 'video of you', 'thousands of views', 'viral thread',
+      'trending', 'your post is', 'see reactions', 'check it out',
+      'mentioned in a viral', 'boost your followers', 'boost any post',
+      'verified badge', 'sociaflow', 'friendsapp', 'photoshare', 'trendfeed', 'viralpost'
     ],
 
-    // ── NEWSLETTER: Weekly update, Newsletter, Monthly digest, Latest news ──
+    // Newsletter / Bulk Mail: Offers, Updates, Subscription mails
     newsletter: [
-      // PDF keywords
-      'newsletter', 'weekly update', 'monthly digest',
-      'latest news', 'company announcement',
-      // Body-specific phrases
-      'weekly digest', 'weekly newsletter', 'monthly digest',
-      'this week\'s newsletter', 'top stories this week',
-      'knowledge, delivered weekly', 'unsubscribe',
-      'manage preferences', 'curated for you',
-      'company announcement', 'first edition is ready',
-      'subscription confirmed', 'free resources',
-      'community highlights', 'editorial team',
-      // Domains
-      'newsdaily.com', 'weeklydigest.org', 'informer-hub.net',
-      'magazineplus.io', 'topicflow.com',
+      'newsletter', 'weekly digest', 'monthly bulletin', 'this week\'s top',
+      'curated just for you', 'subscription confirmed', 'first edition',
+      'top stories this week', 'articles you\'ll love', 'updates from our team',
+      'newsdaily', 'weeklydigest', 'informer-hub', 'magazineplus', 'topicflow',
+      'unsubscribe', 'bulk mail', 'mailing list'
     ],
 
-    // ── SAFE: Meeting scheduled, Project update, Thank you, Official, Regards ──
+    // Safe / Genuine Mail — 4 features: Known sender, Professional language, No suspicious links, No urgent scam words
+    // Highlight POSITIVE signals of genuine mail in green
     safe: [
-      // PDF keywords — positive genuine signals
-      'meeting scheduled', 'project update', 'thank you',
-      'official communication', 'regards,',
-      // Body-specific genuine phrases
-      'meeting reminder', 'robotics project meeting',
-      'cognospace team', 'city public school',
-      'the school administration', 'hr team',
-      'finance department', 'project lead', 'project manager',
-      'hr & payroll team', 'city bank', 'bluedart',
-      'warm regards,', 'best,', 'cheers,',
-      'please confirm', 'feel free to reply',
-      'thank you for your submission', 'thank you for shopping',
-      'payslip is available', 'salary credited',
-      'order has been confirmed', 'appointment confirmed',
-      'parent-teacher meeting', 'onboarding schedule',
-      'welcome to the team', 'drive.google.com',
-      'finance@cognospace.upi', 'bluedart.com/tracking',
+      // ✅ Feature 1: Known sender — real org names & professional email domains
+      'cognospace', 'city medical centre', 'iit admissions office', 'hr & payroll department',
+      'acme corporation', 'hdfc bank', 'alice johnson', 'bob smith', 'the school administration',
+      'city public school', 'finance department', 'project lead',
+
+      // ✅ Feature 2: Professional language — proper greetings, sign-offs, structure
+      'dear team', 'dear patient', 'dear student', 'dear employee', 'dear parent/guardian',
+      'dear customer', 'dear team and parents',
+      'best,', 'warm regards,', 'looking forward', 'please confirm',
+      'feel free to reply', 'thank you,', 'cheers,', 'regards,',
+
+      // ✅ Feature 3: No suspicious links — real trusted domains only
+      'bluedart.com', 'drive.google.com', 'hr.acmecorp.in', 'payroll@acmecorp.in',
+      'admissions@iit-counselling.edu', 'finance@cognospace.upi',
+
+      // ✅ Feature 4: No urgent scam words — normal transactional / informational language
+      'appointment confirmed', 'order has been confirmed', 'salary credited',
+      'transaction alert', 'slot has been confirmed', 'invoice details',
+      'welcome to the team', 'parent-teacher meeting', 'onboarding schedule',
+      'tracking number', 'estimated delivery', 'net salary credited',
+      'please find below', 'please reply to this email',
     ],
   };
 
@@ -2755,7 +2557,7 @@ function openMailView(mailOrJson,isLive,isCompare){
     if(!line)return'<br>';
     // Mark fake/suspicious links (http:// with unknown TLDs or not .com/.org/.edu real sites)
     line=line.replace(/(https?:\/\/[^\s<>]+|www\.[^\s<>]+)/g,url=>{
-      const safeDomains=['bluedart.com','drive.google.com','citybank-online.in','acmecorp.in','national-counselling.edu','citymedical.org','topicflow.com','weeklydigest.org','techbuzz-newsletter.com','healthtips-digest.net','magazineplus.io','informer-hub.net','newsdaily.com'];
+      const safeDomains=['bluedart.com','google.com','drive.google.com','hdfc-bank.com','acmecorp.in','iit-counselling.edu','citymedical.org','topicflow.com','weeklydigest.org','techbuzz-newsletter.com','healthtips-digest.net','magazineplus.io','informer-hub.net','newsdaily.com','photoshare.io','friendsapp.net'];
       const isSafe=safeDomains.some(d=>url.includes(d));
       if(isSafe)return`<a href="#" style="color:#1a73e8;font-weight:600;text-decoration:underline">${url}</a>`;
       return`<span class="unknown-link">${url}</span>`;
@@ -2810,25 +2612,11 @@ function openMailView(mailOrJson,isLive,isCompare){
   const compareBtnsEl = document.getElementById('mvCompareBtns');
   if (isCompare) {
       const spamType = SPAM_TYPES[currentRoundIdx];
-      const isSpamResult   = trainingResults[spamType.id] && trainingResults[spamType.id].spam.find(x => x.id === m.id);
-      const isNotSpamResult= trainingResults[spamType.id] && trainingResults[spamType.id].notSpam.find(x => x.id === m.id);
-      const decided = isSpamResult || isNotSpamResult;
+      const isSpam = trainingResults[spamType.id] && trainingResults[spamType.id].spam.find(x => x.id === m.id);
+      const isNotSpam = trainingResults[spamType.id] && trainingResults[spamType.id].notSpam.find(x => x.id === m.id);
+      const decided = isSpam || isNotSpam;
 
-      // Is this mail auto-classified (different spam type, no manual decision needed)?
-      const isAutoClassified = decided && !isSpamResult && m.catId !== spamType.id && m.catId !== 'safe' && spamType.id !== 'safe';
-      const trueTypeName = isAutoClassified ? (SPAM_TYPES.find(t=>t.id===m.catId)?.name || 'another spam type') : null;
-
-      if (isAutoClassified) {
-          // Show informational message — this mail belongs to a different spam category
-          compareBtnsEl.innerHTML = `
-            <div style="margin: 0 16px 12px; padding: 12px 16px; background: linear-gradient(135deg,#f5f5f5,#ebebeb); border: 1.5px solid #c8d0e0; border-radius: 12px; display:flex; align-items:center; gap:12px;">
-              <span style="font-size:20px">↪</span>
-              <div>
-                <div style="font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;color:#5a6282">Not a ${spamType.name} mail</div>
-                <div style="font-size:12px;color:#9199b5;margin-top:2px">This mail belongs to <strong>${trueTypeName}</strong> — it will be evaluated in its own round.</div>
-              </div>
-            </div>`;
-      } else if (!decided) {
+      if (!decided) {
           if (isSafeRound) {
             // Safe/Genuine round: flip button labels — YES means safe, NO means spam
             compareBtnsEl.innerHTML = `
@@ -2845,20 +2633,20 @@ function openMailView(mailOrJson,isLive,isCompare){
                   <div style="font-size: 13px; font-weight: 800; font-family: 'Nunito', sans-serif; color: var(--text); flex:1; min-width:180px;">Has "${spamType.name}" features?</div>
                   <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                       <button class="cmc-btn yes" style="padding: 8px 18px; font-size: 13px;" onclick="decideMailFromView(${m.id}, 'yes')">✅ YES — Spam</button>
-                      <button class="cmc-btn no" style="padding: 8px 18px; font-size: 13px;" onclick="decideMailFromView(${m.id}, 'no')">✉️ NO — Not Spam</button>
+                      <button class="cmc-btn no" style="padding: 8px 18px; font-size: 13px;" onclick="decideMailFromView(${m.id}, 'no')">✉️ NO — Safe</button>
                   </div>
               </div>`;
           }
       } else {
           if (isSafeRound) {
             compareBtnsEl.innerHTML = `
-              <div style="margin: 0 16px 12px; padding: 10px 16px; background: ${isNotSpamResult ? '#edfbf3' : '#fff0f0'}; border: 1.5px solid ${isNotSpamResult ? '#b4e8cc' : '#f5c0c0'}; border-radius: 10px; font-weight: 700; color: ${isNotSpamResult ? '#2d8a5e' : '#c0474a'}; font-size:13px;">
-                ${isNotSpamResult ? '✅ You marked this as Safe Mail' : '🚫 You marked this as Not Safe — Spam'}
+              <div style="margin: 0 16px 12px; padding: 10px 16px; background: ${isNotSpam ? '#edfbf3' : '#fff0f0'}; border: 1.5px solid ${isNotSpam ? '#b4e8cc' : '#f5c0c0'}; border-radius: 10px; font-weight: 700; color: ${isNotSpam ? '#2d8a5e' : '#c0474a'}; font-size:13px;">
+                ${isNotSpam ? '✅ You marked this as Safe Mail' : '🚫 You marked this as Not Safe — Spam'}
               </div>`;
           } else {
             compareBtnsEl.innerHTML = `
-              <div style="margin: 0 16px 12px; padding: 10px 16px; background: ${isSpamResult ? '#fff0f0' : '#edfbf3'}; border: 1.5px solid ${isSpamResult ? '#f5c0c0' : '#b4e8cc'}; border-radius: 10px; font-weight: 700; color: ${isSpamResult ? '#c0474a' : '#2d8a5e'}; font-size:13px;">
-                  ${isSpamResult ? '🚫 You marked this as Spam' : '✅ You marked this as Not Spam'}
+              <div style="margin: 0 16px 12px; padding: 10px 16px; background: ${isSpam ? '#fff0f0' : '#edfbf3'}; border: 1.5px solid ${isSpam ? '#f5c0c0' : '#b4e8cc'}; border-radius: 10px; font-weight: 700; color: ${isSpam ? '#c0474a' : '#2d8a5e'}; font-size:13px;">
+                  ${isSpam ? '🚫 You marked this as Spam' : '✅ You marked this as Not Spam'}
               </div>`;
           }
       }
