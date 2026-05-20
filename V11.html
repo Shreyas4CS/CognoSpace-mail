@@ -98,8 +98,8 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .mode-btn:not(.active):hover{background:var(--hover);color:var(--blue)}
 .mode-btn.locked{cursor:not-allowed;opacity:0.55}
 .mode-btn.locked:hover{background:transparent;color:var(--text2)}
-.mode-btn.admin-btn{background:linear-gradient(135deg,#52b788,#3d9e73);color:#fff;font-size:12px;padding:6px 12px}
-.mode-btn.admin-btn:hover{transform:scale(1.05);box-shadow:0 4px 12px rgba(82,183,136,.4)}
+.mode-btn.admin-btn{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:12px;padding:6px 12px}
+.mode-btn.admin-btn:hover{transform:scale(1.05);box-shadow:0 4px 12px rgba(124,58,237,.4)}
 .lock-icon{font-size:11px;margin-left:3px}
 .avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#4a90e2,#52b788);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 2px 10px rgba(74,144,226,.3);transition:transform .2s,box-shadow .2s}
 .avatar:hover{transform:scale(1.12);box-shadow:0 4px 14px rgba(74,144,226,.4)}
@@ -361,6 +361,46 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 
 
 
+/* ── ADMIN MODE ── */
+#adminWrap{display:none;flex:1;flex-direction:column;overflow:hidden}
+.admin-header{padding:16px 24px;background:linear-gradient(135deg,#1e0a3c,#2d1057);border-bottom:2px solid #6d28d9;display:flex;align-items:center;gap:14px;flex-shrink:0;flex-wrap:wrap}
+.admin-title{font-size:19px;font-family:'Nunito',sans-serif;font-weight:800;color:#e9d5ff}
+.admin-subtitle{font-size:13px;color:#c4b5fd;margin-top:2px}
+.admin-body{flex:1;overflow-y:auto;padding:16px;background:#0f0521}
+.admin-mail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.admin-mail-card{background:#1a0a2e;border:1.5px solid #3b1f6e;border-radius:14px;overflow:hidden;transition:transform .2s,box-shadow .2s;animation:cardAppear .3s ease both;cursor:pointer; display:flex; flex-direction:column; justify-content:space-between;}
+.admin-mail-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(109,40,217,.3)}
+.amc-head{padding:12px 14px 10px;border-bottom:1px solid #2d1057;display:flex;align-items:center;gap:10px}
+.amc-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800;flex-shrink:0}
+.amc-sender{font-size:12px;font-weight:700;color:#e9d5ff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.amc-type-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;flex-shrink:0;font-family:'Nunito',sans-serif}
+.amc-body{padding:10px 14px 12px; flex:1;}
+.amc-subject{font-size:12px;font-weight:700;color:#ddd6fe;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.amc-preview{font-size:11px;color:#a78bfa;line-height:1.5;max-height:44px;overflow:hidden}
+.amc-verdict{padding:6px 14px 10px;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif}
+.amc-verdict.spam{color:#f87171}
+.amc-verdict.inbox{color:#6ee7b7}
+.admin-filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.admin-filter-btn{padding:6px 16px;border-radius:20px;border:1.5px solid #3b1f6e;background:transparent;color:#c4b5fd;font-size:13px;font-family:'Nunito',sans-serif;font-weight:600;cursor:pointer;transition:all .2s}
+.admin-filter-btn:hover,.admin-filter-btn.active{background:#6d28d9;color:#fff;border-color:#6d28d9}
+/* Admin mail full view */
+.admin-mail-full{background:#1a0a2e;border:1.5px solid #6d28d9;border-radius:14px;margin-top:12px;overflow:hidden;animation:cardAppear .3s ease both}
+.amf-head{padding:16px 18px 12px;border-bottom:1px solid #3b1f6e;background:linear-gradient(135deg,#2d1057,#1e0a3c)}
+.amf-body{padding:16px 18px;font-size:13px;color:#c4b5fd;line-height:1.8;white-space:pre-wrap;font-family:'Nunito Sans',sans-serif;max-height:300px;overflow-y:auto;background:#0f0521}
+.amf-verdict-bar{padding:12px 18px;background:linear-gradient(135deg,#1e0a3c,#2d1057);border-top:1px solid #3b1f6e;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+/* Logs panel */
+.admin-logs-panel{width:0;flex-shrink:0;overflow:hidden;background:#1a0a2e;border-left:2px solid #3b1f6e;transition:width .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+.admin-logs-panel.open{width:320px}
+.admin-logs-header{padding:14px 16px;background:linear-gradient(135deg,#2d1057,#1e0a3c);border-bottom:1px solid #3b1f6e;display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:700;color:#e9d5ff;font-family:'Nunito',sans-serif;flex-shrink:0}
+.admin-logs-body{flex:1;overflow-y:auto;padding:12px}
+.admin-logs-footer{padding:10px 12px;border-top:1px solid #3b1f6e;flex-shrink:0}
+.admin-log-entry{background:#0f0521;border:1px solid #3b1f6e;border-radius:10px;padding:8px 12px;margin-bottom:8px;font-size:12px;color:#c4b5fd;font-family:'Nunito Sans',sans-serif;animation:cardAppear .25s ease both}
+.admin-log-entry .log-time{font-size:10px;color:#6d28d9;font-weight:700;margin-bottom:3px;font-family:'Nunito',sans-serif}
+.admin-log-entry .log-msg{line-height:1.5}
+.admin-log-entry.log-spam{border-left:3px solid #f87171}
+.admin-log-entry.log-inbox{border-left:3px solid #6ee7b7}
+.admin-log-entry.log-info{border-left:3px solid #8b5cf6}
+
 /* ── DECISION TREE MODAL ── */
 #dtModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(45,49,66,.6);backdrop-filter:blur(6px);z-index:500;align-items:center;justify-content:center;padding:16px;animation:fadeInScale .3s ease both}
 #dtModal.show{display:flex}
@@ -386,19 +426,19 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .dt-info-box strong{color:#6a1b9a;font-family:'Nunito',sans-serif}
 
 /* ── ADMIN LOGIN MODAL ── */
-#adminLoginModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(45,49,66,.55);backdrop-filter:blur(8px);z-index:800;align-items:center;justify-content:center;padding:16px}
+#adminLoginModal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,5,33,.85);backdrop-filter:blur(8px);z-index:800;align-items:center;justify-content:center;padding:16px}
 #adminLoginModal.show{display:flex}
-.admin-login-box{background:#fff;border:1.5px solid var(--border);border-radius:24px;padding:40px;width:min(400px,100%);box-shadow:0 16px 48px rgba(74,144,226,.25);animation:popIn .35s ease both;text-align:center}
-.admin-login-box h2{font-size:22px;font-family:'Nunito',sans-serif;font-weight:800;color:var(--text);margin-bottom:8px}
-.admin-login-box p{font-size:13px;color:var(--text2);margin-bottom:28px;line-height:1.6}
-.admin-login-box .auth-input{background:#fafcff;border-color:var(--border);color:var(--text)}
-.admin-login-box .auth-input::placeholder{color:var(--text3)}
-.admin-login-box .auth-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(74,144,226,.15)}
-.admin-login-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--blue),#6aa8f0);color:#fff;border:none;border-radius:12px;font-size:15px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(74,144,226,.3)}
-.admin-login-btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(74,144,226,.4)}
-.admin-login-err{background:#fff0f0;color:#c0474a;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:16px;display:none;border:1px solid #f5c0c0}
-.admin-login-cancel{margin-top:16px;font-size:13px;color:var(--text2);cursor:pointer;font-weight:600;transition:color .2s}
-.admin-login-cancel:hover{color:var(--blue)}
+.admin-login-box{background:linear-gradient(135deg,#1e0a3c,#2d1057);border:1.5px solid #6d28d9;border-radius:24px;padding:40px;width:min(400px,100%);box-shadow:0 20px 60px rgba(109,40,217,.4);animation:popIn .35s ease both;text-align:center}
+.admin-login-box h2{font-size:22px;font-family:'Nunito',sans-serif;font-weight:800;color:#e9d5ff;margin-bottom:8px}
+.admin-login-box p{font-size:13px;color:#c4b5fd;margin-bottom:28px}
+.admin-login-box .auth-input{background:#2d1057;border-color:#6d28d9;color:#e9d5ff}
+.admin-login-box .auth-input::placeholder{color:#8b5cf6}
+.admin-login-box .auth-input:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.2)}
+.admin-login-btn{width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:12px;font-size:15px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(124,58,237,.4)}
+.admin-login-btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(124,58,237,.5)}
+.admin-login-err{background:rgba(239,68,68,.15);color:#fca5a5;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:16px;display:none;border:1px solid rgba(239,68,68,.3)}
+.admin-login-cancel{margin-top:16px;font-size:13px;color:#8b5cf6;cursor:pointer;font-weight:600;transition:color .2s}
+.admin-login-cancel:hover{color:#e9d5ff}
 
 /* ── FOOTER ── */
 footer{background:#1a1f3c;flex-shrink:0;border-top:1px solid rgba(255,255,255,.08)}
@@ -482,6 +522,9 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
   .l2-body{flex-direction:column}
   .l2-right{width:100%}
   .cats-panel{width:100%}
+
+  /* Admin */
+  .admin-mail-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
 
   /* Footer */
   /* Live header */
@@ -697,6 +740,14 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
   .lm-badge{font-size:10px;padding:2px 7px}
   .lm-spam-type{max-width:80px;font-size:9px}
 
+  /* Admin */
+  .admin-header{padding:8px 12px;gap:8px;flex-wrap:wrap}
+  .admin-title{font-size:15px;width:100%}
+  .admin-subtitle{font-size:12px}
+  .admin-body{padding:10px}
+  .admin-mail-grid{grid-template-columns:1fr}
+  .admin-logs-panel.open{width:100%;position:fixed;top:0;left:0;right:0;bottom:0;border-left:none;z-index:400}
+
   /* Modals */
   .modal-overlay{padding:8px}
   .modal{padding:18px 14px;border-radius:16px;width:100%;max-height:92dvh}
@@ -904,8 +955,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
       <div class="mode-toggle">
         <button class="mode-btn active" id="trainModeBtn" onclick="switchMode('training')">🎓 Training</button>
         <button class="mode-btn locked" id="liveModeBtn" onclick="tryLiveMode()" title="Complete training to unlock Live Mode">⚡ Live <span class="lock-icon">🔒</span></button>
-        <button class="mode-btn admin-btn" id="liveAdminBtn" onclick="openAdminLogin()">🚀 Live Admin</button>
-        <button class="mode-btn" id="exitAdminBtn" onclick="exitAdminMode()" style="display:none;background:linear-gradient(135deg,#e07070,#c0474a);color:#fff;font-size:12px;padding:6px 12px" title="End admin session and re-lock Live Mode">🚪 Exit Admin</button>
+        <button class="mode-btn admin-btn" onclick="openAdminLogin()">🔐 Admin</button>
       </div>
       <div class="avatar" id="userAvatar" title="Account">A</div>
       <button id="logoutBtn" onclick="logout()" style="display:none;padding:8px 16px;border-radius:10px;border:none;background:linear-gradient(135deg,#e07070,#f08060);color:#fff;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;font-size:13px;transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">Logout</button>
@@ -989,6 +1039,46 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
       <footer><div class="footer-simple">© 2026 CognoSpace · <a href="https://www.cognospace.in" target="_blank">cognospace.in</a> · Designed for young minds</div></footer>
     </div>
 
+    <div id="adminWrap" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+      <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+        <div class="admin-header">
+          <div style="flex:1">
+            <div class="admin-title">🔐 Admin Dashboard — Answer Key</div>
+            <div class="admin-subtitle">All generated mails with true categories revealed. Add new mails anytime via the data arrays in code.</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <button class="gen-btn" style="background:linear-gradient(135deg,#0f766e,#14b8a6);font-size:13px;padding:9px 18px" onclick="toggleAdminLogs()">📋 Logs</button>
+            <button class="gen-btn" style="background:linear-gradient(135deg,#7c3aed,#a855f7)" onclick="switchMode('training')">← Back to Training</button>
+          </div>
+        </div>
+        <div class="admin-body" style="display:flex;gap:0;overflow:hidden;padding:0">
+          <div style="flex:1;overflow-y:auto;padding:16px">
+            
+            <div style="background: #1a0a2e; border: 1.5px solid #3b1f6e; border-radius: 14px; padding: 16px; margin-bottom: 16px;">
+              <h3 style="color:#e9d5ff; font-family:'Nunito',sans-serif; margin-bottom: 12px; font-size: 15px;">🗝️ Answer Key & Category Guide</h3>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;" id="adminLegendKeys">
+                </div>
+            </div>
+
+            <div class="admin-filter-bar" id="adminFilterBar"></div>
+            <div class="admin-mail-grid" id="adminGrid"></div>
+          </div>
+          <div class="admin-logs-panel" id="adminLogsPanel">
+            <div class="admin-logs-header">
+              <span>📋 Admin Logs</span>
+              <button onclick="toggleAdminLogs()" style="border:none;background:rgba(255,255,255,.1);color:#e9d5ff;border-radius:8px;padding:4px 10px;cursor:pointer;font-size:12px;font-family:'Nunito',sans-serif;font-weight:700">✕ Close</button>
+            </div>
+            <div class="admin-logs-body" id="adminLogsBody">
+              <div style="color:#8b5cf6;font-size:13px;text-align:center;padding:20px 0">No actions logged yet.<br><span style="font-size:11px;color:#6d28d9">Actions will appear here as you use the app.</span></div>
+            </div>
+            <div class="admin-logs-footer">
+              <button onclick="clearAdminLogs()" style="border:none;background:rgba(239,68,68,.2);color:#fca5a5;border-radius:8px;padding:6px 14px;cursor:pointer;font-size:12px;font-family:'Nunito',sans-serif;font-weight:700;width:100%;transition:background .2s" onmouseover="this.style.background='rgba(239,68,68,.35)'" onmouseout="this.style.background='rgba(239,68,68,.2)'">🗑️ Clear Logs</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer><div class="footer-simple">© 2026 CognoSpace · <a href="https://www.cognospace.in" target="_blank">cognospace.in</a> · Designed for young minds</div></footer>
+    </div>
   </div>
 </div>
 
@@ -1081,13 +1171,13 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
 
 <div id="adminLoginModal">
   <div class="admin-login-box">
-    <div style="font-size:48px;margin-bottom:12px;animation:bounce 2s ease infinite">🚀</div>
-    <h2>Live Admin Access</h2>
-    <p>Skip training and jump directly to Live Mode — for quickly testing changes without sitting through 8 rounds of training.</p>
+    <div style="font-size:48px;margin-bottom:12px;animation:bounce 2s ease infinite">🔐</div>
+    <h2>Admin Access</h2>
+    <p>Enter admin credentials to view the mail key and all verdicts</p>
     <div id="adminLoginErr" class="admin-login-err"></div>
-    <input class="auth-input" id="adminUser" type="text" placeholder="Username" autocomplete="off">
-    <input class="auth-input" id="adminPass" type="password" placeholder="Password" autocomplete="new-password">
-    <button class="admin-login-btn" onclick="doAdminLogin()">Go to Live Mode 🚀</button>
+    <input class="auth-input" id="adminUser" type="text" placeholder="Username" style="background:#2d1057;border-color:#6d28d9;color:#e9d5ff">
+    <input class="auth-input" id="adminPass" type="password" placeholder="Password" style="background:#2d1057;border-color:#6d28d9;color:#e9d5ff">
+    <button class="admin-login-btn" onclick="doAdminLogin()">Enter Admin Mode 🔐</button>
     <div class="admin-login-cancel" onclick="closeAdminLogin()">Cancel</div>
   </div>
 </div>
@@ -1540,85 +1630,115 @@ function unlockLiveMode(){
   btn.style.boxShadow='0 2px 10px rgba(82,183,136,.35)';
 }
 
-function switchMode(mode, forced){
-  // Block switching to live if training not complete AND no admin session
-  if(mode==='live' && !trainingComplete && !adminSession && !forced){
-    showToast('🔒 Complete Training first! Finish all 8 spam type rounds.');
-    return;
-  }
+function switchMode(mode){
   currentMode=mode;
   document.getElementById('trainModeBtn').classList.toggle('active',mode==='training');
   const liveBtn=document.getElementById('liveModeBtn');
-  if(mode==='live')liveBtn.classList.add('active');
-  else liveBtn.classList.remove('active');
+  if(mode==='live'&&trainingComplete)liveBtn.classList.add('active');
+  else if(mode!=='live')liveBtn.classList.remove('active');
   document.getElementById('trainingWrap').style.display=mode==='training'?'flex':'none';
   document.getElementById('liveWrap').style.display=mode==='live'?'flex':'none';
   document.getElementById('l2Wrap').style.display='none';
+  document.getElementById('adminWrap').style.display=mode==='admin'?'flex':'none';
+  if(mode==='admin') {
+      renderAdminGrid();
+      // Populate admin legend key dynamically
+      document.getElementById('adminLegendKeys').innerHTML = SPAM_TYPES.map(t=>`
+        <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:#c4b5fd;">
+          <div style="width:12px; height:12px; border-radius:50%; background:${t.color};"></div>
+          <strong>${t.icon} ${t.name}</strong>
+        </div>
+      `).join('');
+  }
 }
 
-// ══ LIVE ADMIN ══
-// Bypasses training and lets devs/QA jump straight to Live Mode for quick UI testing.
-// Note: This does NOT unlock the regular "Live" button — it gives a temporary admin session.
-// When admin logs out, access to Live Mode is revoked unless real training was completed.
-let adminSession = false;
-
-function openAdminLogin(){
-  // Clear any stale credentials before showing
-  document.getElementById('adminUser').value='';
-  document.getElementById('adminPass').value='';
-  document.getElementById('adminLoginErr').style.display='none';
-  document.getElementById('adminLoginModal').classList.add('show');
-  setTimeout(()=>document.getElementById('adminUser').focus(),100);
-}
-function closeAdminLogin(){
-  document.getElementById('adminLoginModal').classList.remove('show');
-  document.getElementById('adminLoginErr').style.display='none';
-  // Always wipe the typed credentials so they don't persist if reopened later
-  document.getElementById('adminUser').value='';
-  document.getElementById('adminPass').value='';
-}
+// ══ ADMIN ══
+function openAdminLogin(){document.getElementById('adminLoginModal').classList.add('show');}
+function closeAdminLogin(){document.getElementById('adminLoginModal').classList.remove('show');document.getElementById('adminLoginErr').style.display='none';}
 function doAdminLogin(){
   const u=document.getElementById('adminUser').value.trim();
   const p=document.getElementById('adminPass').value;
   const err=document.getElementById('adminLoginErr');
   if(u==='Admin'&&p==='Admin123'){
     closeAdminLogin();
-    // Initialize empty training state (for Decision Tree compatibility)
-    if(!trainingResults || Object.keys(trainingResults).length===0){
-      trainingResults={};
-      SPAM_TYPES.forEach(t=>{trainingResults[t.id]={spam:[],notSpam:[]};});
-    }
-    // Activate admin session (NOT trainingComplete — Live button stays locked for normal users)
-    adminSession = true;
-    // Show "Exit Admin" button in topbar
-    const exitBtn=document.getElementById('exitAdminBtn');
-    if(exitBtn) exitBtn.style.display='inline-block';
-    // Jump to Live Mode (forced — bypasses tryLiveMode lock check)
-    switchMode('live', true);
-    showToast('🚀 Live Admin: Live Mode active (training bypassed)');
+    switchMode('admin');
+    showToast('🔐 Admin Mode activated!');
   } else {
     err.style.display='block';err.textContent='Invalid credentials. Try again.';
   }
 }
 
-function exitAdminMode(){
-  adminSession = false;
-  const exitBtn=document.getElementById('exitAdminBtn');
-  if(exitBtn) exitBtn.style.display='none';
-  // Reset live mode state since admin is no longer authorized
-  liveMails = [];
-  liveMailCount = 0;
-  document.getElementById('spamCount').textContent='0';
-  document.getElementById('inboxCount').textContent='0';
-  document.getElementById('navSpamCount').textContent='0';
-  document.getElementById('navInboxCount').textContent='0';
-  document.getElementById('liveLimit').textContent='0 / 50';
-  document.getElementById('liveGenBtn').disabled=false;
-  // If user didn't actually complete training, kick back to training mode
-  if(!trainingComplete){
-    switchMode('training');
-  }
-  showToast('🔒 Admin session ended. Live Mode is now locked.');
+function renderAdminGrid(){
+  const allMails=[...generatedMails,...liveMails];
+  const bar=document.getElementById('adminFilterBar');
+  const grid=document.getElementById('adminGrid');
+  const types=[{id:'all',label:'All Mails',color:'#4a90e2'},...SPAM_TYPES];
+  bar.innerHTML=types.map(t=>`<button class="admin-filter-btn${t.id==='all'?' active':''}" onclick="adminFilter('${t.id}',this)">${t.icon||'📬'} ${t.label||t.name}</button>`).join('');
+  renderAdminMails('all',allMails,grid);
+}
+
+function adminFilter(typeId,btn){
+  document.querySelectorAll('.admin-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const allMails=[...generatedMails,...liveMails];
+  renderAdminMails(typeId,allMails,document.getElementById('adminGrid'));
+}
+
+function renderAdminMails(typeId,allMails,grid){
+  const filtered=typeId==='all'?allMails:allMails.filter(m=>m.catId===typeId);
+  if(filtered.length===0){grid.innerHTML='<div style="color:#a78bfa;padding:32px;text-align:center;font-size:14px;grid-column:1/-1">No mails in this category yet. Generate mails in Training or Live Mode.</div>';return;}
+  
+  grid.innerHTML=filtered.map(m=>{
+    const type=SPAM_TYPES.find(x=>x.id===m.catId)||{name:'Unknown',color:'#888',bg:'#eee',icon:'?'};
+    const col=AV_COLORS[m.id%AV_COLORS.length];
+    const init=m.sender.split('@')[0].slice(0,2).toUpperCase();
+    const isSpam=SPAM_CATS_IDS.includes(m.catId);
+    
+    // Check student's answer verification logic
+    let studentStatus = "";
+    if (generatedMails.includes(m) && (trainingComplete || Object.keys(trainingResults).length > 0)) {
+        if (isSpam) {
+            const markedCorrectly = trainingResults[m.catId]?.spam?.find(x => x.id === m.id);
+            const markedIncorrectly = trainingResults[m.catId]?.notSpam?.find(x => x.id === m.id);
+            if(markedCorrectly) {
+                studentStatus = `<div style="margin-top:8px; padding:6px; background:rgba(6,78,59,0.5); color:#6ee7b7; border-radius:8px; font-size:11px; text-align:center;">✅ Student Caught This Spam</div>`;
+            } else if(markedIncorrectly) {
+                studentStatus = `<div style="margin-top:8px; padding:6px; background:rgba(127,29,29,0.5); color:#fca5a5; border-radius:8px; font-size:11px; text-align:center;">❌ Missed! Student marked Safe</div>`;
+            } else {
+                studentStatus = `<div style="margin-top:8px; padding:6px; background:rgba(55,65,81,0.5); color:#9ca3af; border-radius:8px; font-size:11px; text-align:center;">⏳ Not Tested Yet</div>`;
+            }
+        } else {
+            let markedSpamIn = [];
+            SPAM_TYPES.forEach(t => {
+                if(trainingResults[t.id]?.spam?.find(x=>x.id===m.id)) markedSpamIn.push(t.name);
+            });
+            if (markedSpamIn.length > 0) {
+                studentStatus = `<div style="margin-top:8px; padding:6px; background:rgba(127,29,29,0.5); color:#fca5a5; border-radius:8px; font-size:11px; text-align:center;">❌ False Positive in: ${markedSpamIn.join(', ')}</div>`;
+            } else if(trainingResults[SPAM_TYPES[0].id]) {
+                studentStatus = `<div style="margin-top:8px; padding:6px; background:rgba(6,78,59,0.5); color:#6ee7b7; border-radius:8px; font-size:11px; text-align:center;">✅ Correctly Kept in Inbox</div>`;
+            }
+        }
+    }
+
+    return `
+    <div class="admin-mail-card" onclick="openMailView(${JSON.stringify(m).replace(/"/g,'&quot;')},${liveMails.includes(m)})">
+      <div>
+          <div class="amc-head">
+            <div class="amc-avatar" style="background:${col}">${init}</div>
+            <div class="amc-sender">${escHtml(m.sender)}</div>
+            <div class="amc-type-badge" style="background:${type.bg};color:${type.color};border:1px solid ${type.color}33">${type.icon} ${type.name}</div>
+          </div>
+          <div class="amc-body">
+            <div class="amc-subject">${escHtml(m.subject)}</div>
+            <div class="amc-preview">${escHtml(m.body.slice(0,90))}…</div>
+          </div>
+      </div>
+      <div style="padding:0 14px 10px;">
+          <div class="amc-verdict ${isSpam?'spam':'inbox'}">${isSpam?'🚫 True Answer: SPAM':'✅ True Answer: INBOX'}</div>
+          ${studentStatus}
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ══ MAIL GENERATOR ══
@@ -1626,7 +1746,6 @@ let mailIdCounter=0;
 
 // Tracks all (sender+subject+body) combos used globally to prevent ANY repeat
 const _usedMailKeys = new Set();
-let _variationCounter = 0;
 
 // Variation pools — used to make each mail visually unique even when based on the same template
 const _VAR_NAMES = ['Rahul','Priya','Anjali','Arjun','Sneha','Aditya','Kavya','Rohan','Meera','Vivek','Ishaan','Riya','Karan','Diya','Aryan','Tara','Nikhil','Pooja','Sahil','Neha','Aakash','Saanvi','Dev','Ananya','Yash','Tanvi','Manish','Ritika','Varun','Shreya'];
@@ -1665,318 +1784,7 @@ function _addVariation(subject, body, idx){
 
 function _makeUniqueKey(sender,subject,body){return sender+'|||'+subject+'|||'+body.slice(0,200);}
 
-// ══ LIVE MAIL UNIQUENESS GENERATOR ══
-// Each scenario builder produces a matching (sender, subject, body) trio so the email looks coherent.
-// This prevents mismatches like an HR email containing bank transaction details.
-
-const _LIVE_SCENARIOS = {
-  // ─── PHISHING: fake bank/account security alerts ───
-  phishing: () => {
-    const banks=['hdfc','sbi','icici','axis','kotak','yesbank','pnb','boi','idfc','indusind','canara','unionbank'];
-    const bankNames={hdfc:'HDFC',sbi:'SBI',icici:'ICICI',axis:'Axis',kotak:'Kotak',yesbank:'Yes Bank',pnb:'PNB',boi:'Bank of India',idfc:'IDFC',indusind:'IndusInd',canara:'Canara',unionbank:'Union Bank'};
-    const bankSlug=_randVar(banks);
-    const bankName=bankNames[bankSlug];
-    const ref=_randRef();
-    const senderPrefixes=['security','alert','noreply','support','verify','account-alert','fraud-check','netbanking-verify'];
-    const sender=`${_randVar(senderPrefixes)}@${bankSlug}-secure-verify.biz`;
-    const subjectOpenings=['URGENT','IMMEDIATE','Last Notice','Action Required','Final Reminder','Within 2 Hours','Critical'];
-    const acts=['verify your account','confirm your identity','secure your account','review unusual activity','complete KYC','restore account access'];
-    const subject=`${_randVar(subjectOpenings)}: ${bankName} — ${_randVar(acts)} to avoid blocking`;
-    const opening=_randVar([
-      `Dear Customer,\n\nWe detected unusual activity on your ${bankName} account`,
-      `URGENT SECURITY ALERT\n\nYour ${bankName} account has been flagged`,
-      `Hello,\n\nA suspicious login attempt was made on your ${bankName} account`,
-      `Important Notice,\n\nWe must inform you of unauthorized access to your ${bankName} account`,
-      `Dear Account Holder,\n\nFor your protection, we have temporarily restricted your ${bankName} account`,
-      `WARNING — Action Required\n\nUnusual transactions detected on your ${bankName} account`
-    ]);
-    const body=`${opening} ending in ****${1000+Math.floor(Math.random()*8999)}.\n\nIncident Details:\n• Location: ${_randVar(_VAR_LOCATIONS)}\n• Device: ${_randVar(_VAR_DEVICES)}\n• Time: ${_randVar(_VAR_TIMES)}\n• Suspicious transaction: ₹${_randAmount()}\n\nIf this was NOT you, your account is at risk. Verify your identity immediately to prevent suspension.\n\n👉 Secure My Account → http://${bankSlug}-secure-verify.biz/restore-${ref}\n\n⚠️ This link expires in 2 hours. Do not share.\n\nRef: ${ref}\n${bankName} Digital Security Team`;
-    return {sender, subject, body};
-  },
-
-  // ─── PROMOTION SPAM: sale/discount blasts from shopping domains ───
-  promo_spam: () => {
-    const shops=['supremesale-outlet','bigbillions-day','instantdeal-hub','weekendmegasale','blowout-bargains','dailydealdrop','discountdistrict','bargainburst','grabandsave','nexgenoffers','coupon-cosmos','cashbacknation','steal-the-deal','savingsspree'];
-    const shop=_randVar(shops);
-    const senderPrefixes=['sale','deals','promo','offers','marketing','specials','team','vouchers'];
-    const sender=`${_randVar(senderPrefixes)}@${shop}.shop`;
-    const items=['iPhone 15 Pro','MacBook Air','Sony Headphones','Smart TV 50"','Air Fryer','Gaming Console','Wireless Earbuds','Smart Watch','DSLR Camera','Coffee Maker'];
-    const cats=['Electronics','Fashion','Mobiles','Laptops','Home Appliances','Shoes','Watches','Beauty Products','Kitchen Items'];
-    const verbs=['Flash Sale','Mega Deal','Today Only','Last Hours','Final Sale','Lightning Deal','Bumper Offer'];
-    const pct=Math.floor(50+Math.random()*40);
-    const subject=`🛍️ ${_randVar(verbs)}: ${pct}% OFF on ${_randVar(cats)} — Hurry!`;
-    const code='SAVE'+(10+Math.floor(Math.random()*80));
-    const i1=_randVar(items), i2=_randVar(items), i3=_randVar(items);
-    const p1=Math.floor(50+Math.random()*40), p2=Math.floor(50+Math.random()*40), p3=Math.floor(50+Math.random()*40);
-    const opening=_randVar(['🔥 MEGA SALE ALERT 🔥','⚡ FLASH SALE — LIVE NOW!','🎁 Hey there! Exclusive offer just for you!','🛍️ Hurry — Today\'s biggest deals are LIVE','💰 SUPER SAVINGS WEEK — Grab them before they vanish!','🌟 LIMITED TIME OFFER — Open immediately!']);
-    const body=`${opening}\n\nGrab these unbeatable deals before they're gone:\n\n⚡ ${i1} — ${p1}% OFF (was ₹${_randAmount()})\n⚡ ${i2} — ${p2}% OFF (was ₹${_randAmount()})\n⚡ ${i3} — ${p3}% OFF (was ₹${_randAmount()})\n\nUse code: ${code} for an extra 10% off!\n\nFREE delivery on orders above ₹999.\nValid for the next ${Math.floor(2+Math.random()*22)} hours only.\n\n👉 SHOP NOW → www.${shop}.shop/sale${_randRef()}\n\nDon't miss out — limited stock!\nMega Deals Team`;
-    return {sender, subject, body};
-  },
-
-  // ─── SCAM: lottery / inheritance / prize fraud ───
-  scam: () => {
-    const orgs=['lottery-global','cashwinners','prize-center-global','lotto-winner-2026','cash-award-intl','worldwide-prize-draw','global-cash-rewards','diamond-inheritance','un-grant-funds','offshore-estate','imf-disbursement','charity-millionaire'];
-    const org=_randVar(orgs);
-    const senderPrefixes=['agent','claim','winner','committee','officer','chairman','trustee','manager','official','admin'];
-    const sender=`${_randVar(senderPrefixes)}@${org}.org`;
-    const amounts=['₹25,00,000','₹50,00,000','₹1,00,00,000','$50,000','$75,000','$100,000','£25,000','€40,000'];
-    const amount=_randVar(amounts);
-    const titles=['Winner','Lucky Recipient','Selected Beneficiary','Grand Prize Holder','Award Recipient'];
-    const sources=['International Lottery','Global Charity Fund','UN Grant Program','Royal Family Donation','Inheritance Claim','Diplomatic Trust Fund'];
-    const subject=`🏆 CONGRATULATIONS! You are our ${_randVar(titles)} — Claim ${amount} from ${_randVar(sources)}`;
-    const ref='WIN-'+_randRef();
-    const name=_randVar(_VAR_NAMES)+' '+_randVar(['Kumar','Sharma','Patel','Singh','Reddy','Iyer','Mehta','Verma']);
-    const fee='₹'+(Math.floor(2+Math.random()*8)*1000).toLocaleString('en-IN');
-    const opening=_randVar([
-      `DEAR LUCKY WINNER,\n\nCONGRATULATIONS! 🎊`,
-      `Hello Beneficiary,\n\nWonderful news for you!`,
-      `Greetings from the Prize Committee,\n\nWe are pleased to inform you of an extraordinary opportunity.`,
-      `Dear Friend,\n\nThis email may seem unbelievable but it is 100% genuine.`,
-      `Attention Recipient,\n\nYour email address has been blessed with great fortune today.`,
-      `URGENT NOTIFICATION,\n\nDear Selected Individual,`
-    ]);
-    const middle=_randVar([
-      `Your email address has been randomly selected as the GRAND PRIZE WINNER in our 2026 Global Email Lottery.`,
-      `After a worldwide computerised draw, you have been chosen as the recipient of our annual humanitarian award.`,
-      `From a pool of millions of email addresses, yours was selected as the sole winner of our charitable disbursement.`,
-      `Our random selection algorithm has identified your email as the rightful claimant of this unallocated fund.`,
-      `You have been pre-approved as the beneficiary of an unclaimed inheritance that requires immediate processing.`
-    ]);
-    const body=`${opening}\n\n${middle}\n\nPrize: ${amount}\nReference: ${ref}\nDraw Date: ${_randVar(_VAR_DATES_2026)}, 2026\n\nTo claim your prize, contact our Claims Agent within 48 hours:\n\nName: Mr. ${name}\nEmail: ${name.toLowerCase().replace(' ','.')}@${org}.biz\nWhatsApp: +91-9${Math.floor(100000000+Math.random()*900000000)}\n\nA small processing fee of ${fee} is required (fully refundable upon prize disbursement).\n\nDO NOT share this notice with anyone until your prize is secured.\n\nProvide:\n✓ Full name\n✓ Phone number\n✓ Bank details\n✓ ID proof scan\n\nGlobal Lottery Commission\nRef: ${ref}`;
-    return {sender, subject, body};
-  },
-
-  // ─── MALWARE: file-share emails with executable attachments ───
-  malware: () => {
-    const platforms=['dropbox-secure-share','company-docs-urgent','clouddrive-verify','filevault-share','protectedocs-online','docusafe-portal','encrypteddrive-link','vault-secure-files','enterprise-docs','workspace-share','safedrop-zone'];
-    const platform=_randVar(platforms);
-    const senderPrefixes=['files','attachment','download','share','team','admin','support','noreply'];
-    const sender=`${_randVar(senderPrefixes)}@${platform}.biz`;
-    const files=['Project_Report','Salary_Slip','Tax_Form','Invoice','Statement','Resume','Contract','Audit_Report','Performance_Review','Board_Minutes'];
-    const exts=['.exe','.zip','.rar','.scr','.bat'];
-    const file=_randVar(files), ext=_randVar(exts);
-    const sharers=['HR Department','Finance Team','Your Manager','Colleague','Project Lead','IT Department'];
-    const subject=`📎 ${_randVar(sharers)} shared: "${file}_2026${ext}" — Open immediately`;
-    const size=Math.floor(5+Math.random()*40);
-    const pwd='File'+_randRef();
-    const opening=_randVar([
-      `Hi,\n\nYour colleague has shared a confidential file with you via Secure Drop.`,
-      `Hello,\n\nA new shared document is waiting for you to review.`,
-      `Dear User,\n\nYou have received an important document from your team.`,
-      `Greetings,\n\nThe HR department has sent you a critical file.`,
-      `Notice,\n\nYour manager has shared a time-sensitive document.`,
-      `Attention,\n\nThe Finance team has uploaded a document for your urgent review.`
-    ]);
-    const body=`${opening}\n\nFile: ${file}_2026${ext}\nSize: ${size}.${Math.floor(Math.random()*9)} MB\nShared by: ${_randVar(_VAR_NAMES)} ${_randVar(['Kumar','Sharma','Verma','Reddy','Singh'])}\nDate: ${_randVar(_VAR_DATES_2026)}, 2026\n\nTo open this file:\n1. Click the download link below\n2. Disable antivirus temporarily (file is verified safe)\n3. Right-click → Run as Administrator\n4. Enter password: ${pwd}\n\n👉 Download → http://${platform}.biz/file/${_randRef()}\n\n⚠️ Link expires in 4 hours.\n\nSecure Drop File Sharing`;
-    return {sender, subject, body};
-  },
-
-  // ─── FAKE BUSINESS: impersonating brands with fake account alerts ───
-  fakebiz: () => {
-    const companies=[
-      {name:'Flipkart',slug:'flipkart'},{name:'Amazon India',slug:'amazon-india'},
-      {name:'Paytm',slug:'paytm'},{name:'PhonePe',slug:'phonepe'},
-      {name:'Zomato',slug:'zomato'},{name:'Swiggy',slug:'swiggy'},
-      {name:'Myntra',slug:'myntra'},{name:'BigBasket',slug:'bigbasket'},
-      {name:'Ola',slug:'ola'},{name:'Uber',slug:'uber'},
-      {name:'Netflix India',slug:'netflix-india'},{name:'Hotstar',slug:'hotstar'},
-      {name:'Spotify India',slug:'spotify-india'}
-    ];
-    const co=_randVar(companies);
-    const senderPrefixes=['service','support','noreply','help','team','billing','account-alert','kyc-update'];
-    const sender=`${_randVar(senderPrefixes)}@${co.slug}-account-verify.biz`;
-    const issues=['account suspended','KYC pending','payment failed','subscription expiring','unauthorized access detected','security verification required'];
-    const subject=`${co.name}: Your ${_randVar(issues)} — Verify within 24 hours`;
-    const ref=_randRef();
-    const opening=_randVar([
-      `Dear Customer,\n\nWe regret to inform you that your ${co.name} account has been temporarily restricted`,
-      `Hello,\n\nYour ${co.name} account requires urgent attention`,
-      `Dear User,\n\nA security review has flagged your ${co.name} account`,
-      `Important Notice from ${co.name}\n\nYour account access has been limited`,
-      `${co.name} Customer Alert\n\nWe noticed an issue with your account`
-    ]);
-    const body=`${opening} due to the following reason:\n\n• Reason: ${_randVar(['Unverified KYC','Payment method expired','Unusual login activity','Pending document verification'])}\n• Last Login: ${_randVar(_VAR_DATES_2026)}, 2026 at ${_randVar(_VAR_TIMES)}\n• Location: ${_randVar(_VAR_LOCATIONS)}\n• Reference: ${co.slug.toUpperCase()}-${ref}\n\nTo restore full access, please verify your identity within 24 hours:\n\n👉 Verify Now → http://${co.slug}-account-verify.biz/restore/${ref}\n\nYou'll need to upload:\n• Aadhaar Card (front + back)\n• PAN Card scan\n• A selfie with ID\n\nIf you do not verify, your account will be permanently suspended and any pending orders cancelled.\n\n${co.name} Customer Service\nRef: ${ref}`;
-    return {sender, subject, body};
-  },
-
-  // ─── SOCIAL: follower-boost / viral-content scams ───
-  social: () => {
-    const platforms=[
-      {name:'Instagram',slug:'insta'},{name:'Twitter',slug:'twitter'},
-      {name:'Facebook',slug:'facebook'},{name:'TikTok',slug:'tiktok'},
-      {name:'LinkedIn',slug:'linkedin'},{name:'Snapchat',slug:'snapchat'}
-    ];
-    const p=_randVar(platforms);
-    const senderPrefixes=['alert','notifications','updates','team','support','promo','growth'];
-    const sender=`${_randVar(senderPrefixes)}@${p.slug}-followers-boost.com`;
-    const promises=['10K free followers','50K real likes','viral post boost','verified badge','blue tick badge','trending boost'];
-    const subject=`🔥 ${p.name} EXCLUSIVE: Get ${_randVar(promises)} — Limited slots!`;
-    const followers=Math.floor(5+Math.random()*95)*1000;
-    const body=`Hi there! 🎉\n\nEXCLUSIVE OPPORTUNITY: Get ${followers.toLocaleString()} REAL ${p.name} followers — 100% FREE!\n\nNo bots. No fake accounts. Just real, active users who'll engage with your content.\n\nHOW IT WORKS:\nStep 1: Click the link below\nStep 2: Enter your ${p.name} username (no password needed!)\nStep 3: Choose your follower package\nStep 4: Followers start arriving in ${Math.floor(2+Math.random()*22)} hours\n\n👉 CLAIM FREE FOLLOWERS → http://${p.slug}-boost-${_randRef()}.com\n\n⚠️ Only ${Math.floor(50+Math.random()*450)} slots available today!\nAlready ${Math.floor(2000+Math.random()*5000)} users have claimed.\n\nBONUS: Sign up today and get ${Math.floor(5+Math.random()*15)}K free likes on your last 3 posts!\n\nSocialGrow Team`;
-    return {sender, subject, body};
-  },
-
-  // ─── NEWSLETTER: bulk newsletters from publications ───
-  newsletter: () => {
-    const topics=[
-      {name:'Tech Weekly',slug:'techweekly'},{name:'Health Digest',slug:'healthdigest'},
-      {name:'Finance Today',slug:'financetoday'},{name:'Sports Roundup',slug:'sportsroundup'},
-      {name:'Science Briefing',slug:'sciencebriefing'},{name:'Startup Pulse',slug:'startuppulse'},
-      {name:'Movie Buzz',slug:'moviebuzz'},{name:'Travel Tips',slug:'traveltips'},
-      {name:'Book Review',slug:'bookreview'},{name:'Coding Tips',slug:'codingtips'}
-    ];
-    const topic=_randVar(topics);
-    const senderPrefixes=['daily','weekly','monthly','newsletter','bulletin','digest'];
-    const sender=`${_randVar(senderPrefixes)}@${topic.slug}-newsletter.com`;
-    const editions=['May Edition','Week 21 Digest','Latest Issue','Monthly Roundup','This Week\'s Top Picks','Curated Reads'];
-    const subject=`📰 ${topic.name} — ${_randVar(editions)} 2026`;
-    const date=_randVar(_VAR_DATES_2026);
-    const titles=[
-      `${_randVar(['AI','Cloud','Cybersecurity','Web3','Quantum'])} ${_randVar(['breakthrough','update','development','milestone'])}: What it means for India`,
-      `Top ${Math.floor(5+Math.random()*10)} ${topic.name.toLowerCase()} trends to watch in 2026`,
-      `Why ${_randVar(['startups','enterprises','schools','hospitals'])} are adopting ${_randVar(['AI','automation','remote work','green tech'])}`,
-      `${_randVar(['Mumbai','Bangalore','Hyderabad','Pune'])} emerges as new hub for innovation`,
-      `${_randVar(['Gen Z','Millennials','Working professionals'])} are changing the landscape — here's how`
-    ];
-    const body=`${topic.name.toUpperCase()} — ${date}, 2026\n\nWelcome to this edition. Here are your handpicked stories:\n\n📰 TOP STORIES:\n\n1. ${_randVar(titles)}\n\n2. ${_randVar(titles)}\n\n3. ${_randVar(titles)}\n\n4. ${_randVar(titles)}\n\n5. ${_randVar(titles)}\n\nPlus more inside!\n\n👉 Read all stories → www.${topic.slug}-newsletter.com/${_randRef()}\n\nUnsubscribe | Manage preferences\n\nThe ${topic.name} Team`;
-    return {sender, subject, body};
-  },
-
-  // ─── SAFE: each scenario picks a matching sender domain ───
-  safe: () => {
-    const scenarios=[
-      // Team meeting scenario
-      ()=>{
-        const senderName=_randVar(_VAR_NAMES).toLowerCase();
-        const teamDomains=['workplace.com','yourteam.io','company.org','projecthub.io','acmecorp.in','techcorp.com'];
-        const sender=`${senderName}@${_randVar(teamDomains)}`;
-        const meetingTopic=_randVar(['Team standup','Project review','Q2 planning','Client demo','Design sync','Sprint kickoff']);
-        const date=_randVar(_VAR_DATES_2026);
-        const subject=`Meeting reminder: ${meetingTopic} on ${date}`;
-        const day=_randVar(['Monday','Tuesday','Wednesday','Thursday','Friday']);
-        const time=_randVar(['10:00 AM','11:30 AM','2:00 PM','3:30 PM','4:00 PM']);
-        const room=_randVar(['Conference Room A','Conference Room B','Meeting Room 3','Boardroom','Online (Zoom)']);
-        const body=`Hi team,\n\nJust a reminder about our ${meetingTopic.toLowerCase()} on ${day}, ${date}, 2026 at ${time} in ${room}.\n\nAgenda:\n1. Project status updates\n2. Q2 deliverables review\n3. Roadblocks discussion\n4. Q3 planning\n\nPlease bring your weekly status report and any blockers you'd like the team to help with.\n\nIf you cannot attend, please let me know in advance.\n\nThanks,\n${senderName.charAt(0).toUpperCase()+senderName.slice(1)}`;
-        return {sender, subject, body};
-      },
-      // E-commerce order scenario
-      ()=>{
-        const shops=[{n:'Amazon',d:'amazon.in'},{n:'Flipkart',d:'flipkart.in'},{n:'Myntra',d:'myntra.in'},{n:'BigBasket',d:'bigbasket.in'},{n:'Swiggy',d:'swiggy-orders.in'}];
-        const shop=_randVar(shops);
-        const sender=`${_randVar(['orders','noreply','customercare','support','team'])}@${shop.d}`;
-        const item=_randVar(['Wireless Earbuds','Cotton T-shirt','Running Shoes','Yoga Mat','Water Bottle','Backpack','Notebook Set','Desk Lamp']);
-        const order=_randRef();
-        const subject=`Your ${shop.n} order #${order} has been shipped`;
-        const body=`Hi,\n\nGreat news! Your ${shop.n} order has been confirmed and is on its way.\n\nOrder Number: #${order}\nItem: ${item}\nDelivery Estimate: ${_randVar(_VAR_DATES_2026)}, 2026\nDelivery Window: ${_randVar(['10 AM – 1 PM','2 PM – 5 PM','11 AM – 2 PM'])}\n\nTrack your order at: www.${shop.d}/track/${order}\n\nIf you have any questions, reply to this email or call our customer support during business hours.\n\nThanks for shopping with us!\nThe ${shop.n} Customer Service Team`;
-        return {sender, subject, body};
-      },
-      // Medical appointment scenario
-      ()=>{
-        const doctorName=_randVar(['sharma','patel','mehta','kumar','reddy','kapoor']);
-        const clinicDomains=['citymedical.org','cityhospital.org','apolloclinic.org','fortishealth.in','maxhealthcare.in'];
-        const sender=`dr.${doctorName}@${_randVar(clinicDomains)}`;
-        const doctorDisplay='Dr. '+(doctorName.charAt(0).toUpperCase()+doctorName.slice(1));
-        const date=_randVar(_VAR_DATES_2026);
-        const subject=`Appointment confirmed: ${doctorDisplay} on ${date}`;
-        const spec=_randVar(['General Physician','Dentist','Pediatrician','Cardiologist','Dermatologist']);
-        const body=`Dear Patient,\n\nThis is a confirmation of your upcoming appointment:\n\nDoctor: ${doctorDisplay} (${spec})\nDate: ${date}, 2026\nTime: ${_randVar(['10:30 AM','11:15 AM','2:30 PM','4:00 PM','5:15 PM'])}\nClinic: City Health Centre, ${_randVar(_VAR_LOCATIONS)}\nRoom: ${100+Math.floor(Math.random()*300)}\n\nPlease arrive 10 minutes early. Bring your previous prescriptions if any.\n\nTo reschedule, call our front desk during clinic hours.\n\nWishing you good health,\nCity Health Centre`;
-        return {sender, subject, body};
-      },
-      // Bank transaction scenario
-      ()=>{
-        const banks=[{n:'HDFC',d:'hdfc-bank.com'},{n:'ICICI',d:'icici-bank.com'},{n:'SBI',d:'sbi-online.in'},{n:'Axis',d:'axisbank.com'},{n:'Kotak',d:'kotak.com'}];
-        const bank=_randVar(banks);
-        const sender=`notify@${bank.d}`;
-        const amount='₹'+_randAmount();
-        const recipient=_randVar(_VAR_NAMES);
-        const subject=`${bank.n} Bank: Transaction successful — ${amount} to ${recipient}`;
-        const body=`Dear Customer,\n\nTransaction Alert — ${bank.n} Bank\n\nDetails:\n• Amount: ${amount}\n• Credited To: ${recipient}\n• UPI ID: ${recipient.toLowerCase()}@upi\n• Transaction ID: TXN${_randRef()}\n• Date: ${_randVar(_VAR_DATES_2026)}, 2026 at ${_randVar(_VAR_TIMES)}\n• Available Balance: ₹${_randAmount()}\n\nIf you did not authorize this transaction, please contact your bank immediately at 1800-${bank.n.toUpperCase()}-NOW.\n\nThank you for banking with us.\n${bank.n} Bank — Your trusted banking partner`;
-        return {sender, subject, body};
-      },
-      // School/tutor scenario
-      ()=>{
-        const teacherName=_randVar(_VAR_NAMES).toLowerCase();
-        const schoolDomains=['cityschool.edu','stxavierschool.edu','dpsindia.edu','kvsindia.edu','school.edu'];
-        const sender=`${teacherName}@${_randVar(schoolDomains)}`;
-        const sub=_randVar(['Mathematics','Physics','Chemistry','Biology','English','History','Computer Science']);
-        const subject=`${sub} class scheduled — ${_randVar(_VAR_DATES_2026)}`;
-        const body=`Dear Student,\n\nYour ${sub} class for this week has been scheduled:\n\nTopic: ${_randVar(['Quadratic equations','Newton\'s laws','Photosynthesis','Cell structure','Linear algebra','Modern history','Programming basics'])}\nDate: ${_randVar(_VAR_DATES_2026)}, 2026\nTime: ${_randVar(['4:00 PM','5:30 PM','6:00 PM'])}\nMode: ${_randVar(['Online (Zoom)','In-classroom','Hybrid'])}\n\nPlease complete the following before class:\n• Chapter ${Math.floor(1+Math.random()*15)} reading\n• Practice problems 1–${Math.floor(5+Math.random()*15)}\n\nLooking forward to seeing you!\n\nBest,\n${_randVar(['Mr.','Ms.','Mrs.'])} ${teacherName.charAt(0).toUpperCase()+teacherName.slice(1)}\n${sub} Teacher`;
-        return {sender, subject, body};
-      },
-      // Salary/HR scenario
-      ()=>{
-        const company=_randVar(['acmecorp','infosys','tcs','wipro','techmahindra']);
-        const sender=`payroll@${company}.com`;
-        const month=_randVar(['April','May','June']);
-        const salary='₹'+(Math.floor(20+Math.random()*80)*1000).toLocaleString('en-IN');
-        const subject=`${month} 2026 Salary credited — ${salary}`;
-        const body=`Dear Employee,\n\nYour salary for ${month} 2026 has been credited to your registered account.\n\nDetails:\n• Employee ID: EMP-${_randRef()}\n• Net Salary: ${salary}\n• Credit Date: ${_randVar(_VAR_DATES_2026)}, 2026\n• Bank: ${_randVar(['HDFC','ICICI','SBI','Axis'])} Bank ****${1000+Math.floor(Math.random()*8999)}\n\nYour payslip is available on the HR portal.\n\nFor any discrepancies, please contact the payroll team during working hours.\n\nHR & Payroll Team\n${company.charAt(0).toUpperCase()+company.slice(1)} Corporation`;
-        return {sender, subject, body};
-      },
-      // Admissions/education scenario
-      ()=>{
-        const inst=_randVar([{n:'IIT',d:'iit-counselling.edu'},{n:'BITS',d:'bits-pilani.edu'},{n:'IIM',d:'iim-admissions.edu'},{n:'NIT',d:'nit-counselling.edu'}]);
-        const sender=`admissions@${inst.d}`;
-        const subject=`${inst.n} Admissions: Counselling slot confirmed`;
-        const body=`Dear Student,\n\nYour ${inst.n} 2026 counselling slot has been confirmed:\n\nSlot: ${_randVar(_VAR_DATES_2026)}, 2026 — ${_randVar(['10:00 AM – 12:00 PM','11:00 AM – 1:00 PM','2:00 PM – 4:00 PM'])}\nMode: Online (link sent separately)\n\nDocuments required:\n• Result Scorecard\n• Class 10 & 12 Marksheets\n• Category Certificate (if applicable)\n• ID Proof\n\nFor queries: admissions@${inst.d}\n\n${inst.n} Admissions Office`;
-        return {sender, subject, body};
-      },
-      // Online course/learning scenario
-      ()=>{
-        const platform=_randVar([{n:'Coursera',d:'coursera-india.org'},{n:'Unacademy',d:'unacademy-class.in'},{n:'Udemy',d:'udemy-india.com'},{n:'Byju\'s',d:'byjus-classes.in'}]);
-        const sender=`${_randVar(['team','admin','support','notify'])}@${platform.d}`;
-        const course=_randVar(['Python Programming','Data Science','Web Development','Digital Marketing','Machine Learning','UI/UX Design']);
-        const subject=`Welcome to ${platform.n} — Your ${course} course starts soon`;
-        const body=`Hi,\n\nWelcome to ${platform.n}! 🎓\n\nWe're excited to have you join our ${course} course.\n\nCourse Details:\n• Start Date: ${_randVar(_VAR_DATES_2026)}, 2026\n• Duration: ${Math.floor(4+Math.random()*8)} weeks\n• Mode: Self-paced + weekly live sessions\n• Instructor: ${_randVar(_VAR_NAMES)} ${_randVar(['Kumar','Sharma','Patel'])}\n\nWhat to do next:\n1. Complete your profile on the platform\n2. Download the mobile app for offline learning\n3. Join the course community on Discord\n\nIf you have questions, reply to this email or visit our Help Centre.\n\nHappy learning!\n${platform.n} Team`;
-        return {sender, subject, body};
-      },
-      // Parent-Teacher Meeting scenario
-      ()=>{
-        const schoolDomains=['cityschool.edu','stxavierschool.edu','dpsindia.edu','school.edu'];
-        const sender=`principal@${_randVar(schoolDomains)}`;
-        const date=_randVar(_VAR_DATES_2026);
-        const subject=`Parent-Teacher Meeting reminder: ${date}, 2026`;
-        const body=`Dear Parent/Guardian,\n\nThis is a friendly reminder about the upcoming Parent-Teacher Meeting (PTM) for the academic year 2026-27.\n\nDate: Saturday, ${date}, 2026\nTime: ${_randVar(['9:00 AM – 11:00 AM','11:30 AM – 1:30 PM','2:00 PM – 4:00 PM'])}\nVenue: School Main Building, ${_randVar(_VAR_LOCATIONS)}\n\nWhat will be discussed:\n• Academic performance and grades (Term 1)\n• Attendance record and punctuality\n• Upcoming examinations schedule\n• Individual concerns (please note questions in advance)\n\nIMPORTANT: Please carry your ward's latest report card to the meeting.\n\nWe look forward to meeting you!\n\nWarm regards,\nThe School Administration`;
-        return {sender, subject, body};
-      },
-      // Transport/travel booking scenario
-      ()=>{
-        const services=[{n:'IRCTC',d:'indianrail-irctc.in'},{n:'Delhi Metro',d:'dmrc-metro.in'},{n:'BookMyShow',d:'bookmyshow.com'},{n:'MakeMyTrip',d:'makemytrip-india.com'}];
-        const svc=_randVar(services);
-        const sender=`${_randVar(['noreply','customercare','support','bookings'])}@${svc.d}`;
-        const bookingId=_randRef();
-        const subject=`${svc.n}: Booking confirmed — Ref #${bookingId}`;
-        const body=`Dear Customer,\n\nYour booking with ${svc.n} has been successfully confirmed.\n\nBooking Reference: ${bookingId}\nDate of Travel/Event: ${_randVar(_VAR_DATES_2026)}, 2026\nTime: ${_randVar(_VAR_TIMES)}\nFrom/At: ${_randVar(_VAR_LOCATIONS)}\nTotal Amount: ₹${_randAmount()}\n\nE-tickets and details have been sent separately to your registered email.\n\nFor any changes or cancellations, please log in to your account.\n\nThank you for choosing ${svc.n}!\n${svc.n} Customer Care`;
-        return {sender, subject, body};
-      }
-    ];
-    return _randVar(scenarios)();
-  }
-};
-
-function _makeUniqueLiveContent(typeId){
-  const scenarioFn = _LIVE_SCENARIOS[typeId];
-  if(!scenarioFn){
-    // Fallback if somehow an unknown type is passed
-    return {sender:'noreply@example.com', subject:'(no subject)', body:'(no content)'};
-  }
-  // Try up to 60 times to get a unique scenario
-  for(let t=0;t<60;t++){
-    const {sender, subject, body} = scenarioFn();
-    const key = _makeUniqueKey(sender, subject, body);
-    if(!_usedMailKeys.has(key)){
-      _usedMailKeys.add(key);
-      return {sender, subject, body};
-    }
-  }
-  // Final fallback: force uniqueness with counter
-  const fallback = scenarioFn();
-  fallback.subject = fallback.subject + ' #' + (++_variationCounter);
-  const key = _makeUniqueKey(fallback.sender, fallback.subject, fallback.body);
-  _usedMailKeys.add(key);
-  return fallback;
-}
-
+let _variationCounter = 0;
 function _pickUniqueWithVariation(senders, subjects, bodies, usedKeys){
   // Try base combinations first (up to 30 attempts for "clean" version)
   for(let t=0;t<30;t++){
@@ -2029,10 +1837,11 @@ function makeMail(typeId, usedKeys){
 }
 
 function makeLiveMail(typeId, usedKeys){
-  // Use the dedicated live content generator that synthesizes fully unique sender+subject+body every time
-  const {sender,subject,body}=_makeUniqueLiveContent(typeId);
-  if(usedKeys) usedKeys.add(_makeUniqueKey(sender,subject,body));
-  const times=['Just now','1 min ago','3 min ago','5 min ago','12 min ago','9:42 AM','11:15 AM','2:03 PM','4:28 PM','8:05 AM','Yesterday'];
+  const senders=LIVE_SENDERS[typeId]||SENDERS_BY_TYPE[typeId];
+  const subjects=LIVE_SUBJECTS[typeId]||SUBJECTS_BY_TYPE[typeId];
+  const bodies=LIVE_BODIES[typeId]||BODIES_BY_TYPE[typeId];
+  const {sender,subject,body}=_pickUniqueWithVariation(senders,subjects,bodies,usedKeys||new Set());
+  const times=['9:42 AM','11:15 AM','2:03 PM','4:28 PM','Just now','1 min ago','3 min ago','8:05 AM'];
   const isSpam=SPAM_CATS_IDS.includes(typeId);
   const type=SPAM_TYPES.find(x=>x.id===typeId)||{};
   return {
@@ -2348,30 +2157,22 @@ function generateOneLiveMail(){
   liveMailCount++;
   document.getElementById('liveLimit').textContent=`${liveMailCount} / 50`;
   if(liveMailCount>=50)document.getElementById('liveGenBtn').disabled=true;
-
-  // Target: at least 30% of all mails must be non-spam (safe) — so 15 out of 50.
-  // Strategy: every roll has a 30% bias toward safe, AND if the remaining slots
-  // are exactly what's needed to hit the safe floor, force safe.
-  const SAFE_FLOOR = Math.ceil(50 * 0.30);   // 15 safe mails minimum
-  const safeCount = liveMails.filter(x=>!x.isSpam&&!x.userReported).length;
-  const slotsAfterThis = 50 - liveMailCount;
-  const safeNeeded = Math.max(0, SAFE_FLOOR - safeCount);
-
+  // Guarantee ≥10 safe mails out of 50: if not enough slots remain for needed safe mails, force safe
+  const safeCount=liveMails.filter(x=>!x.isSpam&&!x.userReported).length;
+  const slotsAfterThis=50-liveMailCount;
+  const safeNeeded=Math.max(0,10-safeCount);
   let typeId;
-  if(safeNeeded > slotsAfterThis){
-    // Not enough remaining slots — must force safe now
-    typeId = 'safe';
+  if(safeNeeded>slotsAfterThis){
+    typeId='safe';
   } else {
-    // 30% chance of safe; remaining 70% picks a random spam type
-    if(Math.random() < 0.30){
-      typeId = 'safe';
-    } else {
-      typeId = SPAM_CATS_IDS[Math.floor(Math.random()*SPAM_CATS_IDS.length)];
-    }
+    const allTypeIds=SPAM_TYPES.map(t=>t.id);
+    typeId=allTypeIds[Math.floor(Math.random()*allTypeIds.length)];
   }
   // _usedMailKeys already contains all training mail keys, so makeLiveMail will avoid them automatically
   const m=makeLiveMail(typeId,_liveUsed);
   liveMails.unshift(m);
+  const spamCount=liveMails.filter(x=>x.isSpam&&!x.userReported).length+liveMails.filter(x=>x.userReported).length;
+  const inboxCount=liveMails.filter(x=>!x.isSpam&&!x.userReported).length;
   document.getElementById('spamCount').textContent=liveMails.filter(x=>x.isSpam||x.userReported).length;
   document.getElementById('inboxCount').textContent=liveMails.filter(x=>!x.isSpam&&!x.userReported).length;
   document.getElementById('navSpamCount').textContent=liveMails.filter(x=>x.isSpam||x.userReported).length;
