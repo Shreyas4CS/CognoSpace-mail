@@ -1747,12 +1747,47 @@ let mailIdCounter=0;
 // Tracks all (sender+subject+body) combos used globally to prevent ANY repeat
 const _usedMailKeys = new Set();
 
-function _makeUniqueKey(sender,subject,body){return sender+'|||'+subject+'|||'+body.slice(0,40);}
+// Variation pools — used to make each mail visually unique even when based on the same template
+const _VAR_NAMES = ['Rahul','Priya','Anjali','Arjun','Sneha','Aditya','Kavya','Rohan','Meera','Vivek','Ishaan','Riya','Karan','Diya','Aryan','Tara','Nikhil','Pooja','Sahil','Neha','Aakash','Saanvi','Dev','Ananya','Yash','Tanvi','Manish','Ritika','Varun','Shreya'];
+const _VAR_LOCATIONS = ['Mumbai','Delhi','Bangalore','Hyderabad','Chennai','Kolkata','Pune','Ahmedabad','Jaipur','Lucknow','Surat','Kanpur','Indore','Bhopal','Nagpur','Vadodara','Ludhiana','Coimbatore'];
+const _VAR_DEVICES = ['iPhone 15','iPhone 14','Samsung Galaxy S24','OnePlus 12','Xiaomi 14','Pixel 8','MacBook Pro','Windows PC','Android tablet','iPad Pro'];
+const _VAR_TIMES = ['11:47 PM','3:22 AM','9:14 PM','5:33 AM','1:08 AM','10:46 PM','4:17 AM','8:51 PM','2:29 AM','7:03 PM'];
+const _VAR_DATES_2026 = ['March 14','April 22','May 3','May 11','May 18','June 5','June 19','July 2','August 8','September 14','October 20','November 27'];
+function _randVar(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function _randRef(){return Math.floor(100000+Math.random()*900000);}
+function _randAmount(){return (Math.floor(1+Math.random()*99)*1000).toLocaleString('en-IN');}
 
-function _pickUnique(senders, subjects, bodies, usedKeys, maxTries){
-  // Try to find a unique combination
-  const tries = maxTries || 80;
-  for(let t=0;t<tries;t++){
+// Tag mail body/subject with hidden uniqueness markers so even same-template mails are distinct
+function _addVariation(subject, body, idx){
+  const refNo = 'REF-' + _randRef();
+  const date = _randVar(_VAR_DATES_2026) + ', 2026';
+  const time = _randVar(_VAR_TIMES);
+  const loc = _randVar(_VAR_LOCATIONS);
+  const device = _randVar(_VAR_DEVICES);
+  const name = _randVar(_VAR_NAMES);
+  const amount = '₹' + _randAmount();
+
+  // Append a contextual unique line that fits the email genre — looks natural
+  const variations = [
+    `\n\n— Reference: ${refNo} · Sent on ${date} at ${time}`,
+    `\n\n[Notification ID: ${refNo} · Device: ${device} · Location: ${loc}]`,
+    `\n\nTransaction reference: ${refNo}\nTimestamp: ${date} ${time} IST`,
+    `\n\nThis message was sent to ${name}@user on ${date}.\nMessage ID: MSG-${refNo}`,
+    `\n\nCase #: ${refNo} | Issued: ${date}, ${time}\nProcessing center: ${loc}`,
+  ];
+  const v = variations[idx % variations.length];
+  return {
+    subject: subject,
+    body: body + v
+  };
+}
+
+function _makeUniqueKey(sender,subject,body){return sender+'|||'+subject+'|||'+body.slice(0,200);}
+
+let _variationCounter = 0;
+function _pickUniqueWithVariation(senders, subjects, bodies, usedKeys){
+  // Try base combinations first (up to 30 attempts for "clean" version)
+  for(let t=0;t<30;t++){
     const sender=senders[Math.floor(Math.random()*senders.length)];
     const subject=subjects[Math.floor(Math.random()*subjects.length)];
     const body=bodies[Math.floor(Math.random()*bodies.length)];
@@ -1760,24 +1795,38 @@ function _pickUnique(senders, subjects, bodies, usedKeys, maxTries){
     if(!_usedMailKeys.has(key) && !usedKeys.has(key)){
       _usedMailKeys.add(key);
       usedKeys.add(key);
-      return {sender,subject,body,key};
+      return {sender,subject,body};
     }
   }
-  // fallback: just pick any unique-ish combo (append index to subject)
-  const sender=senders[Math.floor(Math.random()*senders.length)];
-  const subject=subjects[Math.floor(Math.random()*subjects.length)];
-  const body=bodies[Math.floor(Math.random()*bodies.length)];
-  const key=_makeUniqueKey(sender,subject+'_'+_usedMailKeys.size,body);
+  // Fallback: use variation system — guarantees uniqueness via appended unique markers
+  // This can produce effectively unlimited unique mails from limited templates
+  for(let t=0;t<100;t++){
+    const sender=senders[Math.floor(Math.random()*senders.length)];
+    const baseSubject=subjects[Math.floor(Math.random()*subjects.length)];
+    const baseBody=bodies[Math.floor(Math.random()*bodies.length)];
+    const {subject,body}=_addVariation(baseSubject, baseBody, _variationCounter++);
+    const key=_makeUniqueKey(sender,subject,body);
+    if(!_usedMailKeys.has(key) && !usedKeys.has(key)){
+      _usedMailKeys.add(key);
+      usedKeys.add(key);
+      return {sender,subject,body};
+    }
+  }
+  // Final fallback (should virtually never hit)
+  const sender=senders[0];
+  const subject=subjects[0]+' ['+(++_variationCounter)+']';
+  const body=bodies[0]+'\n\n[uid:'+_variationCounter+']';
+  const key=_makeUniqueKey(sender,subject,body);
   _usedMailKeys.add(key);
   usedKeys.add(key);
-  return {sender,subject,body,key};
+  return {sender,subject,body};
 }
 
 function makeMail(typeId, usedKeys){
   const senders=SENDERS_BY_TYPE[typeId];
   const subjects=SUBJECTS_BY_TYPE[typeId];
   const bodies=BODIES_BY_TYPE[typeId];
-  const {sender,subject,body}=_pickUnique(senders,subjects,bodies,usedKeys||new Set());
+  const {sender,subject,body}=_pickUniqueWithVariation(senders,subjects,bodies,usedKeys||new Set());
   const times=['9:42 AM','11:15 AM','2:03 PM','4:28 PM','Yesterday','Mon','Sun','8:05 AM','3:17 PM','Fri'];
   return {
     id:++mailIdCounter,catId:typeId,sender,subject,body,
@@ -1791,7 +1840,7 @@ function makeLiveMail(typeId, usedKeys){
   const senders=LIVE_SENDERS[typeId]||SENDERS_BY_TYPE[typeId];
   const subjects=LIVE_SUBJECTS[typeId]||SUBJECTS_BY_TYPE[typeId];
   const bodies=LIVE_BODIES[typeId]||BODIES_BY_TYPE[typeId];
-  const {sender,subject,body}=_pickUnique(senders,subjects,bodies,usedKeys||new Set());
+  const {sender,subject,body}=_pickUniqueWithVariation(senders,subjects,bodies,usedKeys||new Set());
   const times=['9:42 AM','11:15 AM','2:03 PM','4:28 PM','Just now','1 min ago','3 min ago','8:05 AM'];
   const isSpam=SPAM_CATS_IDS.includes(typeId);
   const type=SPAM_TYPES.find(x=>x.id===typeId)||{};
