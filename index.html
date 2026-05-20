@@ -1874,9 +1874,6 @@ function renderCompareUI(){
   const spamType=SPAM_TYPES[currentRoundIdx];
   const roundsDone=currentRoundIdx;
   const totalRounds=SPAM_TYPES.length;
-  const spamInRound=ROUND_SPAM_COUNTS[spamType.id]||0;
-  const spamPct=Math.round((spamInRound/ROUND_TOTAL)*100);
-  const ratioBadgeColor=spamPct>=60?'#e07070':spamPct>=50?'#f4b942':'#52b788';
 
   body.innerHTML=`
     <div class="compare-wrap">
@@ -1891,13 +1888,12 @@ function renderCompareUI(){
             Round ${currentRoundIdx+1} / ${totalRounds}<br>
             <span style="font-size:11px;font-weight:500">Mail ${currentMailIdx+1} of ${roundMails.length}</span>
           </div>
-          <div style="font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px;background:${ratioBadgeColor}22;color:${ratioBadgeColor};border:1px solid ${ratioBadgeColor}55;white-space:nowrap">${spamPct}% spam mix</div>
           <div class="compare-progress-bar"><div class="compare-progress-fill" style="width:${(currentMailIdx/roundMails.length)*100}%"></div></div>
         </div>
       </div>
       <div class="mail-compare-area">
         <div class="mail-list-panel" id="compareMailPanel">
-          <div class="panel-title">📬 ${roundMails.length} Mails (${spamInRound} spam + ${ROUND_TOTAL-spamInRound} safe) — ${spamType.id === 'safe' ? 'Is this a Safe / Genuine mail?' : `Does this mail have "${spamType.name}" features?`}</div>
+          <div class="panel-title">📬 ${roundMails.length} Mails — ${spamType.id === 'safe' ? 'Is this a Safe / Genuine mail?' : `Does this mail have "${spamType.name}" features?`}</div>
           ${renderCompareMails()}
         </div>
         <div style="position:relative;display:flex;align-items:stretch">
@@ -1907,14 +1903,12 @@ function renderCompareUI(){
           <div class="rounds-overview" id="roundsOverview">
             <div class="ro-title">📊 Training Rounds</div>
             ${SPAM_TYPES.map((t,i)=>{
-              const sc=ROUND_SPAM_COUNTS[t.id]||0;
-              const sp=Math.round((sc/ROUND_TOTAL)*100);
               return `
               <div class="ro-round-item ${i<currentRoundIdx?'done':i===currentRoundIdx?'active':'pending'}">
                 <div class="ro-icon">${t.icon}</div>
                 <div style="flex:1;min-width:0">
                   <div class="ro-name">${t.name}</div>
-                  <div class="ro-stats">${i<currentRoundIdx?(trainingResults[t.id].spam.length+' spam / '+(trainingResults[t.id].notSpam.length)+' not spam'):(t.id==='safe'?'9 mixed spam + 11 safe':''+sp+'% spam · '+sc+'/'+ROUND_TOTAL)}</div>
+                  <div class="ro-stats">${i<currentRoundIdx?(trainingResults[t.id].spam.length+' spam / '+(trainingResults[t.id].notSpam.length)+' not spam'):(i===currentRoundIdx?'In progress':'Pending')}</div>
                 </div>
                 <div class="ro-check">${i<currentRoundIdx?'✅':i===currentRoundIdx?'▶️':'⏳'}</div>
               </div>`;}).join('')}
