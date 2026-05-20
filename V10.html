@@ -441,10 +441,24 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .admin-login-cancel:hover{color:#e9d5ff}
 
 /* ── FOOTER ── */
-footer{background:#1a1f3c;flex-shrink:0;border-top:1px solid rgba(255,255,255,.08)}
-.footer-simple{text-align:center;padding:6px 16px;font-size:11px;color:rgba(255,255,255,.45);font-family:'Nunito Sans',sans-serif}
-.footer-simple a{color:rgba(255,255,255,.65);text-decoration:none;}
-.footer-simple a:hover{color:#fff;text-decoration:underline}
+footer{background:linear-gradient(135deg,#1a1f3c 0%,#2a2f5a 40%,#1a2a4a 100%);padding:0;display:flex;flex-direction:column;flex-shrink:0;position:relative;overflow:hidden;border-top:2px solid transparent}
+footer::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#4a90e2,#52b788,#f4b942,#e07070,#9b8dd4,#4a90e2);background-size:400% 100%;animation:footerShimmer 6s linear infinite}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;gap:12px}
+.footer-brand{display:flex;align-items:center;gap:8px;font-family:'Nunito',sans-serif;font-weight:800;color:#fff;font-size:12px}
+.footer-brand .fb-icon{width:22px;height:22px;background:linear-gradient(135deg,#4a90e2,#52b788);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;box-shadow:0 2px 6px rgba(74,144,226,.4)}
+.footer-brand .fb-logo-img{width:24px;height:24px;border-radius:7px;object-fit:contain}
+.footer-brand .fb-tagline{font-size:10px;color:rgba(255,255,255,.55);font-weight:500;font-family:'Nunito Sans',sans-serif;margin-top:1px}
+.footer-center{display:flex;flex-direction:column;align-items:center;gap:4px}
+.footer-links{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.footer-links a{color:rgba(255,255,255,.6) !important;text-decoration:none !important;transition:color .2s;font-weight:600;font-size:10px;font-family:'Nunito Sans',sans-serif;letter-spacing:.2px}
+.footer-links a:hover{color:#fff !important}
+.footer-copy{font-size:9px;color:rgba(255,255,255,.3);font-family:'Nunito Sans',sans-serif;text-align:center;margin-top:1px}
+.footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;font-size:10px;color:rgba(255,255,255,.7);font-family:'Nunito',sans-serif;font-weight:600}
+.footer-credit{font-size:10px;color:rgba(255,255,255,.55);font-family:'Nunito Sans',sans-serif;font-weight:500;font-style:italic;text-align:right}
+.footer-mode-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;font-family:'Nunito',sans-serif;letter-spacing:.3px}
+.footer-mode-badge.training{background:rgba(74,144,226,.3);color:#a8c8f8;border:1px solid rgba(74,144,226,.4)}
+.footer-mode-badge.live{background:rgba(82,183,136,.3);color:#90ddb8;border:1px solid rgba(82,183,136,.4)}
+.footer-mode-badge.admin-badge{background:rgba(124,58,237,.3);color:#d4b8fd;border:1px solid rgba(124,58,237,.4)}
 
 /* ── TOAST ── */
 #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#2d3142;color:#fff;padding:13px 28px;border-radius:14px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;font-family:'Nunito',sans-serif;font-weight:600;box-shadow:0 6px 24px rgba(45,49,66,.25);white-space:nowrap;max-width:90vw;text-overflow:ellipsis;overflow:hidden}
@@ -459,6 +473,7 @@ footer{background:#1a1f3c;flex-shrink:0;border-top:1px solid rgba(255,255,255,.0
 /* Link colors */
 a,a:visited{color:#1a73e8;text-decoration:underline}
 a:hover{color:#1558b0}
+.footer-links a,.footer-links a:visited,.footer-links a:hover{text-decoration:none !important}
 .auth-switch a{color:var(--blue) !important}
 #progressInfo a{color:var(--blue) !important;text-decoration:underline}
 .unknown-link{color:#999 !important;text-decoration:line-through !important}
@@ -527,7 +542,11 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
   .admin-mail-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
 
   /* Footer */
-  /* Live header */
+  .footer-inner{flex-direction:column;align-items:flex-start;gap:12px;padding:16px 24px}
+  .footer-right{align-items:flex-start}
+}
+
+/* ─── 768px: tablet portrait ─── */
 @media(max-width:768px){
   /* Topbar: keep single row but tighten */
   .topbar{height:60px;padding:0 12px;gap:8px}
@@ -573,6 +592,9 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
   .dt-header{padding:16px 18px}
   .dt-body{padding:16px 14px 20px}
 
+  /* Footer */
+  .footer-inner{padding:14px 16px;gap:10px}
+  .footer-links{gap:12px}
 }
 
 /* ─── 600px: large phone landscape / small tablet ─── */
@@ -981,8 +1003,8 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
           <div style="flex:1">
             <div class="training-title">🎓 Training Mode – Feature-by-Feature Comparison</div>
             <div class="training-desc">
-              Each round shows <strong>20 fresh emails</strong> with <strong>varied spam ratios</strong> (40%, 50%, or 60% spam per category) → Check if each mail has that spam type's features. YES = spam, NO = not spam.<br>
-              <span style="color:#e65100;font-weight:600">🌳 Decision Tree:</span> More spam in training = better accuracy! When all 8 rounds are done, you unlock Live Mode and can view your Decision Tree.
+              Step 1: Generate 20 emails → For each spam type, check all mails one-by-one — does this mail have that spam feature? YES = spam, NO = move to next type.<br>
+              <span style="color:#e65100;font-weight:600">🌳 Decision Tree:</span> You teach the AI by identifying features in each mail. No hints — only the feature type is shown! When training is done, you unlock Live Mode and can view your Decision Tree.
             </div>
           </div>
           <button class="gen-btn" id="genBtn" onclick="generateMails()">⚡ Generate 20 Mails</button>
@@ -991,11 +1013,24 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
           <div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:15px;flex-direction:column;gap:14px;padding:40px 24px;text-align:center">
             <div style="font-size:72px;animation:bounce 2s ease infinite">📬</div>
             <div style="font-size:17px;font-weight:700;color:var(--text2)">Ready to train your AI?</div>
-            <div style="font-size:14px;max-width:440px;line-height:1.7;color:var(--text3)">Click <strong style="color:var(--blue)">"Generate 20 Mails"</strong> to start. Each of the 8 rounds gives you <strong>20 emails</strong> with a unique spam mix (40%–60% spam) — this teaches the Decision Tree what each spam type looks like!</div>
+            <div style="font-size:14px;max-width:440px;line-height:1.7;color:var(--text3)">Click <strong style="color:var(--blue)">"Generate 20 Mails"</strong> to start. You'll check each email against spam feature types — this teaches the Decision Tree what kind of email belongs where!</div>
           </div>
         </div>
       </div>
-      <footer><div class="footer-simple">© 2026 CognoSpace · <a href="https://www.cognospace.in" target="_blank">cognospace.in</a> · Designed for young minds</div></footer>
+      <footer><div class="footer-inner">
+        <div class="footer-brand">
+          <img src="cognospace_logo.png" alt="" class="fb-logo-img" onerror="this.outerHTML='<div class=\'fb-icon\'>C</div>'">
+          <div><div>CognoSpace Mail</div><div class="fb-tagline">AI Learning Platform</div></div>
+        </div>
+        <div class="footer-center">
+          <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="#">About Decision Trees</a><a href="https://www.cognospace.in" target="_blank">CognoSpace</a></div>
+          <div class="footer-copy">© 2026 CognoSpace. All rights reserved.</div>
+        </div>
+        <div class="footer-right">
+          <span class="footer-mode-badge training">🎓 Training Mode</span>
+          <div class="footer-credit">Designed &amp; Developed by CognoSpace for young minds</div>
+        </div>
+      </div></footer>
     </div>
 
     <div id="liveWrap" style="display:none;flex:1;flex-direction:column;overflow:hidden">
@@ -1022,7 +1057,20 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
           <div class="live-empty"><div class="le-icon">📭</div>Click "Generate Mail" to start receiving emails!</div>
         </div>
       </div>
-      <footer><div class="footer-simple">© 2026 CognoSpace · <a href="https://www.cognospace.in" target="_blank">cognospace.in</a> · Designed for young minds</div></footer>
+      <footer><div class="footer-inner">
+        <div class="footer-brand">
+          <img src="cognospace_logo.png" alt="" class="fb-logo-img" onerror="this.outerHTML='<div class=\'fb-icon\'>C</div>'">
+          <div><div>CognoSpace Mail</div><div class="fb-tagline">AI Learning Platform</div></div>
+        </div>
+        <div class="footer-center">
+          <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="#">About Decision Trees</a><a href="https://www.cognospace.in" target="_blank">CognoSpace</a></div>
+          <div class="footer-copy">© 2026 CognoSpace. All rights reserved.</div>
+        </div>
+        <div class="footer-right">
+          <span class="footer-mode-badge live">⚡ Live Mode</span>
+          <div class="footer-credit">Designed &amp; Developed by CognoSpace for young minds</div>
+        </div>
+      </div></footer>
     </div>
 
     <div id="l2Wrap" style="display:none;flex:1;flex-direction:column;overflow:hidden">
@@ -1036,7 +1084,20 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
         </div>
         <div class="l2-body" id="l2Body"></div>
       </div>
-      <footer><div class="footer-simple">© 2026 CognoSpace · <a href="https://www.cognospace.in" target="_blank">cognospace.in</a> · Designed for young minds</div></footer>
+      <footer><div class="footer-inner">
+        <div class="footer-brand">
+          <img src="cognospace_logo.png" alt="" class="fb-logo-img" onerror="this.outerHTML='<div class=\'fb-icon\'>C</div>'">
+          <div><div>CognoSpace Mail</div><div class="fb-tagline">AI Learning Platform</div></div>
+        </div>
+        <div class="footer-center">
+          <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="https://www.cognospace.in" target="_blank">CognoSpace</a></div>
+          <div class="footer-copy">© 2026 CognoSpace. All rights reserved.</div>
+        </div>
+        <div class="footer-right">
+          <span class="footer-mode-badge training" style="background:rgba(240,128,96,.3);color:#f4c090;border-color:rgba(240,128,96,.4)">🌲 Level 2</span>
+          <div class="footer-credit">Designed &amp; Developed by CognoSpace for young minds</div>
+        </div>
+      </div></footer>
     </div>
 
     <div id="adminWrap" style="display:none;flex:1;flex-direction:column;overflow:hidden">
@@ -1077,7 +1138,20 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
           </div>
         </div>
       </div>
-      <footer><div class="footer-simple">© 2026 CognoSpace · <a href="https://www.cognospace.in" target="_blank">cognospace.in</a> · Designed for young minds</div></footer>
+      <footer><div class="footer-inner">
+        <div class="footer-brand">
+          <img src="cognospace_logo.png" alt="" class="fb-logo-img" onerror="this.outerHTML='<div class=\'fb-icon\'>C</div>'">
+          <div><div>CognoSpace Mail</div><div class="fb-tagline">AI Learning Platform</div></div>
+        </div>
+        <div class="footer-center">
+          <div class="footer-links"><a href="https://www.cognospace.in" target="_blank">CognoSpace</a></div>
+          <div class="footer-copy">© 2026 CognoSpace. All rights reserved.</div>
+        </div>
+        <div class="footer-right">
+          <span class="footer-mode-badge admin-badge">🔐 Admin Mode</span>
+          <div class="footer-credit">Designed &amp; Developed by CognoSpace for young minds</div>
+        </div>
+      </div></footer>
     </div>
   </div>
 </div>
@@ -1266,21 +1340,10 @@ const SPAM_TYPES = [
 const SPAM_CATS_IDS = ['phishing','promo_spam','scam','malware','fakebiz','social','newsletter'];
 const SAFE_CAT_ID = 'safe';
 
-// ══ PER-ROUND SPAM COUNTS (out of 20 emails per round) ══
-// Varied ratios: 40%=8, 50%=10, 60%=12 spam per round — intentionally different per category
-// phishing:12(60%), promo_spam:10(50%), scam:8(40%), malware:12(60%),
-// fakebiz:10(50%), social:8(40%), newsletter:10(50%), safe round: 9 spam (mixed) + 11 safe
-const ROUND_SPAM_COUNTS = {
-  phishing:   12,   // 60% spam
-  promo_spam: 10,   // 50% spam
-  scam:        8,   // 40% spam
-  malware:    12,   // 60% spam
-  fakebiz:    10,   // 50% spam
-  social:      8,   // 40% spam
-  newsletter: 10,   // 50% spam
-  safe:        9,   // 9 spam (mixed types) + 11 safe — student must identify genuine mail
-};
-const ROUND_TOTAL = 20; // total emails shown per round
+// Mail counts per type: total 20
+// Spam types = 12 mails (≥10 spam guaranteed for better training accuracy), safe = 8
+// Distribution: phishing=2, promo_spam=2, scam=2, malware=2, fakebiz=1, social=2, newsletter=1, safe=8 = 20
+const MAIL_COUNTS = {phishing:2, promo_spam:2, scam:2, malware:2, fakebiz:1, social:2, newsletter:1, safe:8};
 
 const AV_COLORS=['#4285f4','#ea4335','#fbbc04','#34a853','#8430ce','#007b83','#e67c00','#0097a7','#c2185b','#388e3c'];
 
@@ -1809,74 +1872,50 @@ function makeLiveMail(typeId, usedKeys){
 function generateMails(){
   document.getElementById('genBtn').disabled=true;
   document.getElementById('genBtn').textContent='✓ Mails Generated';
-  generatedMails=[];   // not used for per-round pools anymore but kept for admin view
+  generatedMails=[];
   trainingResults={};
   submittedCats={};
-  liveMails=[];
+  liveMails=[];       // reset live mails so live mode also starts fresh
   liveMailCount=0;
-  // Clear uniqueness tracking
+  // Clear all used keys so training gets a fresh unique pool
   _usedMailKeys.clear();
   _liveUsed.clear();
+  const _trainingUsed=new Set();
   SPAM_TYPES.forEach(t=>{trainingResults[t.id]={spam:[],notSpam:[]};});
+  SPAM_TYPES.forEach(t=>{
+    const count=MAIL_COUNTS[t.id]||2;
+    for(let i=0;i<count;i++)generatedMails.push(makeMail(t.id,_trainingUsed));
+  });
+  // shuffle
+  for(let i=generatedMails.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [generatedMails[i],generatedMails[j]]=[generatedMails[j],generatedMails[i]];
+  }
+  // start first round
   currentRoundIdx=0;
   startRound(0);
 }
 
 // ══ TRAINING COMPARE ROUNDS ══
-// Each round independently generates 20 emails:
-//   - ROUND_SPAM_COUNTS[catId] emails of the target spam type (true spam)
-//   - rest filled with safe emails (true not-spam)
-// This gives each round its own unique pool with the correct spam ratio.
-function buildRoundMails(catId){
-  const _roundUsed = new Set();
-  const spamCount = ROUND_SPAM_COUNTS[catId] || 0;
-  const safeCount = ROUND_TOTAL - spamCount;
-  const mails = [];
-
-  if(catId === 'safe'){
-    // Safe round: fill spam slots with random mixed spam types (not 'safe')
-    // Distribute evenly across spam categories so student sees variety
-    const spamCats = [...SPAM_CATS_IDS]; // 7 spam types
-    for(let i=0; i<spamCount; i++){
-      const randomSpamType = spamCats[i % spamCats.length];
-      mails.push(makeMail(randomSpamType, _roundUsed));
-    }
-  } else {
-    // Normal round: spam slots = this category's spam
-    for(let i=0; i<spamCount; i++){
-      mails.push(makeMail(catId, _roundUsed));
-    }
-  }
-
-  // Fill rest with safe emails
-  for(let i=0; i<safeCount; i++){
-    mails.push(makeMail('safe', _roundUsed));
-  }
-
-  // Shuffle
-  for(let i=mails.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [mails[i],mails[j]]=[mails[j],mails[i]];
-  }
-  return mails;
-}
-
 function startRound(idx){
   currentRoundIdx=idx;
   currentMailIdx=0;
-  const catId = SPAM_TYPES[idx].id;
-  roundMails = buildRoundMails(catId);
+  // Make a fresh shuffled copy of all mails for this round
+  roundMails=[...generatedMails];
+  for(let i=roundMails.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [roundMails[i],roundMails[j]]=[roundMails[j],roundMails[i]];
+  }
   renderCompareUI();
 }
 
 function renderCompareUI(){
   const body=document.getElementById('trainingBody');
   const spamType=SPAM_TYPES[currentRoundIdx];
+  const remaining=roundMails;
   const roundsDone=currentRoundIdx;
   const totalRounds=SPAM_TYPES.length;
-  const spamInRound=ROUND_SPAM_COUNTS[spamType.id]||0;
-  const spamPct=Math.round((spamInRound/ROUND_TOTAL)*100);
-  const ratioBadgeColor=spamPct>=60?'#e07070':spamPct>=50?'#f4b942':'#52b788';
+  const pct=Math.round((roundsDone/totalRounds)*100);
 
   body.innerHTML=`
     <div class="compare-wrap">
@@ -1891,13 +1930,12 @@ function renderCompareUI(){
             Round ${currentRoundIdx+1} / ${totalRounds}<br>
             <span style="font-size:11px;font-weight:500">Mail ${currentMailIdx+1} of ${roundMails.length}</span>
           </div>
-          <div style="font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px;background:${ratioBadgeColor}22;color:${ratioBadgeColor};border:1px solid ${ratioBadgeColor}55;white-space:nowrap">${spamPct}% spam mix</div>
           <div class="compare-progress-bar"><div class="compare-progress-fill" style="width:${(currentMailIdx/roundMails.length)*100}%"></div></div>
         </div>
       </div>
       <div class="mail-compare-area">
         <div class="mail-list-panel" id="compareMailPanel">
-          <div class="panel-title">📬 ${roundMails.length} Mails (${spamInRound} spam + ${ROUND_TOTAL-spamInRound} safe) — ${spamType.id === 'safe' ? 'Is this a Safe / Genuine mail?' : `Does this mail have "${spamType.name}" features?`}</div>
+          <div class="panel-title">📬 All ${roundMails.length} Mails — ${spamType.id === 'safe' ? 'Is this a Safe / Genuine mail?' : `Does this mail have "${spamType.name}" features?`}</div>
           ${renderCompareMails()}
         </div>
         <div style="position:relative;display:flex;align-items:stretch">
@@ -1906,18 +1944,15 @@ function renderCompareUI(){
           </div>
           <div class="rounds-overview" id="roundsOverview">
             <div class="ro-title">📊 Training Rounds</div>
-            ${SPAM_TYPES.map((t,i)=>{
-              const sc=ROUND_SPAM_COUNTS[t.id]||0;
-              const sp=Math.round((sc/ROUND_TOTAL)*100);
-              return `
+            ${SPAM_TYPES.map((t,i)=>`
               <div class="ro-round-item ${i<currentRoundIdx?'done':i===currentRoundIdx?'active':'pending'}">
                 <div class="ro-icon">${t.icon}</div>
-                <div style="flex:1;min-width:0">
+                <div>
                   <div class="ro-name">${t.name}</div>
-                  <div class="ro-stats">${i<currentRoundIdx?(trainingResults[t.id].spam.length+' spam / '+(trainingResults[t.id].notSpam.length)+' not spam'):(t.id==='safe'?'9 mixed spam + 11 safe':''+sp+'% spam · '+sc+'/'+ROUND_TOTAL)}</div>
+                  <div class="ro-stats">${i<currentRoundIdx?(trainingResults[t.id].spam.length+' spam / '+(trainingResults[t.id].notSpam.length)+' not spam'):'Pending'}</div>
                 </div>
                 <div class="ro-check">${i<currentRoundIdx?'✅':i===currentRoundIdx?'▶️':'⏳'}</div>
-              </div>`;}).join('')}
+              </div>`).join('')}
           </div>
         </div>
       </div>
