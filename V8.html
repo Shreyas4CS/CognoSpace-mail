@@ -105,14 +105,8 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .avatar:hover{transform:scale(1.12);box-shadow:0 4px 14px rgba(74,144,226,.4)}
 
 /* ── MAIN LAYOUT ── */
-.main{display:flex;flex:1;overflow:hidden;position:relative}
-.sidebar{width:300px;flex-shrink:0;padding:10px 0;overflow-y:auto;background:#fff;border-right:1.5px solid var(--border);transition:width .3s cubic-bezier(.4,0,.2,1),opacity .25s;position:relative}
-.sidebar.collapsed{width:0;padding:0;overflow:hidden;border-right:none;opacity:0}
-
-/* Sidebar toggle tab */
-.sidebar-tab{position:absolute;top:50%;transform:translateY(-50%);z-index:20;transition:left .3s cubic-bezier(.4,0,.2,1)}
-.sidebar-tab-btn{background:#fff;border:1.5px solid var(--border);border-left:none;border-radius:0 10px 10px 0;width:18px;height:52px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:2px 0 8px rgba(74,144,226,.1);transition:background .15s,box-shadow .15s;font-size:10px;color:var(--text3);padding:0}
-.sidebar-tab-btn:hover{background:var(--blue-light);color:var(--blue);box-shadow:2px 0 12px rgba(74,144,226,.2)}
+.main{display:flex;flex:1;overflow:hidden}
+.sidebar{width:300px;flex-shrink:0;padding:10px 0;overflow-y:auto;background:#fff;border-right:1.5px solid var(--border)}
 .compose-btn{margin:10px 14px 16px;background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:12px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:var(--shadow);font-size:14px;font-family:'Nunito',sans-serif;font-weight:700;color:var(--text);transition:transform .2s,box-shadow .2s,background .2s;width:calc(100% - 28px)}
 .compose-btn:hover{box-shadow:var(--shadow2);background:var(--blue-light);transform:translateY(-2px)}
 .compose-btn .pencil{font-size:20px;transition:transform .3s}
@@ -124,13 +118,6 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .nav-item.active .nav-icon{color:var(--blue)}
 .nav-count{margin-left:auto;font-size:11px;font-weight:700;background:var(--blue);color:#fff;border-radius:10px;padding:1px 8px;font-family:'Nunito',sans-serif}
 .nav-section{font-size:11px;font-weight:700;color:var(--text3);padding:10px 24px 4px;letter-spacing:.8px;text-transform:uppercase;margin-top:6px}
-.nav-section-toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 4px 22px;cursor:pointer;user-select:none;margin-top:6px;border-radius:0 12px 12px 0;margin-right:14px;transition:background .15s}
-.nav-section-toggle:hover{background:var(--hover)}
-.nav-section-toggle .nst-label{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.8px;text-transform:uppercase}
-.nav-section-toggle .nst-arrow{font-size:10px;color:var(--text3);transition:transform .25s;line-height:1}
-.nav-section-toggle .nst-arrow.open{transform:rotate(180deg)}
-.spam-types-list{overflow:hidden;transition:max-height .3s cubic-bezier(.4,0,.2,1),opacity .25s;max-height:400px;opacity:1}
-.spam-types-list.collapsed{max-height:0;opacity:0}
 .cat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 
 /* ── MAIL LIST ── */
@@ -163,7 +150,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .mv-to-line{font-size:13px;color:var(--text2);margin-top:4px}
 .mv-date{font-size:13px;color:var(--text2);white-space:nowrap;flex-shrink:0;margin-top:4px}
 .mv-body-wrap{padding:16px 20px 20px;font-size:14px;line-height:1.75;color:var(--text);font-family:'Nunito Sans',sans-serif;overflow-y:auto;flex:1;min-height:0}
-/* mailView is overflow:hidden as flex column — body-wrap scrolls internally */
+#mailView{overflow-y:auto}
 .mv-spam-banner{margin:16px 24px 0;padding:14px 20px;background:#fff0f0;border-radius:14px;display:flex;align-items:center;gap:12px;font-size:14px;border:1.5px solid #f5c0c0;animation:fadeInUp .3s ease both}
 .mv-inbox-banner{margin:16px 24px 0;padding:14px 20px;background:#edfbf3;border-radius:14px;display:flex;align-items:center;gap:12px;font-size:14px;border:1.5px solid #b4e8cc;animation:fadeInUp .3s ease both}
 .mv-reason{margin:0 24px 24px;padding:18px 22px;background:#fefce8;border:1.5px solid #f0d878;border-radius:14px;font-size:14px;line-height:1.7;animation:fadeInUp .35s ease both}
@@ -184,10 +171,10 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 
 /* ── TRAINING MODE ── */
 #trainingWrap{display:none;flex:1;flex-direction:column;overflow:hidden}
-.training-header{padding:8px 16px;background:#fff;border-bottom:1.5px solid var(--border);display:flex;align-items:flex-start;gap:12px;flex-shrink:0;flex-wrap:wrap}
-.training-title{font-size:14px;font-family:'Nunito',sans-serif;font-weight:800}
-.training-desc{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.5}
-.gen-btn{padding:7px 16px;background:linear-gradient(135deg,var(--blue),#6aa8f0);color:#fff;border:none;border-radius:22px;font-size:12px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;flex-shrink:0;box-shadow:0 3px 10px rgba(74,144,226,.3)}
+.training-header{padding:16px 24px;background:#fff;border-bottom:1.5px solid var(--border);display:flex;align-items:flex-start;gap:16px;flex-shrink:0;flex-wrap:wrap}
+.training-title{font-size:19px;font-family:'Nunito',sans-serif;font-weight:800}
+.training-desc{font-size:13px;color:var(--text2);margin-top:4px;line-height:1.6}
+.gen-btn{padding:11px 24px;background:linear-gradient(135deg,var(--blue),#6aa8f0);color:#fff;border:none;border-radius:22px;font-size:14px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;flex-shrink:0;box-shadow:0 4px 14px rgba(74,144,226,.3)}
 .gen-btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(74,144,226,.4)}
 .gen-btn:active{transform:translateY(0)}
 .gen-btn:disabled{background:#c8d0e0;cursor:not-allowed;box-shadow:none;transform:none}
@@ -238,13 +225,7 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .rp-inbox{background:#edfbf3;color:#2d8a5e}
 .round-next-btn{padding:14px 32px;background:linear-gradient(135deg,var(--blue),#6aa8f0);color:#fff;border:none;border-radius:22px;font-size:15px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(74,144,226,.3);margin-top:8px}
 .round-next-btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(74,144,226,.4)}
-.rounds-overview{width:300px;flex-shrink:0;overflow-y:auto;padding:14px;background:#fff;border-left:1.5px solid var(--border);transition:width .3s cubic-bezier(.4,0,.2,1),padding .3s,opacity .25s;position:relative}
-.rounds-overview.collapsed{width:0;padding:0;overflow:hidden;border-left:none;opacity:0}
-/* Rounds panel toggle tab */
-.rounds-tab{position:absolute;top:50%;right:0;transform:translateY(-50%);z-index:20;pointer-events:none}
-.rounds-overview:not(.collapsed) ~ .rounds-tab,.mail-compare-area .rounds-tab{pointer-events:auto}
-.rounds-tab-btn{background:#fff;border:1.5px solid var(--border);border-right:none;border-radius:10px 0 0 10px;width:18px;height:52px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:-2px 0 8px rgba(74,144,226,.1);transition:background .15s,box-shadow .15s;font-size:10px;color:var(--text3)}
-.rounds-tab-btn:hover{background:var(--blue-light);color:var(--blue);box-shadow:-2px 0 12px rgba(74,144,226,.2)}
+.rounds-overview{width:300px;flex-shrink:0;overflow-y:auto;padding:14px;background:#fff;border-left:1.5px solid var(--border)}
 .ro-title{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px;font-family:'Nunito',sans-serif}
 .ro-round-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;margin-bottom:6px;transition:background .15s;border:1.5px solid var(--border)}
 .ro-round-item.done{background:var(--green-light);border-color:#b4e8cc}
@@ -442,20 +423,20 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 
 /* ── FOOTER ── */
 footer{background:linear-gradient(135deg,#1a1f3c 0%,#2a2f5a 40%,#1a2a4a 100%);padding:0;display:flex;flex-direction:column;flex-shrink:0;position:relative;overflow:hidden;border-top:2px solid transparent}
-footer::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#4a90e2,#52b788,#f4b942,#e07070,#9b8dd4,#4a90e2);background-size:400% 100%;animation:footerShimmer 6s linear infinite}
-.footer-inner{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;gap:12px}
-.footer-brand{display:flex;align-items:center;gap:8px;font-family:'Nunito',sans-serif;font-weight:800;color:#fff;font-size:12px}
-.footer-brand .fb-icon{width:22px;height:22px;background:linear-gradient(135deg,#4a90e2,#52b788);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;box-shadow:0 2px 6px rgba(74,144,226,.4)}
-.footer-brand .fb-logo-img{width:24px;height:24px;border-radius:7px;object-fit:contain}
-.footer-brand .fb-tagline{font-size:10px;color:rgba(255,255,255,.55);font-weight:500;font-family:'Nunito Sans',sans-serif;margin-top:1px}
-.footer-center{display:flex;flex-direction:column;align-items:center;gap:4px}
-.footer-links{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-.footer-links a{color:rgba(255,255,255,.6) !important;text-decoration:none !important;transition:color .2s;font-weight:600;font-size:10px;font-family:'Nunito Sans',sans-serif;letter-spacing:.2px}
+footer::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4a90e2,#52b788,#f4b942,#e07070,#9b8dd4,#4a90e2);background-size:400% 100%;animation:footerShimmer 6s linear infinite}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;padding:20px 36px;gap:20px}
+.footer-brand{display:flex;align-items:center;gap:12px;font-family:'Nunito',sans-serif;font-weight:800;color:#fff;font-size:15px}
+.footer-brand .fb-icon{width:32px;height:32px;background:linear-gradient(135deg,#4a90e2,#52b788);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:800;box-shadow:0 2px 8px rgba(74,144,226,.4)}
+.footer-brand .fb-logo-img{width:36px;height:36px;border-radius:10px;object-fit:contain}
+.footer-brand .fb-tagline{font-size:12px;color:rgba(255,255,255,.55);font-weight:500;font-family:'Nunito Sans',sans-serif;margin-top:2px}
+.footer-center{display:flex;flex-direction:column;align-items:center;gap:8px}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+.footer-links a{color:rgba(255,255,255,.6) !important;text-decoration:none !important;transition:color .2s;font-weight:600;font-size:12px;font-family:'Nunito Sans',sans-serif;letter-spacing:.2px}
 .footer-links a:hover{color:#fff !important}
-.footer-copy{font-size:9px;color:rgba(255,255,255,.3);font-family:'Nunito Sans',sans-serif;text-align:center;margin-top:1px}
-.footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;font-size:10px;color:rgba(255,255,255,.7);font-family:'Nunito',sans-serif;font-weight:600}
-.footer-credit{font-size:10px;color:rgba(255,255,255,.55);font-family:'Nunito Sans',sans-serif;font-weight:500;font-style:italic;text-align:right}
-.footer-mode-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;font-family:'Nunito',sans-serif;letter-spacing:.3px}
+.footer-copy{font-size:11px;color:rgba(255,255,255,.3);font-family:'Nunito Sans',sans-serif;text-align:center;margin-top:2px}
+.footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:12px;color:rgba(255,255,255,.7);font-family:'Nunito',sans-serif;font-weight:600}
+.footer-credit{font-size:12px;color:rgba(255,255,255,.55);font-family:'Nunito Sans',sans-serif;font-weight:500;font-style:italic;text-align:right}
+.footer-mode-badge{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;font-family:'Nunito',sans-serif;letter-spacing:.3px}
 .footer-mode-badge.training{background:rgba(74,144,226,.3);color:#a8c8f8;border:1px solid rgba(74,144,226,.4)}
 .footer-mode-badge.live{background:rgba(82,183,136,.3);color:#90ddb8;border:1px solid rgba(82,183,136,.4)}
 .footer-mode-badge.admin-badge{background:rgba(124,58,237,.3);color:#d4b8fd;border:1px solid rgba(124,58,237,.4)}
@@ -486,434 +467,199 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
 /* Improved mode toggle animation */
 .mode-btn.active::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,.1),transparent);animation:shimmer 2s infinite;background-size:200% 100%}
 
-/* ══════════════════════════════════════════════════════
-   RESPONSIVE — full multi-device rewrite
-   Breakpoints:
-     1200px  Large tablet / small laptop
-      900px  Tablet landscape
-      768px  Tablet portrait
-      600px  Large phone landscape / small tablet
-      480px  Phone portrait (standard)
-      360px  Small phone
-      320px  Minimum supported width
-══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════════════ */
 
-/* ─── 1200px: shrink sidebar ─── */
-@media(max-width:1200px){
-  .sidebar{width:220px}
-  .search-bar{max-width:400px}
-  .rounds-overview{width:240px}
-  .l2-right{width:280px}
-  .cats-panel{width:300px}
-}
-
-/* ─── 900px: tablet landscape ─── */
+/* ── Tablet: ≤900px ── */
 @media(max-width:900px){
-  /* Sidebar: icon strip */
-  .sidebar{width:60px;padding:6px 0}
-  .compose-btn{margin:6px auto 10px;padding:10px;width:44px;height:44px;border-radius:50%;justify-content:center;gap:0;box-shadow:var(--shadow)}
+  /* Sidebar collapses to icon-only strip */
+  .sidebar{width:64px;padding:8px 0}
+  .compose-btn{margin:8px 8px 12px;padding:10px;justify-content:center;width:calc(100% - 16px);border-radius:14px}
   .compose-btn span:last-child{display:none}
-  .nav-item{padding:8px 0;justify-content:center;margin-right:0;border-radius:10px;height:40px;gap:0}
+  .nav-item{padding:8px;justify-content:center;margin-right:6px;border-radius:12px}
   .nav-item .nav-label{display:none}
-  .nav-item .nav-icon{width:22px;font-size:18px;margin:0}
+  .nav-item .nav-icon{width:auto;margin:0}
   .nav-count{display:none}
   .nav-section{display:none}
-
-  /* Topbar */
-  .search-bar{max-width:280px}
-  .topbar-cs-logo{display:none}
-
-  /* Training: panels stack vertically */
+  /* Topbar: shrink search */
+  .search-bar{max-width:320px}
+  /* Training panel stacks */
   .mail-compare-area{flex-direction:column}
-  .mail-list-panel{max-height:240px;border-right:none;border-bottom:2px solid var(--border)}
-  .rounds-overview{width:100%;max-height:140px;border-left:none;border-top:2px solid var(--border);display:flex;flex-direction:row;flex-wrap:wrap;gap:6px;padding:8px;overflow-y:visible;overflow-x:auto}
-  .ro-round-item{flex:0 0 calc(33% - 4px);margin-bottom:0;min-width:120px}
-
-  /* Live header */
-  .live-header{flex-wrap:wrap;gap:8px}
-  .live-stats{margin-left:0}
-
-  /* L2 */
+  .rounds-overview{width:100%;border-left:none;border-top:2px solid var(--border);max-height:180px;display:flex;flex-direction:row;flex-wrap:wrap;gap:6px;padding:10px}
+  .ro-round-item{flex:0 0 calc(50% - 3px);margin-bottom:0}
+  /* L2 stacks */
   .l2-body{flex-direction:column}
   .l2-right{width:100%}
-  .cats-panel{width:100%}
-
-  /* Admin */
-  .admin-mail-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
-
   /* Footer */
-  .footer-inner{flex-direction:column;align-items:flex-start;gap:12px;padding:16px 24px}
+  .footer-inner{flex-direction:column;align-items:flex-start;gap:14px;padding:20px 24px}
   .footer-right{align-items:flex-start}
+  /* Live header wraps */
+  .live-stats{margin-left:0}
 }
 
-/* ─── 768px: tablet portrait ─── */
-@media(max-width:768px){
-  /* Topbar: keep single row but tighten */
-  .topbar{height:60px;padding:0 12px;gap:8px}
+/* ── Mobile: ≤640px ── */
+@media(max-width:640px){
+  /* Body: allow scroll on mobile */
+  body{overflow:auto;height:auto;min-height:100dvh}
+  #appWrap{height:auto;min-height:100dvh}
+  .main{flex-direction:column;overflow:visible}
+
+  /* Topbar: compact 2-row on mobile */
+  .topbar{height:auto;flex-wrap:wrap;padding:8px 10px;gap:6px;row-gap:6px}
   .topbar-logo .logo-text{font-size:15px}
   .topbar-logo .by-sep{display:none}
-  .search-bar{max-width:220px;height:38px;padding:0 12px}
-  .search-bar input{font-size:13px}
-  .mode-toggle{font-size:12px;padding:2px;gap:1px}
-  .mode-btn{padding:5px 10px;font-size:12px}
-  .mode-btn.admin-btn{padding:5px 9px;font-size:11px}
-  .avatar{width:34px;height:34px;font-size:14px}
+  .search-bar{order:3;width:100%;max-width:100%;margin:0}
+  .topbar-right{order:2;gap:6px}
+  .mode-toggle{font-size:12px}
+  .mode-btn{padding:5px 9px;font-size:12px}
+  .avatar{width:32px;height:32px;font-size:13px}
 
-  /* Sidebar stays icon strip */
-  .sidebar{width:56px}
-
-  /* Content */
-  .content{margin:6px 6px 6px 0;border-radius:12px}
-  .mail-sender{width:120px}
-
-  /* Training header: wrap */
-  .training-header{padding:10px 12px;gap:8px;flex-wrap:wrap}
-  .training-title{font-size:16px;width:100%}
-  .training-desc{font-size:12px;width:100%}
-  .gen-btn{padding:9px 18px;font-size:13px;align-self:flex-start}
-
-  /* Compare */
-  .compare-header{flex-wrap:wrap;padding:6px 10px;gap:6px}
-  .spam-type-box{width:100%}
-  .compare-progress{width:100%;justify-content:flex-end}
-  .mail-list-panel{max-height:200px;padding:8px}
-
-  /* Live header */
-  .live-header{padding:10px 14px;gap:8px}
-  .live-title{font-size:15px}
-  .live-gen-btn{padding:8px 14px;font-size:12px}
-  .live-tab{padding:10px 16px;font-size:13px}
-
-  /* Modals */
-  .modal{padding:24px 18px;border-radius:18px;width:calc(100% - 32px)}
-  .modal h2{font-size:20px}
-  .round-popup-box{padding:24px 16px;border-radius:18px}
-  .dt-container{max-height:94vh;border-radius:18px}
-  .dt-header{padding:16px 18px}
-  .dt-body{padding:16px 14px 20px}
-
-  /* Footer */
-  .footer-inner{padding:14px 16px;gap:10px}
-  .footer-links{gap:12px}
-}
-
-/* ─── 600px: large phone landscape / small tablet ─── */
-@media(max-width:600px){
-  /* Body scrolls freely */
-  body{overflow-x:hidden;overflow-y:auto;height:auto;min-height:100dvh}
-  #appWrap{height:auto;min-height:100dvh;display:flex!important;flex-direction:column}
-
-  /* Topbar: 2 rows */
-  .topbar{
-    height:auto;
-    flex-wrap:wrap;
-    padding:8px 10px;
-    gap:6px;
-  }
-  .topbar-logo{flex:1;min-width:0}
-  .topbar-logo .logo-text{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .topbar-right{order:2;flex-shrink:0;gap:6px}
-  .search-bar{
-    order:3;
-    width:100%;
-    max-width:100%;
-    margin:0;
-    height:38px;
-  }
-  .mode-toggle{gap:1px;padding:2px}
-  .mode-btn{padding:5px 8px;font-size:11px}
-  .mode-btn.admin-btn{padding:4px 8px;font-size:10px}
-  .avatar{width:30px;height:30px;font-size:12px}
-  #logoutBtn{padding:6px 10px!important;font-size:11px!important}
-
-  /* Main: stack sidebar below content */
-  .main{flex-direction:column;overflow:visible;flex:1}
-
-  /* Sidebar: horizontal bottom nav bar */
+  /* Sidebar becomes horizontal bottom-docked strip */
   .sidebar{
     width:100%;
-    height:54px;
-    flex-shrink:0;
     border-right:none;
     border-top:1.5px solid var(--border);
+    order:10;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding:4px 0;
     display:flex;
     flex-direction:row;
     align-items:center;
-    padding:0 4px;
-    overflow-x:auto;
-    overflow-y:hidden;
+    height:56px;
+    flex-shrink:0;
     position:sticky;
     bottom:0;
     background:#fff;
-    z-index:60;
-    box-shadow:0 -2px 8px rgba(74,144,226,.08);
-    order:10;
-    scrollbar-width:none;
+    z-index:50;
+    box-shadow:0 -2px 10px rgba(74,144,226,.1);
   }
-  .sidebar::-webkit-scrollbar{display:none}
   .compose-btn{
     margin:4px 6px;
-    padding:7px 12px;
-    border-radius:16px;
+    padding:8px 12px;
+    border-radius:18px;
+    white-space:nowrap;
+    flex-shrink:0;
     width:auto;
     height:40px;
-    font-size:12px;
-    flex-shrink:0;
-    white-space:nowrap;
-    box-shadow:none;
-    border-radius:50%;
-    width:40px;
-    padding:0;
-    justify-content:center;
-    gap:0;
+    font-size:13px;
   }
-  .compose-btn span:last-child{display:none}
-  #sidebarNav{display:flex;flex-direction:row;align-items:center;gap:0;padding:0 2px;flex:1;overflow-x:auto;scrollbar-width:none}
-  #sidebarNav::-webkit-scrollbar{display:none}
+  .compose-btn span:last-child{display:inline}
+  #sidebarNav{display:flex;flex-direction:row;align-items:center;gap:2px;overflow-x:auto;padding:0 4px;flex:1}
   .nav-section{display:none}
   .nav-item{
     flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    padding:4px 6px;
+    padding:4px 8px;
     margin:0;
     border-radius:10px;
     height:auto;
-    min-width:48px;
-    flex-shrink:0;
+    min-width:52px;
+    font-size:10px;
     gap:2px;
-    transform:none!important;
+    white-space:nowrap;
+    flex-shrink:0;
   }
-  .nav-item .nav-label{display:block;font-size:8px;color:var(--text3);font-weight:600;line-height:1.1;text-align:center}
-  .nav-item .nav-icon{font-size:16px;width:auto}
-  .nav-count{display:block;margin-left:0;padding:1px 4px;font-size:8px;line-height:1.4}
+  .nav-item .nav-label{display:block;font-size:9px;color:var(--text3);font-weight:600}
+  .nav-item .nav-icon{font-size:16px;width:auto;margin:0}
+  .nav-count{display:block;margin-left:0;padding:1px 5px;font-size:9px}
 
-  /* Content fills remaining space */
-  .content{margin:0;border-radius:0;box-shadow:none;flex:1}
+  /* Main content area */
+  .content{margin:0;border-radius:0;box-shadow:none}
 
-  /* Mail list rows */
-  .mail-row{padding:0 10px;height:54px;gap:6px}
-  .mail-sender{width:90px;font-size:13px}
-  .mail-preview{font-size:13px}
-  .mail-time{font-size:11px;width:44px}
+  /* Auth page */
+  .auth-card{padding:28px 22px 24px}
+  .auth-card h2{font-size:20px}
+  .auth-logo .logo-text{font-size:21px}
+
+  /* Mail list */
+  .mail-sender{width:110px}
+  .mail-row{padding:0 10px;height:56px}
 
   /* Mail open view */
-  #mailView{position:fixed;top:0;left:0;right:0;bottom:0;z-index:200}
-  .mv-topbar{padding:8px 10px;gap:6px;flex-wrap:nowrap}
-  .mv-back{padding:7px 10px;font-size:14px;border-radius:9px}
-  .mv-subject{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .mv-nav-btns{gap:4px}
-  .mv-nav-btn{padding:6px 10px;font-size:13px}
-  #mvNavCounter{display:none}
-  .mv-card{margin:6px 8px;border-radius:12px}
-  .mv-card-head{padding:10px 12px 8px;gap:8px}
-  .mv-avatar{width:32px;height:32px;font-size:13px}
-  .mv-from{font-size:14px}
-  .mv-email-addr{font-size:11px}
-  .mv-to-line{font-size:11px;margin-top:2px}
-  .mv-date{font-size:11px}
-  .mv-body-wrap{padding:12px 14px 14px;font-size:13px;line-height:1.65}
-  .mv-spam-banner,.mv-inbox-banner{margin:6px 8px 0;padding:8px 12px;font-size:13px;border-radius:10px}
-  .mv-reason{margin:6px 8px 10px;padding:10px 14px;font-size:12px}
-  .report-spam-btn{margin:0 8px 10px;padding:9px 14px;font-size:13px}
-  .spam-edge-badge{display:none}
+  .mv-topbar{padding:10px 14px;gap:8px}
+  .mv-subject{font-size:16px}
+  .mv-card{margin:10px 10px;border-radius:14px}
+  .mv-card-head{padding:14px 16px;gap:10px}
+  .mv-body-wrap{padding:16px 18px 24px;font-size:14px}
+  .mv-spam-banner,.mv-inbox-banner,.mv-reason{margin-left:10px;margin-right:10px}
 
   /* Training header */
-  .training-header{padding:8px 10px;gap:8px;flex-wrap:wrap}
-  .training-title{font-size:14px;width:100%}
-  .training-desc{font-size:11px;line-height:1.5;width:100%}
-  .gen-btn{width:100%;text-align:center;padding:10px;font-size:13px;border-radius:12px}
+  .training-header{padding:12px 14px;gap:10px}
+  .training-title{font-size:16px}
+  .training-desc{font-size:12px}
+  .gen-btn{padding:9px 16px;font-size:13px}
 
-  /* Compare */
-  .compare-header{padding:6px 8px;gap:6px;flex-wrap:wrap}
-  .spam-type-box{width:100%;padding:6px 10px;border-radius:8px}
-  .spam-type-box .stb-name{font-size:13px}
-  .spam-type-box .stb-features{font-size:10px}
-  .compare-progress{width:100%;justify-content:space-between}
-  .compare-progress-bar{width:80px}
-  .mail-list-panel{max-height:180px;padding:8px}
-  .rounds-overview{max-height:110px;padding:6px;gap:4px}
-  .ro-round-item{flex:0 0 calc(50% - 2px);min-width:0;padding:6px 8px}
-  .ro-name{font-size:11px}
-  .ro-icon{font-size:14px}
-  .cmc-btns{padding:6px 10px 8px;gap:6px}
-  .cmc-btn{padding:7px 8px;font-size:12px}
+  /* Compare view: single column */
+  .mail-compare-area{flex-direction:column}
+  .mail-list-panel{border-right:none;border-bottom:2px solid var(--border);max-height:260px;padding:10px}
+  .compare-header{padding:10px 12px;gap:8px}
+  .spam-type-box{min-width:160px}
+  .rounds-overview{width:100%;max-height:160px}
+  .ro-round-item{flex:0 0 calc(50% - 3px)}
 
-  /* Live mode */
-  .live-header{padding:8px 10px;gap:6px;flex-wrap:wrap}
-  .live-title{font-size:14px;width:100%}
-  .live-stats{width:100%;gap:6px;justify-content:flex-start}
-  .live-stat{padding:5px 10px;font-size:12px;border-radius:16px}
-  .live-stat .stat-icon{font-size:13px}
-  .live-stat .stat-num{font-size:14px;min-width:18px}
-  .live-gen-btn{flex:1;text-align:center;padding:8px 10px;font-size:12px;border-radius:12px}
-  #liveLimit{font-size:11px}
-  .live-tab{padding:8px 12px;font-size:12px}
-  .live-mail-row{padding:8px 10px;gap:8px;min-height:52px}
-  .lm-sender{font-size:12px}
-  .lm-subject{font-size:12px}
-  .lm-preview{font-size:11px}
-  .lm-badge{font-size:10px;padding:2px 7px}
-  .lm-spam-type{max-width:80px;font-size:9px}
+  /* Live mode header */
+  .live-header{padding:10px 14px;gap:8px}
+  .live-title{font-size:16px}
+  .live-stats{margin-left:0;gap:8px}
+  .live-stat{padding:6px 10px;font-size:12px}
+  .live-stat .stat-num{font-size:15px;min-width:20px}
+  .live-gen-btn{padding:8px 14px;font-size:13px}
+  #liveLimit{font-size:12px}
+
+  /* Live tabs */
+  .live-tab{padding:10px 14px;font-size:13px}
+
+  /* Live mail rows */
+  .live-mail-row{padding:10px 12px;gap:8px}
+  .lm-spam-type{max-width:90px;font-size:9px}
 
   /* Admin */
-  .admin-header{padding:8px 12px;gap:8px;flex-wrap:wrap}
-  .admin-title{font-size:15px;width:100%}
-  .admin-subtitle{font-size:12px}
-  .admin-body{padding:10px}
+  .admin-header{padding:10px 14px}
+  .admin-title{font-size:16px}
   .admin-mail-grid{grid-template-columns:1fr}
   .admin-logs-panel.open{width:100%;position:fixed;top:0;left:0;right:0;bottom:0;border-left:none;z-index:400}
 
   /* Modals */
-  .modal-overlay{padding:8px}
-  .modal{padding:18px 14px;border-radius:16px;width:100%;max-height:92dvh}
-  .modal h2{font-size:18px}
-  .modal .modal-sub{font-size:12px;margin-bottom:16px}
-  .analysis-grid{grid-template-columns:1fr 1fr;gap:8px}
-  .analysis-card{padding:12px}
-  .analysis-card .ac-count{font-size:24px}
-  .modal-actions{gap:8px}
-  .modal-btn{padding:9px 18px;font-size:13px}
-  .round-popup-box{padding:20px 14px;border-radius:16px}
-  .round-popup-icon{font-size:48px;margin-bottom:12px}
-  .round-popup-title{font-size:20px}
-  .round-popup-stats{gap:8px;margin:14px 0}
-  .rp-stat{padding:10px 12px}
-  .rp-stat-num{font-size:26px}
-  .round-next-btn{padding:11px 24px;font-size:13px}
+  .modal{padding:24px 18px;border-radius:18px}
+  .modal h2{font-size:20px}
+  .analysis-grid{grid-template-columns:1fr}
+  .round-popup-box{padding:28px 20px}
+  .round-popup-stats{gap:10px}
+  .rp-stat{padding:12px 16px}
 
-  /* DT Modal */
-  .dt-container{border-radius:16px;max-height:96dvh;width:100%}
-  .dt-header{padding:14px 14px 12px;flex-wrap:wrap;gap:8px}
-  .dt-title{font-size:16px}
-  .dt-subtitle{font-size:11px}
-  .dt-close-btn{padding:7px 14px;font-size:12px}
-  .dt-body{padding:12px 10px 16px}
-  .dt-legend{padding:10px 12px;gap:8px}
-  .dt-legend-item{font-size:11px}
-  .dt-stats{grid-template-columns:repeat(3,1fr);gap:6px}
-  .dt-stat-card{padding:10px 6px}
-  .dt-stat-icon{font-size:18px}
-  .dt-stat-count{font-size:16px}
-  .dt-stat-name{font-size:10px}
+  /* Decision tree modal */
+  .dt-container{border-radius:18px;width:100%;max-height:95dvh}
+  .dt-header{padding:18px 20px 14px}
+  .dt-title{font-size:18px}
+  .dt-body{padding:16px 14px 24px}
 
   /* L2 layout */
-  .l2-header{padding:8px 10px;gap:6px}
-  .l2-title{font-size:15px}
-  .l2-desc{font-size:11px}
-  .l2-body{flex-direction:column;gap:6px;padding:6px}
-  .l2-left{padding:10px}
+  .l2-body{flex-direction:column;gap:8px;padding:8px}
   .l2-right{width:100%}
-  .mail-pool{border-right:none;border-bottom:2px solid var(--border);max-height:160px;padding:8px}
-  .cats-panel{width:100%;padding:8px}
+  .mail-pool{border-right:none;border-bottom:2px solid var(--border);max-height:200px}
+  .cats-panel{width:100%}
 
   /* Footer */
-  .footer-inner{flex-direction:column;align-items:flex-start;gap:8px;padding:12px 14px}
-  .footer-brand{font-size:13px;gap:8px}
-  .footer-links{gap:10px;flex-wrap:wrap}
-  .footer-links a{font-size:11px}
-  .footer-copy{font-size:10px}
+  .footer-inner{flex-direction:column;align-items:flex-start;gap:10px;padding:16px 18px}
+  .footer-links{gap:12px}
   .footer-right{align-items:flex-start}
-  .footer-credit{text-align:left;font-size:11px}
-
-  /* Auth page */
-  #authWrap{padding:12px;justify-content:flex-start;padding-top:32px}
-  .auth-logo{margin-bottom:20px}
-  .auth-logo .logo-text{font-size:20px}
-  .auth-card{padding:22px 18px 20px;border-radius:18px}
-  .auth-card h2{font-size:19px}
-  .auth-card p{font-size:13px;margin-bottom:20px}
-  .auth-input{padding:12px 14px;font-size:14px;margin-bottom:12px;border-radius:10px}
-  .auth-btn{padding:12px;font-size:14px;border-radius:10px}
+  .footer-credit{text-align:left}
 
   /* Toast */
-  #toast{font-size:12px;padding:9px 16px;max-width:94vw;bottom:68px}
+  #toast{font-size:13px;padding:10px 20px;max-width:92vw}
+
+  /* Topbar CS logo: hide on very small screens */
+  .topbar-cs-logo{display:none}
 }
 
-/* ─── 480px: standard phone portrait ─── */
-@media(max-width:480px){
-  /* Topbar tighter */
-  .topbar{padding:6px 8px;gap:5px}
+/* ── Extra small: ≤380px ── */
+@media(max-width:380px){
+  .mode-btn{padding:4px 7px;font-size:11px}
   .topbar-logo .logo-text{font-size:13px}
-  .topbar-logo .cs-logo-img{width:24px;height:24px}
-  .mode-btn{padding:4px 7px;font-size:10px}
-  .mode-btn.admin-btn{padding:4px 7px;font-size:10px}
-  .avatar{width:28px;height:28px;font-size:11px}
-
-  /* Mail list */
-  .mail-sender{width:80px;font-size:12px}
-  .mail-preview{font-size:12px}
-  .inbox-toolbar{padding:6px 10px;height:44px}
-
-  /* Mail open view */
-  .mv-topbar{padding:6px 8px}
-  .mv-back{padding:6px 8px;font-size:13px}
-  .mv-subject{font-size:13px}
-  .mv-nav-btn{padding:5px 8px;font-size:12px}
-  .mv-card{margin:4px 6px;border-radius:10px}
-  .mv-card-head{padding:8px 10px;gap:6px}
-  .mv-avatar{width:28px;height:28px;font-size:11px}
-  .mv-from{font-size:13px}
-  .mv-body-wrap{padding:10px 12px 12px;font-size:12px;line-height:1.6}
-
-  /* Training */
-  .training-title{font-size:13px}
-  .training-desc{font-size:11px}
-  .gen-btn{font-size:12px;padding:9px}
-
-  /* Compare */
-  .spam-type-box .stb-name{font-size:12px}
-  .mail-list-panel{max-height:150px}
-  .rounds-overview{max-height:90px}
-  .ro-round-item{padding:5px 6px}
-  .ro-name{font-size:10px}
-
-  /* Live */
-  .live-title{font-size:13px}
-  .live-stat{padding:4px 8px;font-size:11px;border-radius:12px}
-  .live-stat .stat-num{font-size:13px}
-  .live-tab{padding:7px 10px;font-size:11px}
-  .live-mail-row{padding:7px 8px;min-height:48px;gap:6px}
-  .lm-sender,.lm-subject{font-size:11px}
-
-  /* Modals */
-  .analysis-grid{grid-template-columns:1fr}
-  .dt-stats{grid-template-columns:repeat(2,1fr)}
-  .round-popup-box{padding:16px 12px}
-  .round-popup-title{font-size:18px}
-
-  /* Auth */
-  .auth-card{padding:18px 14px 16px}
-  .auth-card h2{font-size:17px}
-}
-
-/* ─── 360px: small phone ─── */
-@media(max-width:360px){
-  .topbar-logo .logo-text{font-size:11px}
-  .mode-btn{padding:3px 6px;font-size:9px}
-  .avatar{width:26px;height:26px;font-size:10px}
-  .sidebar{height:48px}
-  .nav-item{min-width:42px;padding:3px 4px}
-  .nav-item .nav-icon{font-size:14px}
-  .nav-item .nav-label{font-size:7px}
-  .compose-btn{width:36px;height:36px}
-  .mail-sender{width:70px;font-size:11px}
-  .mail-time{width:36px;font-size:10px}
-  .mv-subject{font-size:12px}
-  .live-stat{padding:3px 6px;font-size:10px}
-  .live-gen-btn{font-size:11px;padding:7px 8px}
-  .auth-card{padding:14px 12px}
-  .auth-card h2{font-size:16px}
-  #toast{bottom:56px}
-}
-
-/* ─── 320px: minimum supported ─── */
-@media(max-width:320px){
-  .topbar-logo .logo-text{display:none}
-  .mode-btn.admin-btn{display:none}
-  .topbar-right{gap:4px}
-  .nav-item .nav-label{display:none}
-  .nav-item{min-width:36px}
+  .auth-card{padding:22px 16px 20px}
+  .live-stat{padding:5px 8px}
+  .live-gen-btn{padding:7px 11px;font-size:12px}
 }
 
 </style>
@@ -979,11 +725,6 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
   </div>
 
   <div class="main">
-    <!-- Sidebar toggle tab -->
-    <div class="sidebar-tab" id="sidebarTab" style="left:300px">
-      <button class="sidebar-tab-btn" onclick="toggleSidebar()" id="sidebarTabBtn" title="Toggle sidebar">◀</button>
-    </div>
-
     <div class="sidebar" id="sidebar">
       <button class="compose-btn" onclick="showToast('✏️ Compose is available in Live Mode after training!')">
         <span class="pencil">✏️</span> Compose
@@ -997,17 +738,17 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
           <div style="flex:1">
             <div class="training-title">🎓 Training Mode – Feature-by-Feature Comparison</div>
             <div class="training-desc">
-              Step 1: Generate 20 emails → For each spam type, check all mails one-by-one — does this mail have that spam feature? YES = spam, NO = move to next type.<br>
+              Step 1: Generate 40 emails → For each spam type, check all mails one-by-one — does this mail have that spam feature? YES = spam, NO = move to next type.<br>
               <span style="color:#e65100;font-weight:600">🌳 Decision Tree:</span> You teach the AI by identifying features in each mail. No hints — only the feature type is shown! When training is done, you unlock Live Mode and can view your Decision Tree.
             </div>
           </div>
-          <button class="gen-btn" id="genBtn" onclick="generateMails()">⚡ Generate 20 Mails</button>
+          <button class="gen-btn" id="genBtn" onclick="generateMails()">⚡ Generate 40 Mails</button>
         </div>
         <div class="training-body" id="trainingBody">
           <div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:15px;flex-direction:column;gap:14px;padding:40px 24px;text-align:center">
             <div style="font-size:72px;animation:bounce 2s ease infinite">📬</div>
             <div style="font-size:17px;font-weight:700;color:var(--text2)">Ready to train your AI?</div>
-            <div style="font-size:14px;max-width:440px;line-height:1.7;color:var(--text3)">Click <strong style="color:var(--blue)">"Generate 20 Mails"</strong> to start. You'll check each email against spam feature types — this teaches the Decision Tree what kind of email belongs where!</div>
+            <div style="font-size:14px;max-width:440px;line-height:1.7;color:var(--text3)">Click <strong style="color:var(--blue)">"Generate 40 Mails"</strong> to start. You'll check each email against spam feature types — this teaches the Decision Tree what kind of email belongs where!</div>
           </div>
         </div>
       </div>
@@ -1334,10 +1075,10 @@ const SPAM_TYPES = [
 const SPAM_CATS_IDS = ['phishing','promo_spam','scam','malware','fakebiz','social','newsletter'];
 const SAFE_CAT_ID = 'safe';
 
-// Mail counts per type: total 20
-// Spam types = 12 mails (≥10 spam guaranteed for better training accuracy), safe = 8
-// Distribution: phishing=2, promo_spam=2, scam=2, malware=2, fakebiz=1, social=2, newsletter=1, safe=8 = 20
-const MAIL_COUNTS = {phishing:2, promo_spam:2, scam:2, malware:2, fakebiz:1, social:2, newsletter:1, safe:8};
+// Mail counts per type: total 40
+// Safe = 20 (>20 safe mails guaranteed), spam types varied (each at least 2, totaling 20)
+// Distribution: phishing=5, promo_spam=4, scam=2, malware=3, fakebiz=2, social=2, newsletter=2, safe=20 = 40
+const MAIL_COUNTS = {phishing:5, promo_spam:4, scam:2, malware:3, fakebiz:2, social:2, newsletter:2, safe:20};
 
 const AV_COLORS=['#4285f4','#ea4335','#fbbc04','#34a853','#8430ce','#007b83','#e67c00','#0097a7','#c2185b','#388e3c'];
 
@@ -1623,22 +1364,9 @@ function buildSidebar(){
     <div class="nav-item" onclick="showToast('Sent mail feature coming soon!')"><span class="nav-icon">📤</span><span class="nav-label">Sent</span></div>
     <div class="nav-item" onclick="showToast('Drafts feature coming soon!')"><span class="nav-icon">📝</span><span class="nav-label">Drafts</span></div>
     <div class="nav-item" id="navSpam" onclick="openSpamView()"><span class="nav-icon">🚫</span><span class="nav-label">Spam</span> <span class="nav-count" id="navSpamCount">0</span></div>
-    <div class="nav-section-toggle" onclick="toggleSpamTypes()" id="spamTypesToggle">
-      <span class="nst-label">Spam Types</span>
-      <span class="nst-arrow open" id="spamTypesArrow">▼</span>
-    </div>
-    <div class="spam-types-list" id="spamTypesList">
-      ${SPAM_TYPES.map(c=>`<div class="nav-item" onclick="showToast('${c.name}: identify in Training Mode!')"><div class="cat-dot" style="background:${c.color}"></div><span class="nav-label">${c.name}</span></div>`).join('')}
-    </div>
+    <div class="nav-section">Spam Types</div>
+    ${SPAM_TYPES.map(c=>`<div class="nav-item" onclick="showToast('${c.name}: identify in Training Mode!')"><div class="cat-dot" style="background:${c.color}"></div><span class="nav-label">${c.name}</span></div>`).join('')}
   `;
-}
-
-function toggleSpamTypes(){
-  const list=document.getElementById('spamTypesList');
-  const arrow=document.getElementById('spamTypesArrow');
-  const isOpen=!list.classList.contains('collapsed');
-  list.classList.toggle('collapsed',isOpen);
-  arrow.classList.toggle('open',!isOpen);
 }
 
 // ══ SEARCH ══
@@ -1800,41 +1528,13 @@ function renderAdminMails(typeId,allMails,grid){
 
 // ══ MAIL GENERATOR ══
 let mailIdCounter=0;
-
-// Tracks all (sender+subject+body) combos used globally to prevent ANY repeat
-const _usedMailKeys = new Set();
-
-function _makeUniqueKey(sender,subject,body){return sender+'|||'+subject+'|||'+body.slice(0,40);}
-
-function _pickUnique(senders, subjects, bodies, usedKeys, maxTries){
-  // Try to find a unique combination
-  const tries = maxTries || 80;
-  for(let t=0;t<tries;t++){
-    const sender=senders[Math.floor(Math.random()*senders.length)];
-    const subject=subjects[Math.floor(Math.random()*subjects.length)];
-    const body=bodies[Math.floor(Math.random()*bodies.length)];
-    const key=_makeUniqueKey(sender,subject,body);
-    if(!_usedMailKeys.has(key) && !usedKeys.has(key)){
-      _usedMailKeys.add(key);
-      usedKeys.add(key);
-      return {sender,subject,body,key};
-    }
-  }
-  // fallback: just pick any unique-ish combo (append index to subject)
-  const sender=senders[Math.floor(Math.random()*senders.length)];
-  const subject=subjects[Math.floor(Math.random()*subjects.length)];
-  const body=bodies[Math.floor(Math.random()*bodies.length)];
-  const key=_makeUniqueKey(sender,subject+'_'+_usedMailKeys.size,body);
-  _usedMailKeys.add(key);
-  usedKeys.add(key);
-  return {sender,subject,body,key};
-}
-
-function makeMail(typeId, usedKeys){
+function makeMail(typeId){
   const senders=SENDERS_BY_TYPE[typeId];
   const subjects=SUBJECTS_BY_TYPE[typeId];
   const bodies=BODIES_BY_TYPE[typeId];
-  const {sender,subject,body}=_pickUnique(senders,subjects,bodies,usedKeys||new Set());
+  const sender=senders[Math.floor(Math.random()*senders.length)];
+  const subject=subjects[Math.floor(Math.random()*subjects.length)];
+  const body=bodies[Math.floor(Math.random()*bodies.length)];
   const times=['9:42 AM','11:15 AM','2:03 PM','4:28 PM','Yesterday','Mon','Sun','8:05 AM','3:17 PM','Fri'];
   return {
     id:++mailIdCounter,catId:typeId,sender,subject,body,
@@ -1844,11 +1544,13 @@ function makeMail(typeId, usedKeys){
   };
 }
 
-function makeLiveMail(typeId, usedKeys){
+function makeLiveMail(typeId){
   const senders=LIVE_SENDERS[typeId]||SENDERS_BY_TYPE[typeId];
   const subjects=LIVE_SUBJECTS[typeId]||SUBJECTS_BY_TYPE[typeId];
   const bodies=LIVE_BODIES[typeId]||BODIES_BY_TYPE[typeId];
-  const {sender,subject,body}=_pickUnique(senders,subjects,bodies,usedKeys||new Set());
+  const sender=senders[Math.floor(Math.random()*senders.length)];
+  const subject=subjects[Math.floor(Math.random()*subjects.length)];
+  const body=bodies[Math.floor(Math.random()*bodies.length)];
   const times=['9:42 AM','11:15 AM','2:03 PM','4:28 PM','Just now','1 min ago','3 min ago','8:05 AM'];
   const isSpam=SPAM_CATS_IDS.includes(typeId);
   const type=SPAM_TYPES.find(x=>x.id===typeId)||{};
@@ -1869,16 +1571,10 @@ function generateMails(){
   generatedMails=[];
   trainingResults={};
   submittedCats={};
-  liveMails=[];       // reset live mails so live mode also starts fresh
-  liveMailCount=0;
-  // Clear all used keys so training gets a fresh unique pool
-  _usedMailKeys.clear();
-  _liveUsed.clear();
-  const _trainingUsed=new Set();
   SPAM_TYPES.forEach(t=>{trainingResults[t.id]={spam:[],notSpam:[]};});
   SPAM_TYPES.forEach(t=>{
-    const count=MAIL_COUNTS[t.id]||2;
-    for(let i=0;i<count;i++)generatedMails.push(makeMail(t.id,_trainingUsed));
+    const count=MAIL_COUNTS[t.id]||5;
+    for(let i=0;i<count;i++)generatedMails.push(makeMail(t.id));
   });
   // shuffle
   for(let i=generatedMails.length-1;i>0;i--){
@@ -1932,22 +1628,17 @@ function renderCompareUI(){
           <div class="panel-title">📬 All ${roundMails.length} Mails — ${spamType.id === 'safe' ? 'Is this a Safe / Genuine mail?' : `Does this mail have "${spamType.name}" features?`}</div>
           ${renderCompareMails()}
         </div>
-        <div style="position:relative;display:flex;align-items:stretch">
-          <div class="rounds-tab" id="roundsTab" style="position:absolute;left:-18px;top:50%;transform:translateY(-50%);z-index:10">
-            <button class="rounds-tab-btn" onclick="toggleRoundsPanel()" id="roundsTabBtn" title="Toggle rounds panel">▶</button>
-          </div>
-          <div class="rounds-overview" id="roundsOverview">
-            <div class="ro-title">📊 Training Rounds</div>
-            ${SPAM_TYPES.map((t,i)=>`
-              <div class="ro-round-item ${i<currentRoundIdx?'done':i===currentRoundIdx?'active':'pending'}">
-                <div class="ro-icon">${t.icon}</div>
-                <div>
-                  <div class="ro-name">${t.name}</div>
-                  <div class="ro-stats">${i<currentRoundIdx?(trainingResults[t.id].spam.length+' spam / '+(trainingResults[t.id].notSpam.length)+' not spam'):'Pending'}</div>
-                </div>
-                <div class="ro-check">${i<currentRoundIdx?'✅':i===currentRoundIdx?'▶️':'⏳'}</div>
-              </div>`).join('')}
-          </div>
+        <div class="rounds-overview">
+          <div class="ro-title">📊 Training Rounds</div>
+          ${SPAM_TYPES.map((t,i)=>`
+            <div class="ro-round-item ${i<currentRoundIdx?'done':i===currentRoundIdx?'active':'pending'}">
+              <div class="ro-icon">${t.icon}</div>
+              <div>
+                <div class="ro-name">${t.name}</div>
+                <div class="ro-stats">${i<currentRoundIdx?(trainingResults[t.id].spam.length+' spam / '+(trainingResults[t.id].notSpam.length)+' not spam'):'Pending'}</div>
+              </div>
+              <div class="ro-check">${i<currentRoundIdx?'✅':i===currentRoundIdx?'▶️':'⏳'}</div>
+            </div>`).join('')}
         </div>
       </div>
     </div>`;
@@ -2135,9 +1826,6 @@ function submitL2(){
 }
 
 // ══ LIVE MODE ══
-// _liveUsed tracks keys used within live mode (in addition to _usedMailKeys which already has training keys)
-const _liveUsed = new Set();
-
 function generateOneLiveMail(){
   if(liveMailCount>=50){showToast('You\'ve generated 50 mails! That\'s the limit.');return;}
   liveMailCount++;
@@ -2154,8 +1842,7 @@ function generateOneLiveMail(){
     const allTypeIds=SPAM_TYPES.map(t=>t.id);
     typeId=allTypeIds[Math.floor(Math.random()*allTypeIds.length)];
   }
-  // _usedMailKeys already contains all training mail keys, so makeLiveMail will avoid them automatically
-  const m=makeLiveMail(typeId,_liveUsed);
+  const m=makeLiveMail(typeId);
   liveMails.unshift(m);
   const spamCount=liveMails.filter(x=>x.isSpam&&!x.userReported).length+liveMails.filter(x=>x.userReported).length;
   const inboxCount=liveMails.filter(x=>!x.isSpam&&!x.userReported).length;
@@ -2650,32 +2337,6 @@ function buildDecisionTree(){
   const wrap = document.getElementById('dtTreeWrap');
   wrap.innerHTML = '';
   wrap.appendChild(svg);
-}
-
-// ══ SIDEBAR TOGGLE ══
-let _sidebarOpen = true;
-function toggleSidebar(){
-  const sidebar = document.getElementById('sidebar');
-  const tab = document.getElementById('sidebarTab');
-  const btn = document.getElementById('sidebarTabBtn');
-  _sidebarOpen = !_sidebarOpen;
-  sidebar.classList.toggle('collapsed', !_sidebarOpen);
-  btn.textContent = _sidebarOpen ? '◀' : '▶';
-  btn.title = _sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar';
-  // Move tab to follow sidebar edge
-  tab.style.left = _sidebarOpen ? '300px' : '0px';
-}
-
-// ══ ROUNDS PANEL TOGGLE ══
-let _roundsOpen = true;
-function toggleRoundsPanel(){
-  const panel = document.getElementById('roundsOverview');
-  const btn = document.getElementById('roundsTabBtn');
-  if(!panel || !btn) return;
-  _roundsOpen = !_roundsOpen;
-  panel.classList.toggle('collapsed', !_roundsOpen);
-  btn.textContent = _roundsOpen ? '▶' : '◀';
-  btn.title = _roundsOpen ? 'Collapse rounds panel' : 'Expand rounds panel';
 }
 
 // ══ UTILS ══
