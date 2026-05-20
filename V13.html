@@ -2956,79 +2956,22 @@ function buildDecisionTree(){
     </div>`;
   }).join('');
 
-  // Top-down BRANCHING tree: root at top, each node branches to LEFT child (NO/next) and RIGHT child (YES/leaf)
-  // Exactly like reference image: one parent at top, two children below diagonally
-  const types = SPAM_TYPES.filter(t => t.id !== 'safe');
+  // Whiteboard-style vertical decision chain matching the photo:
+  // Each row: [SPAM bubble] <--YES-- [Question Node] --NO--> continues down
+  // Last NO → INBOX
+  const types = SPAM_TYPES.filter(t => t.id !== 'safe'); // only spam types in tree
   const svgNS = 'http://www.w3.org/2000/svg';
 
-  // Node sizes
-  const R_ROOT = 36;
-  const R_DEC  = 28;
-  const R_LEAF = 24;
+  const SVG_W = Math.max(820, window.innerWidth - 100);
+  const ROW_H = 120;        // vertical spacing per row
+  const TOP_PAD = 60;
+  const SVG_H = types.length * ROW_H + TOP_PAD + 100;
 
-  // We build a full binary tree layout top-down.
-  // Each decision node: left child = NO (next decision or inbox), right child = YES (spam leaf)
-  // Layout: compute positions using a recursive approach with horizontal spacing per level.
-
-  const TOP_PAD   = 80;
-  const LEVEL_H   = 120;  // vertical gap between levels
-  const SVG_W     = Math.max(960, window.innerWidth - 60);
-  const SVG_H     = (types.length + 2) * LEVEL_H + TOP_PAD + 100;
-
-  // Build tree structure
-  // We have: root → dec[0] → dec[1] → ... → dec[N-1] → inbox
-  // Each dec[i] branches YES→leaf[i] (right), NO→dec[i+1] (left, going down)
-  // This is a right-leaning chain tree. We lay it out so it fans out properly.
-
-  // Strategy: assign x positions using a full-width allocation per subtree.
-  // The "NO chain" goes down the left side. YES leaves branch to the right.
-  // At each level i, the decision node is at the left portion, leaf at the right.
-
-  // Allocate horizontal bands per level
-  // Level 0 (root): full width centred
-  // Level 1: left half = NO subtree, right half = YES leaf
-  // Level 2: left quarter = NO subtree, right quarter within left half = YES leaf
-  // ... but this shrinks too fast. Instead, use fixed spacing and shift.
-
-  // Better: compute the full tree width needed.
-  // The deepest subtree has (N+1) leaves: N YES-leaves + 1 inbox at bottom.
-  // Place leaves evenly, then back-compute internal node positions as midpoints of children.
-
-  const n = types.length; // number of decision nodes
-  // leaves (bottom row): YES leaves for each decision, plus inbox at end
-  // Total leaves = n + 1
-  const LEAF_GAP = Math.min(170, (SVG_W - 80) / (n + 1));
-  const totalLeafWidth = LEAF_GAP * (n + 1);
-  const leafStartX = (SVG_W - totalLeafWidth) / 2 + LEAF_GAP / 2;
-
-  // YES-leaf[i] is at column i (right child of dec[i])
-  // inbox is at column n (left child of dec[n-1] → bottom of NO chain)
-  // But the NO chain is left-biased: dec[i] left child = dec[i+1]
-  // dec[i+1]'s subtree covers columns [i+1 .. n]
-  // dec[i] right child (YES leaf[i]) is at column i
-  // dec[i] x = midpoint of (column i) and (midpoint of dec[i]'s left subtree)
-
-  // Leaf x positions
-  const yesLeafX = types.map((_, i) => leafStartX + i * LEAF_GAP);
-  const inboxX   = leafStartX + n * LEAF_GAP;
-
-  // Decision node x: midpoint between its YES-leaf and its NO-child's subtree midpoint
-  // Compute bottom-up. dec[n-1] children: YES=leaf[n-1], NO=inbox
-  const decX = new Array(n);
-  const decY = new Array(n);
-  for (let i = n - 1; i >= 0; i--) {
-    const rightX = yesLeafX[i];
-    const leftX  = (i === n - 1) ? inboxX : decX[i + 1];
-    decX[i] = (leftX + rightX) / 2;
-    decY[i] = TOP_PAD + (i + 1) * LEVEL_H;
-  }
-
-  // Root x = midpoint of dec[0] and... root is above dec[0], just use dec[0]'s x
-  const rootX = decX[0];
-  const rootY = TOP_PAD;
-
-  // Leaf Y: all YES-leaves and inbox at the SAME bottom row
-  const leafY = TOP_PAD + (n + 1) * LEVEL_H;
+  // Layout: question node centred, spam bubble to the left
+  const Q_W = 230, Q_H = 52;
+  const S_W = 150, S_H = 48;
+  const QCX = SVG_W * 0.55;  // question nodes x-centre (slightly right of centre)
+  const SPAM_CX = SVG_W * 0.18; // spam bubbles x-centre (left side)
 
   const svg = document.createElementNS(svgNS, 'svg');
   svg.setAttribute('viewBox', `0 0 ${SVG_W} ${SVG_H}`);
@@ -3039,141 +2982,95 @@ function buildDecisionTree(){
 
   const defs = document.createElementNS(svgNS, 'defs');
   defs.innerHTML = `
-    <filter id="dshadow" x="-30%" y="-30%" width="180%" height="180%">
-      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(30,60,120,0.13)"/>
+    <filter id="dshadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,0.12)"/>
     </filter>
-    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L7,3 z" fill="#c62828"/>
+    <marker id="arrowRed" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#c62828"/>
     </marker>
-    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L7,3 z" fill="#2e7d32"/>
-    </marker>
-    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L7,3 z" fill="#1565c0"/>
+    <marker id="arrowGreen" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2e7d32"/>
     </marker>`;
   svg.appendChild(defs);
 
-  const elNS = tag => document.createElementNS(svgNS, tag);
+  function el(tag){ return document.createElementNS(svgNS, tag); }
 
   function addText(parent, x, y, text, size, weight, fill, anchor='middle'){
-    const lines = text.split('\n');
-    const lineH = size * 1.35;
-    const startY = y - ((lines.length - 1) * lineH) / 2;
-    lines.forEach((line, li) => {
-      const t = elNS('text');
-      t.setAttribute('x', x); t.setAttribute('y', startY + li * lineH);
-      t.setAttribute('text-anchor', anchor);
-      t.setAttribute('font-size', size); t.setAttribute('font-weight', weight);
-      t.setAttribute('font-family', "'Nunito',sans-serif");
-      t.setAttribute('fill', fill); t.textContent = line;
-      parent.appendChild(t);
-    });
+    const t = el('text');
+    t.setAttribute('x', x); t.setAttribute('y', y);
+    t.setAttribute('text-anchor', anchor);
+    t.setAttribute('font-size', size); t.setAttribute('font-weight', weight);
+    t.setAttribute('font-family', "'Nunito',sans-serif");
+    t.setAttribute('fill', fill); t.textContent = text;
+    parent.appendChild(t);
   }
 
-  function addCircle(parent, cx, cy, r, fill, stroke, sw=2.5){
-    const c = elNS('circle');
-    c.setAttribute('cx', cx); c.setAttribute('cy', cy); c.setAttribute('r', r);
-    c.setAttribute('fill', fill); c.setAttribute('stroke', stroke);
-    c.setAttribute('stroke-width', sw);
-    c.setAttribute('filter', 'url(#dshadow)');
-    parent.appendChild(c);
+  function addRect(parent, cx, cy, w, h, rx, fill, stroke, useShadow){
+    const r = el('rect');
+    r.setAttribute('x', cx - w/2); r.setAttribute('y', cy - h/2);
+    r.setAttribute('width', w); r.setAttribute('height', h);
+    r.setAttribute('rx', rx); r.setAttribute('fill', fill);
+    r.setAttribute('stroke', stroke); r.setAttribute('stroke-width', '2');
+    if(useShadow) r.setAttribute('filter', 'url(#dshadow)');
+    parent.appendChild(r);
   }
 
-  function addLine(parent, x1, y1, x2, y2, color, sw=2, marker=null){
-    const l = elNS('line');
+  function addLine(parent, x1, y1, x2, y2, color, dash, marker){
+    const l = el('line');
     l.setAttribute('x1', x1); l.setAttribute('y1', y1);
     l.setAttribute('x2', x2); l.setAttribute('y2', y2);
-    l.setAttribute('stroke', color); l.setAttribute('stroke-width', sw);
+    l.setAttribute('stroke', color); l.setAttribute('stroke-width', '2.5');
+    if(dash) l.setAttribute('stroke-dasharray', dash);
     if(marker) l.setAttribute('marker-end', `url(#${marker})`);
     parent.appendChild(l);
   }
 
-  function addPath(parent, d, color, sw=2, marker=null){
-    const p = elNS('path');
-    p.setAttribute('d', d);
-    p.setAttribute('fill', 'none');
-    p.setAttribute('stroke', color); p.setAttribute('stroke-width', sw);
-    if(marker) p.setAttribute('marker-end', `url(#${marker})`);
-    parent.appendChild(p);
-  }
-
-  // Helper: draw a straight line between two circles, stopping at circle edges
-  function connectCircles(parent, x1, y1, r1, x2, y2, r2, color, sw, marker){
-    const dx = x2 - x1, dy = y2 - y1;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    const ux = dx/dist, uy = dy/dist;
-    addLine(parent,
-      x1 + ux*r1, y1 + uy*r1,
-      x2 - ux*r2, y2 - uy*r2,
-      color, sw, marker
-    );
-  }
-
-  // ── Title ──
-  addText(svg, SVG_W/2, 28, '🌳 Your Spam Detection Decision Tree', 15, '800', '#2d3142');
-  addText(svg, SVG_W/2, 48, 'YES → Spam Folder  |  NO → Check next category', 11, '600', '#5a6282');
-
-  // ── Draw edges FIRST (behind nodes) ──
-
-  // Root → dec[0]
-  connectCircles(svg, rootX, rootY, R_ROOT, decX[0], decY[0], R_DEC, '#1565c0', 2.5, 'arrowBlue');
+  // Title
+  addText(svg, QCX, 28, '🌳 Your Spam Detection Decision Tree', 15, '800', '#2d3142');
+  addText(svg, QCX, 46, 'For each email: go top to bottom. First YES = that spam type. All NO = Safe Inbox ✅', 10, '600', '#5a6282');
 
   types.forEach((type, i) => {
-    const px = decX[i], py = decY[i];
-
-    // YES branch: dec[i] → YES-leaf[i] (diagonal down-right)
-    connectCircles(svg, px, py, R_DEC, yesLeafX[i], leafY, R_LEAF, '#c62828', 2, 'arrowRed');
-    // YES label at midpoint, offset slightly
-    const yMidX = (px + yesLeafX[i]) / 2 + 10;
-    const yMidY = (py + leafY) / 2 - 6;
-    addText(svg, yMidX, yMidY, 'YES', 9, '800', '#c62828');
-
-    // NO branch: dec[i] → dec[i+1] or inbox (diagonal down-left)
-    const noToX = (i === n - 1) ? inboxX : decX[i + 1];
-    const noToY = (i === n - 1) ? leafY  : decY[i + 1];
-    const noToR = (i === n - 1) ? R_LEAF : R_DEC;
-    connectCircles(svg, px, py, R_DEC, noToX, noToY, noToR, '#2e7d32', 2, 'arrowGreen');
-    // NO label at midpoint
-    const nMidX = (px + noToX) / 2 - 12;
-    const nMidY = (py + noToY) / 2 - 6;
-    addText(svg, nMidX, nMidY, 'NO', 9, '800', '#2e7d32');
-  });
-
-  // ── Draw nodes ON TOP of edges ──
-
-  // Root node — coral/orange
-  addCircle(svg, rootX, rootY, R_ROOT, '#e8865a', '#c0643a', 3);
-  addText(svg, rootX, rootY - 6, '📧', 16, '400', '#fff');
-  addText(svg, rootX, rootY + 12, 'Email', 9, '700', '#fff');
-  // Label below root
-  addText(svg, rootX, rootY + R_ROOT + 14, 'Email Arrives', 9, '600', '#2d3142');
-
-  // Decision nodes — teal
-  types.forEach((type, i) => {
-    addCircle(svg, decX[i], decY[i], R_DEC, '#3a8fa0', '#1f6b7a', 2.5);
-    addText(svg, decX[i], decY[i] - 5, type.icon, 13, '400', '#fff');
-    addText(svg, decX[i], decY[i] + 10, '?', 12, '800', '#fff');
-    // Label BELOW node
-    addText(svg, decX[i], decY[i] + R_DEC + 14, type.name, 9, '700', '#2d3142');
-  });
-
-  // YES leaf nodes (spam folders)
-  types.forEach((type, i) => {
+    const qy = TOP_PAD + 30 + i * ROW_H;   // question node centre y
+    const spamY = qy;
     const count = trainingResults[type.id]?.spam?.length || 0;
-    addCircle(svg, yesLeafX[i], leafY, R_LEAF, type.color, type.color, 2.5);
-    addText(svg, yesLeafX[i], leafY - 5, '📁', 12, '400', '#fff');
-    addText(svg, yesLeafX[i], leafY + 9, 'Spam', 8, '700', '#fff');
-    // Label below: type name + count — two lines
-    addText(svg, yesLeafX[i], leafY + R_LEAF + 13, type.name, 8, '700', type.color);
-    addText(svg, yesLeafX[i], leafY + R_LEAF + 25, `(${count} caught)`, 8, '600', '#5a6282');
-  });
 
-  // Inbox node — green
-  const safeCount = trainingResults['safe']?.spam?.length || 0;
-  addCircle(svg, inboxX, leafY, R_LEAF + 4, '#43a047', '#2e7d32', 3);
-  addText(svg, inboxX, leafY - 5, '📥', 13, '400', '#fff');
-  addText(svg, inboxX, leafY + 10, 'Inbox', 9, '700', '#fff');
-  addText(svg, inboxX, leafY + R_LEAF + 17, 'Safe Mail ✅', 9, '700', '#2e7d32');
+    // Vertical connector from previous NO arrow (from bottom of prev question node)
+    if (i > 0) {
+      const prevQY = TOP_PAD + 30 + (i-1) * ROW_H;
+      addLine(svg, QCX, prevQY + Q_H/2, QCX, qy - Q_H/2 - 5, '#2e7d32', null, 'arrowGreen');
+      addText(svg, QCX + 8, prevQY + Q_H/2 + (qy - prevQY - Q_H)/2, 'NO', 11, '800', '#2e7d32', 'start');
+    }
+
+    // Question node — rounded rect
+    addRect(svg, QCX, qy, Q_W, Q_H, 14, '#e3f2fd', '#1565c0', true);
+    addText(svg, QCX, qy - 9, 'Does this email have', 10, '600', '#0d47a1');
+    addText(svg, QCX, qy + 7, `${type.icon} ${type.name}`, 11, '800', '#0d47a1');
+    addText(svg, QCX, qy + 20, 'features?', 10, '600', '#0d47a1');
+
+    // YES arrow: horizontal from left side of question node → spam bubble right side
+    const yesStartX = QCX - Q_W/2;
+    const yesEndX = SPAM_CX + S_W/2 + 4;
+    addLine(svg, yesStartX, qy, yesEndX, spamY, '#c62828', null, 'arrowRed');
+    // YES label on the arrow, midway
+    addText(svg, (yesStartX + yesEndX)/2, qy - 7, 'YES', 11, '800', '#c62828');
+
+    // Spam bubble (left side)
+    addRect(svg, SPAM_CX, spamY, S_W, S_H, 24, type.bg, type.color, true);
+    addText(svg, SPAM_CX, spamY - 11, '🚫 SPAM', 11, '800', type.color);
+    addText(svg, SPAM_CX, spamY + 5, `${type.name}`, 10, '700', type.color);
+    addText(svg, SPAM_CX, spamY + 19, `(${count} found)`, 9, '600', type.color);
+
+    // Last item: NO → INBOX
+    if (i === types.length - 1) {
+      const inboxY = qy + ROW_H;
+      addLine(svg, QCX, qy + Q_H/2, QCX, inboxY - S_H/2 - 5, '#2e7d32', null, 'arrowGreen');
+      addText(svg, QCX + 8, qy + Q_H/2 + (ROW_H - Q_H/2)/2, 'NO', 11, '800', '#2e7d32', 'start');
+      // Inbox box
+      addRect(svg, QCX, inboxY, S_W + 40, S_H, 24, '#e8f5e9', '#2e7d32', true);
+      addText(svg, QCX, inboxY - 9, '📥 INBOX', 13, '800', '#1b5e20');
+      addText(svg, QCX, inboxY + 10, 'Safe / Genuine Mail ✅', 10, '700', '#2e7d32');
+    }
+  });
 
   const wrap = document.getElementById('dtTreeWrap');
   wrap.innerHTML = '';
