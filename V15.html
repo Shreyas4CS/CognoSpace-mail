@@ -931,17 +931,17 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
           <div style="flex:1">
             <div class="training-title">🎓 Training Mode – Feature-by-Feature Comparison</div>
             <div class="training-desc">
-              <strong>70 mails</strong> are generated once and cascade through all 7 rounds — each spam type has a <em>different</em> number of spam mails hidden in the pool (6 to 12, increasing for later rounds so you always have enough to catch). The non-spam mails flow forward to the next round. Mails that aren't caught in any round become <strong style="color:#52b788">Safe Mail ✅</strong>.<br>
+              <strong>50 mails</strong> are generated once and cascade through all 7 rounds — each spam type has a <em>different</em> number of spam mails hidden in the pool (3 to 9). The non-spam mails flow forward to the next round. Mails that aren't caught in any round become <strong style="color:#52b788">Safe Mail ✅</strong>.<br>
               <span style="color:#e65100;font-weight:600">🌳 Decision Tree:</span> Catch more spam = better accuracy! Finish all 7 rounds to unlock Live Mode.
             </div>
           </div>
-          <button class="gen-btn" id="genBtn" onclick="generateMails()">⚡ Generate 70 Mails</button>
+          <button class="gen-btn" id="genBtn" onclick="generateMails()">⚡ Generate 50 Mails</button>
         </div>
         <div class="training-body" id="trainingBody">
           <div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:15px;flex-direction:column;gap:14px;padding:40px 24px;text-align:center">
             <div style="font-size:72px;animation:bounce 2s ease infinite">📬</div>
             <div style="font-size:17px;font-weight:700;color:var(--text2)">Ready to train your AI?</div>
-            <div style="font-size:14px;max-width:480px;line-height:1.7;color:var(--text3)">Click <strong style="color:var(--blue)">"Generate 70 Mails"</strong> to start. All 70 mails are generated once — Round 1 checks all 70 for <strong>Phishing</strong>. Non-spam mails cascade to Round 2, and so on through all 7 spam types. Each category has a <em>different</em> number of spam mails (6–12, more for later rounds). Mails that pass every round are classified as <strong style="color:#52b788">Safe ✅</strong>!</div>
+            <div style="font-size:14px;max-width:480px;line-height:1.7;color:var(--text3)">Click <strong style="color:var(--blue)">"Generate 50 Mails"</strong> to start. All 50 mails are generated once — Round 1 checks all 50 for <strong>Phishing</strong>. Non-spam mails cascade to Round 2, and so on through all 7 spam types. Each category has a <em>different</em> number of spam mails (3–9). Mails that pass every round are classified as <strong style="color:#52b788">Safe ✅</strong>!</div>
           </div>
         </div>
       </div>
@@ -1027,7 +1027,7 @@ button:active::after{width:200px;height:200px;opacity:1;transition:0s}
 <div class="modal-overlay" id="analysisModal">
   <div class="modal">
     <h2>📊 Training Analysis</h2>
-    <div class="modal-sub">Here's what the Decision Tree model learned! Each round showed you one spam type — and you classified the mails against it as the pool cascaded down.</div>
+    <div class="modal-sub">Here's what the Decision Tree model learned! Each round showed you one spam type — and you classified all 40 mails against it.</div>
     <div class="analysis-grid" id="analysisGrid"></div>
     <div style="background:linear-gradient(135deg,#e8f0fe,#eef5ff);border-radius:14px;padding:18px 20px;margin-bottom:20px;font-size:14px;line-height:1.7;border:1.5px solid #c5d8fa">
       <strong style="color:#1a73e8;font-family:'Nunito',sans-serif;font-size:15px">🌳 What is a Decision Tree?</strong><br><br>
@@ -1178,24 +1178,21 @@ const SPAM_CATS_IDS = ['phishing','promo_spam','scam','malware','fakebiz','socia
 const SAFE_CAT_ID = 'safe';
 
 // ══ TRAINING MAIL POOL CONFIG ══
-// 70 mails generated once, cascading through 7 spam-type rounds.
-// Each spam type has a DIFFERENT count — spread so every category has enough
-// spam mails to guarantee users will catch at least some even after cascade shrinkage.
-// Counts increase slightly for later rounds (cascade means fewer mails reach them).
-// 6+8+7+10+9+11+12 = 63 spam  +  7 safe  = 70 total
-const TOTAL_TRAINING_MAILS = 70;
-const SAFE_IN_POOL = 7;
+// 50 mails generated once, cascading through 7 spam-type rounds.
+// Each spam type has a DIFFERENT count in the pool (no two the same).
+// 4+6+3+7+5+8+9 = 42 spam  +  8 safe  = 50 total
+const TOTAL_TRAINING_MAILS = 50;
+const SAFE_IN_POOL = 8;
 
-// Unique spam count per category — all different, ascending order for later rounds
-// to compensate for cascade pool shrinkage. Min=6, Max=12, no two equal.
+// Unique spam count per category — all different, sum = 42
 const SPAM_COUNT_BY_TYPE = {
-  phishing:   6,   // Round 1 — all 70 mails visible
-  promo_spam: 8,   // Round 2
-  scam:       7,   // Round 3
-  malware:    10,  // Round 4 — pool shrinking, need more
-  fakebiz:    9,   // Round 5
-  social:     11,  // Round 6
-  newsletter: 12,  // Round 7 — deepest cascade, most spam to ensure catches
+  phishing:   4,
+  promo_spam: 6,
+  scam:       3,
+  malware:    7,
+  fakebiz:    5,
+  social:     8,
+  newsletter: 9,
 };
 
 // Legacy compat alias used by decision-tree rendering
@@ -2220,26 +2217,8 @@ function startRound(idx){
   currentMailIdx=0;
   const catId = SPAM_TYPES[idx].id;
   roundMails = buildRoundMails(catId);
-  // Initialize trainingResults for this round
+  // Initialize trainingResults for this round if needed (no auto-classification)
   if(!trainingResults[catId]) trainingResults[catId]={spam:[],notSpam:[]};
-
-  // ── Auto-classify mails that clearly belong to OTHER spam categories ──
-  // A mail whose catId is a spam type OTHER than the current round's type
-  // is definitively NOT this round's spam — auto-mark as notSpam so the user
-  // only sees and decides on (a) the actual spam for this round, and (b) safe mails.
-  if(catId !== 'safe'){
-    roundMails.forEach(m => {
-      const alreadyDecided =
-        trainingResults[catId].spam.find(x=>x.id===m.id) ||
-        trainingResults[catId].notSpam.find(x=>x.id===m.id);
-      if(alreadyDecided) return;
-      // If this mail's true category is a different spam type → auto not-spam
-      if(m.catId !== catId && m.catId !== 'safe'){
-        trainingResults[catId].notSpam.push(m);
-      }
-    });
-  }
-
   renderCompareUI();
 }
 
@@ -2250,7 +2229,7 @@ function renderCompareUI(){
   // Count how many were caught in prior rounds
   const caughtBefore = SPAM_CATS_IDS.slice(0, currentRoundIdx).reduce((acc,c)=>acc+(trainingResults[c]&&trainingResults[c].spam?trainingResults[c].spam.length:0),0);
   const cascadeNote = currentRoundIdx===0
-    ? `All ${TOTAL_TRAINING_MAILS} mails — Round 1 of ${SPAM_TYPES.length}`
+    ? `All 50 mails — Round 1 of ${SPAM_TYPES.length}`
     : `${roundMails.length} mails remaining (${caughtBefore} caught so far)`;
 
   body.innerHTML=`
@@ -2361,14 +2340,6 @@ function decideMail(mailId,decision){
   trainingResults[spamType.id].notSpam=trainingResults[spamType.id].notSpam.filter(x=>x.id!==mailId);
   if(decision==='yes'){trainingResults[spamType.id].spam.push(m);}
   else{trainingResults[spamType.id].notSpam.push(m);}
-
-  // ── Over-marking warning ──
-  const maxSpam = SPAM_COUNT_BY_TYPE[spamType.id] || 99;
-  const markedSpam = trainingResults[spamType.id].spam.length;
-  if(decision==='yes' && markedSpam > maxSpam){
-    showToast(`⚠️ You've marked ${markedSpam} as ${spamType.name} spam — but there are only ${maxSpam} in this round! Re-check carefully.`, 5000);
-  }
-
   // Update panel
   const panel=document.getElementById('compareMailPanel');
   if(panel)panel.innerHTML='<div class="panel-title">📬 '+roundMails.length+' Mails — '+(spamType.id==='safe'?'✅ These survived all rounds — are they all safe?':'Does this mail have "'+spamType.name+'" features?')+'</div>'+renderCompareMails();
