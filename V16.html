@@ -3189,31 +3189,23 @@ function buildDecisionTree(containerId, upToRoundIndex){
   rootCircle.setAttribute('fill', '#e8865a'); rootCircle.setAttribute('stroke', '#c0643a');
   rootCircle.setAttribute('stroke-width', '3'); rootCircle.setAttribute('filter', SH);
   svg.appendChild(rootCircle);
-  txt(svg, rootX, rootY - 10, '📧', 13, '400', '#fff');
-  txt(svg, rootX, rootY + 4, String(total), 12, '900', '#fff');
+  txt(svg, rootX, rootY - 8, '📧', 15, '400', '#fff');
+  txt(svg, rootX, rootY + 10, 'Email', 10, '800', '#fff');
   // Label below
   txt(svg, rootX, rootY + R_ROOT + 14, 'Email Arrives', 9, '600', '#2d3142');
-  txt(svg, rootX, rootY + R_ROOT + 26, `(${total} emails)`, 8, '600', '#5a6282');
 
   // ── Decision nodes ──
-  // Pre-compute how many mails enter each decision node (cascade: subtract all spam caught in prior rounds)
-  const mailsEntering = types.map((type, i) => {
-    const caughtBefore = types.slice(0, i).reduce((acc, t) => acc + (trainingResults[t.id]?.spam?.length || 0), 0);
-    return total - caughtBefore;
-  });
-
   types.forEach((type, i) => {
     const cx = decX[i], cy = decY[i];
-    const entering = mailsEntering[i];
     const circle = elNS('circle');
     circle.setAttribute('cx', cx); circle.setAttribute('cy', cy);
     circle.setAttribute('r', R_DEC);
     circle.setAttribute('fill', '#3a8fa0'); circle.setAttribute('stroke', '#1f6b7a');
     circle.setAttribute('stroke-width', '2.5'); circle.setAttribute('filter', SH);
     svg.appendChild(circle);
-    // Icon + entering count stacked inside node
+    // Icon + "?" stacked inside node
     txt(svg, cx, cy - 8, type.icon, 12, '400', '#fff');
-    txt(svg, cx, cy + 8, String(entering), 12, '800', '#fff');
+    txt(svg, cx, cy + 8, '?', 12, '800', '#fff');
     // Name label BELOW node (clean, two-line if long)
     nodeLabel(svg, cx, cy + R_DEC + 6, type.name, 9, '#2d3142');
   });
@@ -3245,9 +3237,6 @@ function buildDecisionTree(containerId, upToRoundIndex){
   {
     const cx = bottomNodeX, cy = bottomNodeY;
     if(nextType){
-      // Mails flowing to next round = total minus ALL spam caught so far
-      const totalCaught = types.reduce((acc, t) => acc + (trainingResults[t.id]?.spam?.length || 0), 0);
-      const flowingToNext = total - totalCaught;
       // Show the next category as a teal "preview" decision node (dashed border = not yet classified)
       const circle = elNS('circle');
       circle.setAttribute('cx', cx); circle.setAttribute('cy', cy);
@@ -3257,16 +3246,13 @@ function buildDecisionTree(containerId, upToRoundIndex){
       circle.setAttribute('filter', SH); circle.setAttribute('opacity', '0.75');
       svg.appendChild(circle);
       txt(svg, cx, cy - 8, nextType.icon, 12, '400', '#fff');
-      txt(svg, cx, cy + 8, String(flowingToNext), 12, '800', '#fff');
+      txt(svg, cx, cy + 8, '?', 12, '800', '#fff');
       // Label below
       nodeLabel(svg, cx, cy + R_NEXT + 6, nextType.name, 9, '#5a6282');
-      // "X remaining → next round" hint
+      // "Next up" hint
       const nameLines2 = nextType.name.length > 14 ? 2 : 1;
-      txt(svg, cx, cy + R_NEXT + 6 + nameLines2 * 12 + 4, `(${flowingToNext} remaining)`, 8, '600', '#9199b5');
+      txt(svg, cx, cy + R_NEXT + 6 + nameLines2 * 12 + 4, '(next round)', 8, '600', '#9199b5');
     } else {
-      // Mails that survived all rounds = safe mails
-      const totalCaughtAll = types.reduce((acc, t) => acc + (trainingResults[t.id]?.spam?.length || 0), 0);
-      const safeCount = total - totalCaughtAll;
       // Show Inbox / Safe node
       const circle = elNS('circle');
       circle.setAttribute('cx', cx); circle.setAttribute('cy', cy);
@@ -3275,9 +3261,8 @@ function buildDecisionTree(containerId, upToRoundIndex){
       circle.setAttribute('stroke-width', '3'); circle.setAttribute('filter', SH);
       svg.appendChild(circle);
       txt(svg, cx, cy - 9, '📥', 13, '400', '#fff');
-      txt(svg, cx, cy + 9, String(safeCount), 11, '900', '#fff');
+      txt(svg, cx, cy + 9, 'Inbox', 10, '800', '#fff');
       txt(svg, cx, cy + R_INBOX + 14, 'Safe Mail ✅', 9, '700', '#2e7d32');
-      txt(svg, cx, cy + R_INBOX + 26, `(${safeCount} safe)`, 8, '600', '#5a6282');
     }
   }
 
