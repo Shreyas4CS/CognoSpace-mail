@@ -1525,8 +1525,98 @@ function logout() {
   }
   currentUser = null;
   localStorage.removeItem('cs_currentUser');
+
+  // ── Wipe ALL in-memory game state ──
+  trainingResults    = {};
+  submittedCats      = {};
+  trainingPool       = [];
+  generatedMails     = [];
+  roundMails         = [];
+  currentRoundIdx    = 0;
+  currentMailIdx     = 0;
+  trainingComplete   = false;
+  adminSession       = false;
+  liveMails          = [];
+  liveMailCount      = 0;
+  liveFilter         = 'all';
+  openMailData       = null;
+  mailViewContext    = [];
+  mailViewIndex      = 0;
+  mailIdCounter      = 0;
+  _variationCounter  = 0;
+  _usedMailKeys.clear();
+  _liveUsed.clear();
+  _trainingUsed.clear();
+
+  // ── Reset UI counters ──
+  const spamCountEl = document.getElementById('spamCount');
+  const inboxCountEl = document.getElementById('inboxCount');
+  const navSpamEl = document.getElementById('navSpamCount');
+  const navInboxEl = document.getElementById('navInboxCount');
+  const liveLimitEl = document.getElementById('liveLimit');
+  const liveGenBtnEl = document.getElementById('liveGenBtn');
+  if(spamCountEl)   spamCountEl.textContent  = '0';
+  if(inboxCountEl)  inboxCountEl.textContent = '0';
+  if(navSpamEl)     navSpamEl.textContent    = '0';
+  if(navInboxEl)    navInboxEl.textContent   = '0';
+  if(liveLimitEl)   liveLimitEl.textContent  = '0 / 50';
+  if(liveGenBtnEl)  liveGenBtnEl.disabled    = false;
+
+  // ── Reset Generate button to its original state ──
+  const genBtnEl = document.getElementById('genBtn');
+  if(genBtnEl){
+    genBtnEl.disabled   = false;
+    genBtnEl.textContent = '⚡ Generate 50 Mails';
+  }
+
+  // ── Reset training body to the "Ready to train" empty state ──
+  const trainingBodyEl = document.getElementById('trainingBody');
+  if(trainingBodyEl){
+    trainingBodyEl.innerHTML = `
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:15px;flex-direction:column;gap:14px;padding:40px 24px;text-align:center">
+        <div style="font-size:72px;animation:bounce 2s ease infinite">📬</div>
+        <div style="font-size:17px;font-weight:700;color:var(--text2)">Ready to train your AI?</div>
+        <div style="font-size:14px;max-width:480px;line-height:1.7;color:var(--text3)">Click <strong style="color:var(--blue)">"Generate 50 Mails"</strong> to start. All 50 mails are generated once — Round 1 checks all 50 for <strong>Phishing</strong>. Non-spam mails cascade to Round 2, and so on through all 7 spam types. Each category has a <em>different</em> number of spam mails (3–9). Mails that pass every round are classified as <strong style="color:#52b788">Safe ✅</strong>!</div>
+      </div>`;
+  }
+
+  // ── Reset Live Mode body ──
+  const liveBodyEl = document.getElementById('liveBody');
+  if(liveBodyEl){
+    liveBodyEl.innerHTML = `<div class="live-empty"><div class="le-icon">📭</div>Click "Generate Mail" to start receiving emails!</div>`;
+  }
+
+  // ── Reset Live Mode button back to locked state ──
+  const liveModeBtn = document.getElementById('liveModeBtn');
+  if(liveModeBtn){
+    liveModeBtn.classList.add('locked');
+    liveModeBtn.innerHTML = '⚡ Live <span class="lock-icon">🔒</span>';
+    liveModeBtn.setAttribute('onclick', "tryLiveMode()");
+    liveModeBtn.title = 'Complete Training to unlock Live Mode';
+    liveModeBtn.style.background = '';
+    liveModeBtn.style.color = '';
+    liveModeBtn.style.boxShadow = '';
+  }
+
+  // ── Close any open modals ──
+  ['roundPopup','analysisModal','dtModal','adminLoginModal'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('show');
+  });
+
+  // Hide admin exit button if visible
+  const exitBtn = document.getElementById('exitAdminBtn');
+  if(exitBtn) exitBtn.style.display = 'none';
+
+  // Hide logout button
   const btn = document.getElementById('logoutBtn');
-  if (btn) btn.style.display = 'none';
+  if(btn) btn.style.display = 'none';
+
+  // Close mail view if open
+  const mv = document.getElementById('mailView');
+  if(mv) mv.style.display = 'none';
+
+  // Switch back to auth screen
   document.getElementById('appWrap').style.display = 'none';
   document.getElementById('authWrap').style.display = 'flex';
   document.getElementById('liEmail').value = '';
@@ -1535,7 +1625,7 @@ function logout() {
   document.getElementById('suEmail').value = '';
   document.getElementById('suPass').value = '';
   showSignup(); // show signup card on logout
-  showToast('Logged out — account data cleared!');
+  showToast('Logged out — session data cleared!');
 }
 
 function buildSidebar(){
