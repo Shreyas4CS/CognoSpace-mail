@@ -2704,155 +2704,167 @@ function openMailView(mailOrJson,isLive,isCompare){
   // Keywords matched EXACTLY to the PDF guide and actual mail bodies.
   const SPAM_KEYWORDS = {
 
-    // ── PHISHING: fake bank/account security alerts (matches _LIVE_SCENARIOS.phishing) ──
+    // ── PHISHING: Urgent action, Verify account, Suspended, Click here, OTP ──
     phishing: [
-      // Feature keywords (PDF guide)
+      // PDF keywords
       'urgent action required', 'verify your account', 'account will be blocked',
       'click here immediately', 'otp verification', 'account has been suspended',
-      'account access is restricted', 'verify immediately', 'confirm your identity',
-      // Generated-mail phrases
-      'unusual activity', 'unusual transactions', 'suspicious login',
-      'suspicious login attempt', 'account has been flagged', 'account is at risk',
-      'temporarily restricted', 'unauthorized access', 'verify your identity',
-      'secure my account', 'secure your account', 'restore account access',
-      'complete kyc', 'to avoid blocking', 'prevent suspension',
-      'link expires in', 'do not share', 'this was not you', 'if this was not you',
-      'digital security team', 'security alert',
-      // Suspicious domain pattern (generated + legacy)
-      'secure-verify.biz', 'account-suspended-now.xyz', 'otp-verify-secure.net',
-      'login-confirm-id.biz', 'account-blocked-check.org', 'suspend-alert-secure.com',
-      'click-verify-now.biz', 'urgent-account-action.net',
+      'account access is restricted', 'verify immediately',
+      // Body-specific phrases
+      'your bank account will be blocked', 'login immediately',
+      'avoid account suspension', 'complete otp verification',
+      'account will be suspended', 'permanently blocked',
+      'account will be permanently blocked', 'permanent account termination',
+      'verify your identity', 'restore access', 'click the link below',
+      'link expires in', 'do not share this email',
+      'account data will be permanently deleted',
+      // Fake domains
+      'account-suspended-now.xyz', 'otp-verify-secure.net',
+      'login-confirm-id.biz', 'account-blocked-check.org',
+      'suspend-alert-secure.com', 'click-verify-now.biz',
+      'urgent-account-action.net',
     ],
 
-    // ── PROMO SPAM: sale/discount blasts (matches _LIVE_SCENARIOS.promo_spam) ──
+    // ── PROMO SPAM: Sale, Offer, Limited time, Discount, Coupon, Cashback ──
     promo_spam: [
-      // Feature keywords (PDF guide)
+      // PDF keywords
       'sale', 'offer', 'limited time', 'discount', 'coupon', 'cashback',
-      // Generated-mail phrases
-      'mega sale', 'mega sale alert', 'flash sale', 'lightning deal', 'mega deal',
-      'today only', 'last hours', 'final sale', 'bumper offer',
-      'limited time offer', 'super savings', 'exclusive offer',
-      '% off', 'use code', 'extra 10% off', 'free delivery', 'limited stock',
-      'shop now', 'grab them', 'don\'t miss out', 'biggest deals',
-      'unbeatable deals', 'while stocks last',
-      // Legacy body phrases
-      'huge discounts', 'use coupon', 'buy 2 get 3 free', 'grab deals now',
-      // Suspicious domain pattern
-      '.shop/sale',
+      // Body-specific phrases
+      'mega summer sale', 'flat 70% off', 'flat 50% off', 'hurry up',
+      'use coupon', 'save70', 'bigsale50', 'flash60', 'new40', 'weekend30',
+      'cash50', 'huge discounts', 'limited time offer',
+      'today only', 'expires tonight', 'tonight at 11:59 pm',
+      'claim cashback now', 'cashback of ₹500', 'big sale alert',
+      'flash sale', 'lightning sale', 'buy 2 get 3 free',
+      'free delivery', 'free gift', 'shop now', 'grab deals now',
+      '% off', 'prices disappear in', 'act fast',
     ],
 
-    // ── SCAM: lottery / prize / inheritance fraud (matches _LIVE_SCENARIOS.scam) ──
+    // ── SCAM: Lottery, Claim reward, Earn money fast, Prize money, Investment ──
     scam: [
-      // Feature keywords (PDF guide)
+      // PDF keywords
       'lottery', 'claim reward', 'earn money fast', 'prize money',
       'investment opportunity',
-      // Generated-mail phrases
-      'congratulations', 'grand prize winner', 'lucky winner', 'lucky recipient',
-      'selected beneficiary', 'award recipient', 'you are our', 'you have won',
-      'claim your prize', 'international lottery', 'global charity fund',
-      'un grant', 'humanitarian', 'inheritance', 'unclaimed',
-      'lottery commission', 'prize committee', 'claims agent',
-      'processing fee', 'fully refundable', 'bank details', 'id proof',
-      'wire transfer', 'money transfer', 'guaranteed returns', '300% returns',
-      'do not share this notice', 'do not tell anyone',
+      // Body-specific phrases
+      'congratulations', 'you have won', 'lucky winner', 'grand prize winner',
+      'claim your prize', 'international lottery', 'prize money of',
+      'send your bank details', 'bank details for wire transfer',
+      'bank account number', 'processing fee', 'fully refundable',
+      'wire transfer', 'money transfer', 'claim reward now',
+      'forfeited', 'do not share this email', 'do not tell anyone',
+      'prize committee', 'lottery award', 'lottery reference',
+      'earmarked for transfer', 'humanitarian initiative',
+      'strictly confidential', 'awaiting your response',
+      'investment opportunity', '300% returns', 'guaranteed returns',
+      // Timing pressure
       'within 48 hours', 'within 72 hours', 'before it is reallocated',
-      // Suspicious domain pattern (generated + legacy)
-      'lottery-global', 'prize-center-global', 'cash-award-intl',
-      'lottery-reward.com', 'claim-reward-now.net', 'earnfast-global.biz',
-      'prize-money-fund.org', 'investment-opportunity.net',
+      // Fake domains
+      'lottery-reward.com', 'claim-reward-now.net',
+      'earnfast-global.biz', 'prize-money-fund.org',
+      'investment-opportunity.net',
     ],
 
-    // ── MALWARE: file-share emails with executable attachments (matches _LIVE_SCENARIOS.malware) ──
+    // ── MALWARE: Download attachment, Invoice attached, ZIP file, Enable macros ──
     malware: [
-      // Feature keywords (PDF guide)
+      // PDF keywords
       'download attachment', 'invoice attached', 'zip file',
-      'enable macros', 'open document', 'open immediately',
-      // Generated-mail phrases
-      'shared a confidential file', 'shared document', 'critical file',
-      'time-sensitive document', 'open this file', 'download link',
-      'disable antivirus', 'run as administrator', 'enter password',
-      'enable editing', 'verified safe', 'file is verified safe',
-      'secure drop', 'link expires in', 'file expires in',
-      // Executable / archive extensions
-      '.exe', '.zip', '.rar', '.scr', '.bat',
-      // Suspicious domain pattern (generated + legacy)
-      'secure-share.biz', 'docs-urgent.net', 'clouddrive-verify',
-      'invoice-attachment.biz', 'zip-file-share.com', 'download-docs-now.net',
-      'enable-macros-doc.biz', 'open-document-urgent.net',
+      'enable macros', 'open document',
+      // Body-specific phrases
+      'check the attached invoice', 'confirm payment today',
+      'enable editing', 'enable macros to view', 'enable macros when prompted',
+      'download attachment below', 'click to download',
+      'download now', 'open document immediately', 'open attached',
+      'file expires in', 'password: sal@2026', 'password: qd@2026',
+      'file expires in 48 hours', 'file expires in 24 hours',
+      '.exe', '.zip', '.bat',
+      'extract the zip file', 'salary_revision_2026.zip',
+      'invoice_final_2026.exe', 'employee_handbook_2026.exe',
+      'q2_performance_data.zip', 'payment_invoice_attached_2026.zip',
+      // Fake domains
+      'invoice-attachment.biz', 'zip-file-share.com',
+      'download-docs-now.net', 'enable-macros-doc.biz',
+      'open-document-urgent.net',
     ],
 
-    // ── FAKE BIZ: brand impersonation + KYC/account alerts (matches _LIVE_SCENARIOS.fakebiz) ──
+    // ── FAKE BIZ: Tech support, Refund approved, Customer care, Support ticket ──
     fakebiz: [
-      // Feature keywords (PDF guide)
+      // PDF keywords
       'tech support', 'refund approved', 'customer care',
       'support ticket', 'subscription renewal',
-      // Generated-mail phrases
-      'kyc pending', 'kyc update', 'unverified kyc', 'verification required',
-      'security verification required', 'payment failed', 'payment method expired',
-      'subscription expiring', 'account suspended', 'unauthorized access detected',
-      'pending document verification', 'verify within 24 hours', 'verify now',
-      'restore full access', 'aadhaar card', 'pan card', 'selfie with id',
-      'permanently suspended', 'pending orders cancelled', 'customer service',
-      'unusual login activity',
-      // Legacy body phrases
-      'refund has been approved', 'contact customer care', 'support executive',
-      'subscription renews today', 'renew immediately',
-      // Suspicious domain pattern (generated + legacy)
-      'account-verify.biz', 'techsupport-helpdesk.biz', 'customer-care-center.net',
+      // Body-specific phrases
+      'refund of ₹8,999 is approved', 'contact our support executive',
+      'contact customer care', 'support executive immediately',
+      'support ticket #', 'subscription renews today',
+      'renew immediately', 'subscription renewal is pending',
+      'virus on your device', 'device protection will be removed',
+      'refund will expire', 'customer care team',
+      'call our tech support', 'speak to a support executive',
+      'claim your refund', 'refund has been approved',
+      'customer support team', 'billing & subscription',
+      // Fake domains
+      'techsupport-helpdesk.biz', 'customer-care-center.net',
       'support-ticket-now.com', 'subscription-renewal-alert.biz',
       'refund-approved-center.net',
     ],
 
-    // ── SOCIAL: follower-boost / viral-content scams (matches _LIVE_SCENARIOS.social) ──
+    // ── SOCIAL: New follower, Verified badge, Trending post, Likes increased ──
     social: [
-      // Feature keywords (PDF guide)
+      // PDF keywords
       'new follower', 'verified badge', 'trending post',
       'likes increased', 'click to view message',
-      // Generated-mail phrases
-      'free followers', 'real followers', '100% free', 'no bots',
-      'no fake accounts', 'no password needed', 'follower package',
-      'followers start arriving', 'claim free followers', 'free likes',
-      'slots available', 'users have claimed', 'blue tick', 'blue tick badge',
-      'viral post boost', 'trending boost', 'exclusive opportunity',
-      'going viral', 'your post is trending',
-      // Suspicious domain pattern (generated + legacy)
-      'followers-boost.com', '-boost-', 'newfollower-alert.com',
-      'verified-account-now.net', 'trending-post-update.biz',
-      'likes-increased-now.com', 'click-to-view-msg.net',
+      // Body-specific phrases
+      'new followers waiting', 'new follower alert',
+      'you have 47 new followers', 'followers waiting to connect',
+      'eligible for a verified badge', 'blue tick', 'get verified badge',
+      'going viral', 'your post is trending', 'trending rank',
+      'likes increased by', 'likes increased rapidly',
+      'see reactions now', 'click to view message',
+      'view new followers', 'new followers', 'follower count',
+      'mentioned in a trending post', 'trending post',
+      'before it gets removed', 'spreading fast',
+      // Fake domains
+      'newfollower-alert.com', 'verified-account-now.net',
+      'trending-post-update.biz', 'likes-increased-now.com',
+      'click-to-view-msg.net',
     ],
 
-    // ── NEWSLETTER: bulk newsletters from publications (matches _LIVE_SCENARIOS.newsletter) ──
+    // ── NEWSLETTER: Weekly update, Newsletter, Monthly digest, Latest news ──
     newsletter: [
-      // Feature keywords (PDF guide)
+      // PDF keywords
       'newsletter', 'weekly update', 'monthly digest',
       'latest news', 'company announcement',
-      // Generated-mail phrases
-      'top stories', 'handpicked stories', 'plus more inside',
-      'read all stories', 'this edition', 'weekly digest',
-      'monthly roundup', 'curated reads', 'latest issue', 'top picks',
-      'trends to watch', 'unsubscribe', 'manage preferences',
-      // Newsletter domain pattern
-      '-newsletter.com',
+      // Body-specific phrases
+      'weekly digest', 'weekly newsletter', 'monthly digest',
+      'this week\'s newsletter', 'top stories this week',
+      'knowledge, delivered weekly', 'unsubscribe',
+      'manage preferences', 'curated for you',
+      'company announcement', 'first edition is ready',
+      'subscription confirmed', 'free resources',
+      'community highlights', 'editorial team',
+      // Domains
+      'newsdaily.com', 'weeklydigest.org', 'informer-hub.net',
+      'magazineplus.io', 'topicflow.com',
     ],
 
-    // ── SAFE: positive genuine signals (matches _LIVE_SCENARIOS.safe) ──
+    // ── SAFE: Meeting scheduled, Project update, Thank you, Official, Regards ──
     safe: [
-      // Feature keywords (PDF guide)
+      // PDF keywords — positive genuine signals
       'meeting scheduled', 'project update', 'thank you',
       'official communication', 'regards,',
-      // Generated genuine phrases
-      'meeting reminder', 'please bring', 'status report',
-      'order has been confirmed', 'track your order', 'thanks for shopping',
-      'appointment confirmed', 'please arrive 10 minutes early',
-      'transaction successful', 'transaction alert', 'available balance',
-      'class scheduled', 'has been scheduled', 'looking forward',
-      'salary credited', 'salary for', 'payslip is available',
-      'hr & payroll', 'counselling slot', 'slot confirmed',
-      'welcome to', 'course starts', 'happy learning',
-      'parent-teacher meeting', 'booking confirmed', 'successfully confirmed',
-      'thank you for choosing', 'reply to this email', 'please confirm',
-      'if you have any questions', 'warm regards,', 'best,', 'thanks,',
-      'onboarding', 'welcome to the team', 'thank you for your submission',
+      // Body-specific genuine phrases
+      'meeting reminder', 'robotics project meeting',
+      'cognospace team', 'city public school',
+      'the school administration', 'hr team',
+      'finance department', 'project lead', 'project manager',
+      'hr & payroll team', 'city bank', 'bluedart',
+      'warm regards,', 'best,', 'cheers,',
+      'please confirm', 'feel free to reply',
+      'thank you for your submission', 'thank you for shopping',
+      'payslip is available', 'salary credited',
+      'order has been confirmed', 'appointment confirmed',
+      'parent-teacher meeting', 'onboarding schedule',
+      'welcome to the team', 'drive.google.com',
+      'finance@cognospace.upi', 'bluedart.com/tracking',
     ],
   };
 
@@ -2877,16 +2889,7 @@ function openMailView(mailOrJson,isLive,isCompare){
     if(!line)return'<br>';
     // Mark fake/suspicious links (http:// with unknown TLDs or not .com/.org/.edu real sites)
     line=line.replace(/(https?:\/\/[^\s<>]+|www\.[^\s<>]+)/g,url=>{
-      const safeDomains=['bluedart.com','drive.google.com','citybank-online.in','acmecorp.in','national-counselling.edu','citymedical.org','topicflow.com','weeklydigest.org','techbuzz-newsletter.com','healthtips-digest.net','magazineplus.io','informer-hub.net','newsdaily.com',
-        // Genuine domains used by SAFE mail scenarios (so their links render as legitimate)
-        'workplace.com','yourteam.io','company.org','projecthub.io','techcorp.com',
-        'buynow.in','shopzone.in','styleshop.in','groceryhub.in','mealrun.in',
-        'cityhospital.org','apolloclinic.org','fortishealth.in','maxhealthcare.in',
-        'metrobank.in','apexbank.in','primebank.in','unitybank.in',
-        'cityschool.edu','stxavierschool.edu','dpsindia.edu','kvsindia.edu','school.edu',
-        'coursera-india.org','unacademy-class.in','udemy-india.com','byjus-classes.in',
-        'nte-counselling.edu','cbit-college.edu','ncm-admissions.edu','nti-counselling.edu',
-        'indianrail-irctc.in','dmrc-metro.in','bookmyshow.com','makemytrip-india.com'];
+      const safeDomains=['bluedart.com','drive.google.com','citybank-online.in','acmecorp.in','national-counselling.edu','citymedical.org','topicflow.com','weeklydigest.org','techbuzz-newsletter.com','healthtips-digest.net','magazineplus.io','informer-hub.net','newsdaily.com'];
       const isSafe=safeDomains.some(d=>url.includes(d));
       if(isSafe)return`<a href="#" style="color:#1a73e8;font-weight:600;text-decoration:underline">${url}</a>`;
       return`<span class="unknown-link">${url}</span>`;
